@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
@@ -34,6 +34,13 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const supabase = createBrowserSupabaseClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) router.replace("/dashboard");
+    });
+  }, [router]);
 
   async function handleEmailSignup(e: React.FormEvent) {
     e.preventDefault();
