@@ -1,0 +1,184 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
+import { createBrowserSupabaseClient } from "@/lib/supabase";
+
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+      <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 13 4 24s8.9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.4-3.9z" />
+      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4c-7.7 0-14.4 4.4-17.7 10.7z" />
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2A12 12 0 0 1 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+      <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.7-.4-3.9z" />
+    </svg>
+  );
+}
+
+function translateAuthError(msg: string): string {
+  if (msg.includes("Invalid login credentials"))
+    return "Email ou mot de passe incorrect. Si vous vous êtes inscrit avec Google, utilisez le bouton « Continuer avec Google » ci-dessus.";
+  if (msg.includes("Email not confirmed")) return "Veuillez confirmer votre email avant de vous connecter.";
+  if (msg.includes("Too many requests")) return "Trop de tentatives. Réessayez dans quelques minutes.";
+  return "Une erreur est survenue. Veuillez réessayer.";
+}
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  async function handleEmailLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const supabase = createBrowserSupabaseClient();
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (authError) {
+      setError(translateAuthError(authError.message));
+      setLoading(false);
+      return;
+    }
+
+    router.push("/dashboard");
+    router.refresh();
+  }
+
+  async function handleGoogleLogin() {
+    setGoogleLoading(true);
+    setError(null);
+    const supabase = createBrowserSupabaseClient();
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (authError) {
+      setError("Impossible de lancer la connexion Google. Réessayez.");
+      setGoogleLoading(false);
+    }
+    // On success, the browser redirects to Google — no further action needed
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <Link href="/">
+            <span className="text-3xl font-bold text-foreground">
+              Vox<span className="text-accent">stel</span>
+            </span>
+          </Link>
+          <p className="text-muted mt-2 text-sm">Content de vous revoir !</p>
+        </div>
+
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
+          <h1 className="text-xl font-bold text-foreground mb-6">Se connecter</h1>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-5 text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
+          {/* Google OAuth */}
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={googleLoading || loading}
+            className="btn-secondary w-full flex items-center justify-center gap-3 mb-5"
+          >
+            <GoogleIcon />
+            {googleLoading ? "Redirection…" : "Continuer avec Google"}
+          </button>
+
+          {/* Separator */}
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted">ou</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          {/* Email / password */}
+          <form onSubmit={handleEmailLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Adresse email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                className="input-field"
+                placeholder="vous@exemple.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Mot de passe
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  className="input-field pr-11"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors"
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading || googleLoading}
+              className="btn-primary w-full flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Connexion…
+                </>
+              ) : (
+                "Se connecter"
+              )}
+            </button>
+          </form>
+        </div>
+
+        <p className="text-center text-sm text-muted mt-6">
+          Pas encore de compte ?{" "}
+          <Link href="/signup" className="text-accent font-medium hover:underline">
+            S'inscrire gratuitement
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
