@@ -1,12 +1,9 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useGeneratorStore } from "@/store/useGeneratorStore";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import type { Category } from "@/types";
+
+export const dynamic = 'force-dynamic';
 
 const CATEGORY_FEATURES = [
   {
@@ -47,14 +44,6 @@ const MINI_STEPS = [
 ];
 
 export default function HomePage() {
-  const router = useRouter();
-  const { setCategory } = useGeneratorStore();
-
-  function handleSelectCategory(id: string) {
-    setCategory(id as Category);
-    router.push(`/generate/${id}`);
-  }
-
   return (
     <>
       <Header />
@@ -380,10 +369,9 @@ export default function HomePage() {
 
             <div className="grid sm:grid-cols-2 gap-6">
               {CATEGORY_FEATURES.map((cat) => (
-                <button
+                <Link
                   key={cat.id}
-                  type="button"
-                  onClick={() => handleSelectCategory(cat.id)}
+                  href={`/generate/${cat.id}`}
                   className="group text-left bg-card border border-border rounded-2xl p-8 shadow-sm hover:shadow-lg hover:border-accent/35 transition-all duration-300"
                 >
                   <div className="flex items-start gap-5">
@@ -400,7 +388,7 @@ export default function HomePage() {
                     <span className="text-sm font-semibold text-accent">Essayer cette catégorie</span>
                     <span className="text-accent" aria-hidden>→</span>
                   </div>
-                </button>
+                </Link>
               ))}
             </div>
           </div>
