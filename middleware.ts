@@ -1,39 +1,22 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
+/**
+ * Lightweight session check — reads Supabase auth cookies directly.
+ * No network call, no Node.js APIs → fully Edge Runtime compatible.
+ * Real token validation still happens in every Server Component via getCurrentUser().
+ */
+function hasAuthSession(request: NextRequest): boolean {
+  return request.cookies.getAll().some(
+    (c) => c.name.startsWith("sb-") && c.name.includes("-auth-token")
   );
+}
 
-  // Refresh session — keeps access token valid (must be called before any redirect)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const authenticated = hasAuthSession(request);
 
   // Protect /dashboard — redirect to /login if not authenticated
-  if (pathname.startsWith("/dashboard") && !user) {
+  if (pathname.startsWith("/dashboard") && !authenticated) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);
@@ -41,17 +24,16 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect authenticated users away from auth pages
-  if ((pathname === "/login" || pathname === "/signup") && user) {
+  if ((pathname === "/login" || pathname === "/signup") && authenticated) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
-  return supabaseResponse;
+  return NextResponse.next();
 }
 
 export const config = {
-  // Run on all routes except static files and API routes
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|api/).*)",
   ],
