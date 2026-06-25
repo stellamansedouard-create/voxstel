@@ -3,6 +3,7 @@
 import { useCallback, useEffect } from "react";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
+import { getStoredUTM } from "@/lib/utm.client";
 import ToolSelector from "@/components/generator/ToolSelector";
 import FreeTextInput from "@/components/generator/FreeTextInput";
 import PrecisionsScreen from "@/components/generator/PrecisionsScreen";
@@ -48,7 +49,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       const res = await fetch("/api/analyze-description", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tool: store.tool, category, description: store.description }),
+        body: JSON.stringify({ tool: store.tool, category, description: store.description, usageContext: store.usageContext || undefined }),
       });
       if (!res.ok) throw new Error("analyze failed");
 
@@ -129,6 +130,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
           tool: store.tool,
           category,
           description: store.description,
+          usageContext: store.usageContext || undefined,
           generatedPromptEn: store.generatedPrompt?.en ?? "",
           previousQA,
         }),
@@ -174,9 +176,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         tool: store.tool,
         category,
         description: store.description,
+        usageContext: store.usageContext || undefined,
         adaptiveAnswers,
         useSonnet: false,
         referenceAspects: referenceAspects.length ? referenceAspects : undefined,
+        _tracking: getStoredUTM(),
       }),
     });
     if (!res.ok) throw new Error("generation failed");
@@ -260,8 +264,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
             {store.step === "description" && toolMeta && (
               <FreeTextInput
                 tool={toolMeta}
+                category={category}
                 value={store.description}
                 onChange={store.setDescription}
+                usageContext={store.usageContext}
+                onUsageContextChange={store.setUsageContext}
                 onSubmit={handleDescriptionSubmit}
                 onBack={store.goBack}
               />

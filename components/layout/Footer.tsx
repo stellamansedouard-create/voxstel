@@ -58,10 +58,18 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/cgu"
+                  href="/cgu-cgv"
                   className="text-sm text-muted hover:text-foreground transition-colors"
                 >
-                  CGU
+                  CGU & CGV
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/politique-de-confidentialite"
+                  className="text-sm text-muted hover:text-foreground transition-colors"
+                >
+                  Confidentialité
                 </Link>
               </li>
               <li>

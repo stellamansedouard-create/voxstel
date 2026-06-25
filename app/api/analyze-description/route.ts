@@ -20,10 +20,11 @@ function getCategoryHints(categoryId: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { tool, category, description } = await req.json() as {
+    const { tool, category, description, usageContext } = await req.json() as {
       tool: AITool;
       category: string;
       description: string;
+      usageContext?: string;
     };
 
     const toolMeta = getToolById(category, tool);
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
 Contexte de l'outil : ${promptContext}
 
 Ton rôle : analyser la description et générer DEUX choses distinctes.
+${usageContext ? `\nContexte d'usage fourni par l'utilisateur : "${usageContext}"\nAdapte tes questions à ce contexte : ton, contraintes de format, qualité requise (commerciale vs personnelle), etc. Si le contexte change la nature des informations manquantes, priorise les questions en conséquence.` : ""}
 
 ━━━ RÈGLE FONDAMENTALE SUR LES QUESTIONS ━━━
 Une question est valide pour DEUX raisons, pas une seule :
@@ -81,7 +83,7 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
           content: `L'utilisateur veut créer avec ${toolName}. Sa description :
 
 "${description}"
-
+${usageContext ? `\nContexte d'usage : "${usageContext}"` : ""}
 Génère les questions directes et les catégories optionnelles pour enrichir son prompt.`,
         },
       ],

@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import type { ToolMeta } from "@/types";
+import type { Category, ToolMeta } from "@/types";
 import ReferenceUpload from "./ReferenceUpload";
 
 interface FreeTextInputProps {
   tool: ToolMeta;
+  category: Category;
   value: string;
   onChange: (value: string) => void;
+  usageContext: string;
+  onUsageContextChange: (value: string) => void;
   onSubmit: () => void;
   onBack: () => void;
   isLoading?: boolean;
@@ -55,10 +58,20 @@ const TOOL_EXAMPLES: Record<string, string> = {
 const DEFAULT_PLACEHOLDER =
   "Décrivez librement ce que vous voulez créer. Plus vous êtes précis, meilleur sera le prompt généré...";
 
+const CONTEXT_PLACEHOLDERS: Partial<Record<Category, string>> = {
+  image: "Ex : affiche de festival, fond d'écran, pub pour une marque, usage personnel...",
+  video: "Ex : intro de chaîne YouTube, clip musical, présentation client, court-métrage...",
+  text: "Ex : article de blog SEO, email de prospection, outil interne d'équipe...",
+  music: "Ex : bande son de jeu vidéo, fond sonore de podcast, chanson pour un mariage...",
+};
+
 export default function FreeTextInput({
   tool,
+  category,
   value,
   onChange,
+  usageContext,
+  onUsageContextChange,
   onSubmit,
   onBack,
   isLoading = false,
@@ -134,6 +147,24 @@ export default function FreeTextInput({
           </span>
           <span className="text-xs text-muted">⌘ + Entrée pour continuer</span>
         </div>
+      </div>
+
+      {/* Contexte d'usage optionnel */}
+      <div className="mt-4">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
+          Dans quel contexte ?{" "}
+          <span className="font-normal text-muted">(optionnel)</span>
+        </label>
+        <input
+          type="text"
+          value={usageContext}
+          onChange={(e) => onUsageContextChange(e.target.value)}
+          placeholder={
+            CONTEXT_PLACEHOLDERS[category] ??
+            "Ex : pour un usage personnel, une présentation client..."
+          }
+          className="input-field"
+        />
       </div>
 
       {/* Référence optionnelle (image pour Image, fichier texte pour Texte/Code) */}

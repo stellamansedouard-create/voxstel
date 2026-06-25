@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
-import { FEATURE_TEXT_REFERENCE_PLAN_RESTRICTED } from "@/lib/features";
+import PlanGate from "@/components/ui/PlanGate";
 
 const ACCEPTED_EXTENSIONS = [
   ".txt", ".md", ".markdown",
@@ -15,10 +15,11 @@ const ACCEPT_ATTR = ACCEPTED_EXTENSIONS.join(",");
 const MAX_BYTES = 500 * 1024; // 500 KB
 
 export default function TextReferenceUpload() {
-  if (FEATURE_TEXT_REFERENCE_PLAN_RESTRICTED) {
-    return null; // Swap for <PlanGate plan="unlimited"> when auth is ready
-  }
-  return <UploadWidget />;
+  return (
+    <PlanGate plan="unlimited">
+      <UploadWidget />
+    </PlanGate>
+  );
 }
 
 function UploadWidget() {

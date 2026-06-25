@@ -5,11 +5,12 @@ import type { AITool, DirectQuestion, PrecisionCategory, PreviousQAItem } from "
 
 export async function POST(req: NextRequest) {
   try {
-    const { tool, category, description, generatedPromptEn, previousQA } =
+    const { tool, category, description, usageContext, generatedPromptEn, previousQA } =
       await req.json() as {
         tool: AITool;
         category: string;
         description: string;
+        usageContext?: string;
         generatedPromptEn: string;
         previousQA: PreviousQAItem[];
       };
@@ -63,7 +64,7 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
         {
           role: "user",
           content: `Description originale : "${description}"
-
+${usageContext ? `Contexte d'usage : "${usageContext}"\n` : ""}
 Prompt généré (insatisfaisant) :
 "${generatedPromptEn}"
 

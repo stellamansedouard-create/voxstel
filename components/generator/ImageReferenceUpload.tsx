@@ -2,15 +2,14 @@
 
 import { useRef, useState } from "react";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
-import { FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED } from "@/lib/features";
+import PlanGate from "@/components/ui/PlanGate";
 
 export default function ImageReferenceUpload() {
-  // Feature flag — will gate to "Unlimited" plan when auth is implemented
-  if (FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED) {
-    return null; // Swap for a <PlanGate plan="unlimited"> wrapper later
-  }
-
-  return <UploadWidget />;
+  return (
+    <PlanGate plan="unlimited">
+      <UploadWidget />
+    </PlanGate>
+  );
 }
 
 function UploadWidget() {

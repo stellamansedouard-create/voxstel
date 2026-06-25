@@ -16,6 +16,7 @@ interface GeneratorActions {
   setCategory: (category: Category) => void;
   setTool: (tool: AITool) => void;
   setDescription: (description: string) => void;
+  setUsageContext: (usageContext: string) => void;
   setAdaptiveData: (data: { directQuestions: DirectQuestion[]; categories: PrecisionCategory[] }) => void;
   setDirectAnswer: (id: string, value: string) => void;
   setAdaptiveAnswer: (categoryId: string, value: string) => void;
@@ -50,6 +51,7 @@ const initialState: ExtendedState = {
   category: null,
   tool: null,
   description: "",
+  usageContext: "",
   directQuestions: [],
   directAnswers: {},
   categories: [],
@@ -84,6 +86,7 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         step: "tool",
         tool: null,
         description: "",
+        usageContext: "",
         directQuestions: [],
         directAnswers: {},
         categories: [],
@@ -103,6 +106,7 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         tool,
         step: "description",
         description: "",
+        usageContext: "",
         directQuestions: [],
         directAnswers: {},
         categories: [],
@@ -116,6 +120,7 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
       }),
 
     setDescription: (description) => set({ description }),
+    setUsageContext: (usageContext) => set({ usageContext }),
 
     setAdaptiveData: (data) =>
       set({
@@ -191,6 +196,7 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
     restartDescription: () =>
       set((state) => ({
         description: "",
+        usageContext: "",
         directQuestions: [],
         directAnswers: {},
         categories: [],

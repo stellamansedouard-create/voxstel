@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { UTMTracker } from "@/components/UTMTracker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,6 +25,9 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-foreground min-h-screen">
+        <Suspense fallback={null}>
+          <UTMTracker />
+        </Suspense>
         {children}
       </body>
     </html>

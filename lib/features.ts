@@ -4,7 +4,7 @@
  */
 
 /** Restrict image reference upload to the "Unlimited" plan */
-export const FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED = false;
+export const FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED = true;
 
 /** Restrict text/code reference upload to the "Unlimited" plan */
-export const FEATURE_TEXT_REFERENCE_PLAN_RESTRICTED = false;
+export const FEATURE_TEXT_REFERENCE_PLAN_RESTRICTED = true;

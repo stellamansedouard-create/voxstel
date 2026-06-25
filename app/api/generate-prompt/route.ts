@@ -1,19 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
+import { getCurrentUser } from "@/lib/auth";
+import { trackEvent } from "@/lib/analytics";
+import { checkQuota, incrementQuota } from "@/lib/quota";
 import type { AITool, GeneratedPrompt, ImageAspect } from "@/types";
+
+interface TrackingPayload {
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  referrer?: string;
+  session_id?: string;
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const { tool, category, description, adaptiveAnswers, useSonnet, referenceAspects } =
+    const { tool, category, description, usageContext, adaptiveAnswers, useSonnet, referenceAspects, _tracking } =
       await req.json() as {
         tool: AITool;
         category: string;
         description: string;
+        usageContext?: string;
         adaptiveAnswers: Record<string, string>;
         useSonnet?: boolean;
         referenceAspects?: ImageAspect[];
+        _tracking?: TrackingPayload;
       };
+
+    // Auth + quota check — must run before calling Anthropic
+    const user = await getCurrentUser().catch(() => null);
+    let quotaStatus = null;
+
+    if (user) {
+      quotaStatus = await checkQuota(user.id);
+      if (!quotaStatus || !quotaStatus.allowed) {
+        return NextResponse.json({ error: "quota_exceeded" }, { status: 429 });
+      }
+    }
 
     const model = useSonnet ? MODELS.sonnet : MODELS.haiku;
     const toolMeta = getToolById(category, tool);
@@ -53,7 +77,7 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown :
           content: `Génère un prompt ${toolName}.
 
 Description : "${description}"
-${extras ? `\nPrécisions :\n${extras}` : ""}${referenceSection}`,
+${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPrécisions :\n${extras}` : ""}${referenceSection}`,
         },
       ],
     });
@@ -71,6 +95,25 @@ ${extras ? `\nPrécisions :\n${extras}` : ""}${referenceSection}`,
     } catch {
       throw new Error("Failed to parse prompt JSON");
     }
+
+    // Quota increment — fire-and-forget, only for plans with a monthly limit
+    if (user && quotaStatus && quotaStatus.limit !== null) {
+      void incrementQuota(user.id, quotaStatus.quotaUsed).catch((e) =>
+        console.error("[quota]", e)
+      );
+    }
+
+    // Analytics — fire-and-forget
+    void trackEvent({
+      userId: user?.id ?? null,
+      eventType: "prompt_generated",
+      promptCategory: category,
+      utmSource: _tracking?.utm_source ?? null,
+      utmMedium: _tracking?.utm_medium ?? null,
+      utmCampaign: _tracking?.utm_campaign ?? null,
+      referrer: _tracking?.referrer ?? null,
+      sessionId: _tracking?.session_id ?? null,
+    }).catch((e) => console.error("[analytics]", e));
 
     return NextResponse.json(result);
   } catch (error) {

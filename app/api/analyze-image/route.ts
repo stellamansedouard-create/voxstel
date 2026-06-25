@@ -1,10 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
+import { getCurrentUser } from "@/lib/auth";
+import { createServerSupabase } from "@/lib/supabase";
+import { FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED } from "@/lib/features";
 import type { AITool, ImageAspect } from "@/types";
+
+const REFERENCE_ALLOWED_PLANS = ["unlimited", "promax"];
 
 export async function POST(req: NextRequest) {
   try {
+    // Auth check — always required
+    const user = await getCurrentUser().catch(() => null);
+    if (!user) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+
+    // Plan check — enforced when the feature flag is active
+    if (FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED) {
+      const supabase = createServerSupabase();
+      const { data } = await supabase
+        .from("users")
+        .select("plan")
+        .eq("id", user.id)
+        .single();
+      if (!data || !REFERENCE_ALLOWED_PLANS.includes(data.plan)) {
+        return NextResponse.json({ error: "plan_required" }, { status: 403 });
+      }
+    }
+
     const { tool, category, base64, mimeType } = await req.json() as {
       tool: AITool;
       category: string;

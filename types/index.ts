@@ -80,6 +80,7 @@ export interface GeneratorState {
   isLoading: boolean;
   error: string | null;
   refinementCount: number;
+  usageContext: string;
 }
 
 export interface ToolMeta {
