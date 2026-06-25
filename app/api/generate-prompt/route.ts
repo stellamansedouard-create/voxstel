@@ -104,20 +104,16 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       );
     }
 
-    // Prompt history — fire-and-forget, service role bypasses RLS
+    // Prompt history — awaited to catch schema/table errors in Vercel logs
     if (user) {
-      void createServerSupabase()
+      const { error: histErr } = await createServerSupabase()
         .from("prompts_history")
-        .insert({
-          user_id: user.id,
-          category,
-          tool,
-          prompt_en: result.en,
-          prompt_fr: result.fr,
-        })
-        .then(({ error }) => {
-          if (error) console.error("[prompts_history]", error.message);
-        });
+        .insert({ user_id: user.id, category, tool, prompt_en: result.en, prompt_fr: result.fr });
+      if (histErr) {
+        console.error("[prompts_history] INSERT failed — message:", histErr.message, "| code:", histErr.code, "| details:", histErr.details, "| hint:", histErr.hint);
+      } else {
+        console.log("[prompts_history] INSERT ok — user:", user.id, "category:", category);
+      }
     }
 
     // Analytics — fire-and-forget

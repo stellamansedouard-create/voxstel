@@ -27,5 +27,9 @@ export async function trackEvent(payload: TrackEventPayload): Promise<void> {
     session_id: payload.sessionId ?? null,
     metadata: payload.metadata ?? null,
   });
-  if (error) console.error("[analytics] trackEvent:", error.message);
+  if (error) {
+    console.error("[analytics] trackEvent failed — message:", error.message, "| code:", (error as Record<string, unknown>).code, "| details:", (error as Record<string, unknown>).details);
+  } else {
+    console.log("[analytics] trackEvent ok — event_type:", payload.eventType, "user_id:", payload.userId);
+  }
 }

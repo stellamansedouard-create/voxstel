@@ -73,17 +73,13 @@ export async function POST(req: NextRequest) {
 
 Contexte de l'outil : ${promptContext}
 
-━━━ ÉTAPE 1 — ANALYSE INTERNE QQOQCP (ne jamais mentionner ces axes dans les questions) ━━━
-Avant de générer quoi que ce soit, évalue mentalement combien de ces axes sont DÉJÀ couverts dans la description :
+━━━ ANALYSE INTERNE QQOQCP (ne jamais mentionner ces axes dans les questions) ━━━
+Évalue mentalement quels axes sont DÉJÀ couverts dans la description :
 ${getQQOQCPAxes(category)}
 
-Compte les axes non couverts et applique :
-- 4-5 axes manquants → poser 3-4 questions
-- 2-3 axes manquants → poser 1-2 questions
-- 0-1 axe manquant  → 0-1 question ou readyToGenerate: true
+Règle : génère une question UNIQUEMENT pour un axe clairement ABSENT de la description. Ne génère PAS de question pour un axe déjà couvert ou facilement inférable. Si la description couvre déjà la quasi-totalité des axes, retourne readyToGenerate: true.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${usageContextBlock}
-━━━ ÉTAPE 2 — GÉNÉRATION ━━━
 Une question est valide pour DEUX raisons, pas une seule :
 a) APPROFONDIR quelque chose de VAGUE/GÉNÉRIQUE déjà mentionné
    → Ex : l'utilisateur écrit "ambiance sombre" — c'est présent mais trop flou pour ${toolName}
@@ -92,7 +88,7 @@ b) COMBLER un MANQUE ESSENTIEL détecté dans l'analyse QQOQCP
    → Ex : aucune mention du style alors que c'est structurant pour ${toolName}
    → Question ciblée + suggestions adaptées au contexte
 
-1. "questions" — nombre proportionnel aux axes manquants (voir Étape 1)
+1. "questions" — uniquement pour les axes réellement manquants
    - Chaque question avec 4-5 suggestions courtes et TRÈS contextuelles (3 mots max)
    - Les suggestions doivent coller à la description spécifique, pas être génériques
    - Ne jamais utiliser les noms QQOQCP comme formulation de question
@@ -144,6 +140,11 @@ Génère les questions directes et les catégories optionnelles pour enrichir so
 
     if (!Array.isArray(parsed.questions)) parsed.questions = [];
     if (!Array.isArray(parsed.categories)) parsed.categories = [];
+
+    // Server-side cap: richer/longer descriptions need fewer follow-up questions
+    const totalChars = description.length + (usageContext?.length ?? 0);
+    const maxQ = totalChars < 20 ? 4 : totalChars < 50 ? 3 : totalChars < 100 ? 2 : 1;
+    parsed.questions = parsed.questions.slice(0, maxQ);
 
     if (parsed.questions.length === 0 && parsed.categories.length === 0) {
       parsed.readyToGenerate = true;

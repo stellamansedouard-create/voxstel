@@ -39,7 +39,7 @@ export default function PrecisionsScreen({
   onBack,
   isSubmitting = false,
 }: PrecisionsScreenProps) {
-  const { isRefinement, previousQA } = useGeneratorStore();
+  const { isRefinement, previousQA, usageContext } = useGeneratorStore();
 
   const hasDirectQuestions = directQuestions.length > 0;
   const hasCategories = categories.length > 0;
@@ -50,7 +50,14 @@ export default function PrecisionsScreen({
       {/* Description figée */}
       <div className="flex gap-3 bg-card-hover border border-border rounded-xl px-4 py-3.5">
         <span className="text-2xl text-border leading-none select-none mt-0.5 flex-shrink-0">&ldquo;</span>
-        <p className="text-sm text-foreground leading-relaxed line-clamp-4 italic">{description}</p>
+        <div>
+          <p className="text-sm text-foreground leading-relaxed line-clamp-4 italic">{description}</p>
+          {usageContext && (
+            <p className="text-xs text-muted mt-1.5">
+              Contexte : <span className="font-medium text-foreground/80">{usageContext}</span>
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Réponses précédentes modifiables (mode Renforcer) */}
