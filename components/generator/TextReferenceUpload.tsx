@@ -55,6 +55,7 @@ function UploadWidget() {
           tool: store.tool,
           category: store.category,
           content,
+          usageContext: store.usageContext || undefined,
         }),
       });
 

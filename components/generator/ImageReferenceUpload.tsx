@@ -51,6 +51,7 @@ function UploadWidget() {
           category: store.category,
           base64,
           mimeType: file.type,
+          usageContext: store.usageContext || undefined,
         }),
       });
 

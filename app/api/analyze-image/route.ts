@@ -29,11 +29,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const { tool, category, base64, mimeType } = await req.json() as {
+    const { tool, category, base64, mimeType, usageContext } = await req.json() as {
       tool: AITool;
       category: string;
       base64: string;
       mimeType: string;
+      usageContext?: string;
     };
 
     // Validate mime type — Claude Vision supports jpeg, png, gif, webp
@@ -80,7 +81,7 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
             },
             {
               type: "text",
-              text: `Analyse cette image pour créer des aspects réutilisables dans un prompt ${toolName}. Identifie ce qui est visuellement distinctif et utilisable.`,
+              text: `Analyse cette image pour créer des aspects réutilisables dans un prompt ${toolName}. Identifie ce qui est visuellement distinctif et utilisable.${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}`,
             },
           ],
         },

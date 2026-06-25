@@ -4,6 +4,7 @@ import { getToolById } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { checkQuota, incrementQuota } from "@/lib/quota";
+import { createServerSupabase } from "@/lib/supabase";
 import type { AITool, GeneratedPrompt, ImageAspect } from "@/types";
 
 interface TrackingPayload {
@@ -101,6 +102,22 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       void incrementQuota(user.id, quotaStatus.quotaUsed).catch((e) =>
         console.error("[quota]", e)
       );
+    }
+
+    // Prompt history — fire-and-forget, service role bypasses RLS
+    if (user) {
+      void createServerSupabase()
+        .from("prompts_history")
+        .insert({
+          user_id: user.id,
+          category,
+          tool,
+          prompt_en: result.en,
+          prompt_fr: result.fr,
+        })
+        .then(({ error }) => {
+          if (error) console.error("[prompts_history]", error.message);
+        });
     }
 
     // Analytics — fire-and-forget

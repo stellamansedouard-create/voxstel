@@ -30,10 +30,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const { tool, category, content } = await req.json() as {
+    const { tool, category, content, usageContext } = await req.json() as {
       tool: AITool;
       category: string;
       content: string;
+      usageContext?: string;
     };
 
     const toolMeta = getToolById(category, tool);
@@ -74,7 +75,7 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
       messages: [
         {
           role: "user",
-          content: `Analyse ce ${contentType} et identifie ses aspects stylistiques caractéristiques :\n\n${truncated}${content.length > MAX_CONTENT_CHARS ? "\n[extrait tronqué]" : ""}`,
+          content: `Analyse ce ${contentType} et identifie ses aspects stylistiques caractéristiques.${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}\n\n${truncated}${content.length > MAX_CONTENT_CHARS ? "\n[extrait tronqué]" : ""}`,
         },
       ],
     });

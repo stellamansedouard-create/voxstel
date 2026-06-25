@@ -6,7 +6,8 @@ import PromptHistoryList from "@/components/dashboard/PromptHistoryList";
 import AnalyticsCharts from "@/components/dashboard/AnalyticsCharts";
 import SourceBreakdown from "@/components/dashboard/SourceBreakdown";
 import type { PromptHistoryItem } from "@/components/dashboard/PromptHistoryList";
-import { getCurrentUser, getAuthServerClient } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { createServerSupabase } from "@/lib/supabase";
 import { PRICING } from "@/lib/pricing";
 import type { Metadata } from "next";
 
@@ -50,7 +51,7 @@ export default async function DashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const supabase = getAuthServerClient();
+  const supabase = createServerSupabase();
 
   const signupDate = new Date(user.created_at);
   const now = new Date();
