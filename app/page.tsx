@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +44,9 @@ const MINI_STEPS = [
   { n: "04", label: "Copiez le prompt" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getCurrentUser().catch(() => null);
+  const isLoggedIn = !!user;
   return (
     <>
       <Header />
@@ -98,7 +101,7 @@ export default function HomePage() {
                 href="/generate/image"
                 className="btn-primary inline-flex items-center gap-2 text-base py-3.5 px-8 shadow-md"
               >
-                Essayer gratuitement <span aria-hidden>→</span>
+                {isLoggedIn ? "Accéder au générateur" : "Essayer gratuitement"} <span aria-hidden>→</span>
               </Link>
             </div>
           </div>
@@ -432,7 +435,7 @@ export default function HomePage() {
               href="/generate/image"
               className="btn-primary inline-flex items-center gap-2.5 text-base py-4 px-9 shadow-md"
             >
-              Créer mon premier prompt <span aria-hidden>→</span>
+              {isLoggedIn ? "Accéder au générateur" : "Créer mon premier prompt"} <span aria-hidden>→</span>
             </Link>
 
             <p className="text-xs text-muted mt-5">

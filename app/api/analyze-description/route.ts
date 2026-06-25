@@ -18,6 +18,37 @@ function getCategoryHints(categoryId: string): string {
   }
 }
 
+function getQQOQCPAxes(categoryId: string): string {
+  switch (categoryId) {
+    case "image":
+      return `- QUOI : sujet principal, personnages, éléments visuels clés
+- OÙ : lieu, décor, environnement
+- QUAND : époque, moment de la journée, saison, lumière naturelle
+- COMMENT : style artistique, technique, éclairage, composition, palette de couleurs
+- POURQUOI : contexte d'usage (publicité, décoration, portfolio, jeu vidéo, réseaux sociaux…)`;
+    case "video":
+      return `- QUOI : action principale, sujet, scène
+- OÙ : lieu, ambiance visuelle, décor
+- QUAND : durée de scène, rythme, époque de référence
+- COMMENT : style visuel, mouvement de caméra, transitions, couleurs
+- POURQUOI : usage final (clip musical, publicité, court-métrage, intro YouTube…)`;
+    case "text":
+      return `- QUI : audience cible, destinataire, niveau de connaissance
+- QUOI : sujet précis, tâche à accomplir, contenu attendu
+- COMMENT : ton, structure, format, longueur, niveau de langage
+- POURQUOI : objectif final (SEO, conversion, documentation, pédagogie, divertissement…)`;
+    case "music":
+      return `- QUOI : genre musical, style, sous-genre
+- COMMENT : instruments, tempo, arrangement, structure du morceau
+- QUAND : durée, époque musicale de référence
+- POURQUOI : usage final (bande son, méditation, danse, générique, ambiance…)`;
+    default:
+      return `- QUOI : sujet, contenu principal
+- COMMENT : style, technique, format
+- POURQUOI : contexte d'usage`;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { tool, category, description, usageContext } = await req.json() as {
@@ -31,6 +62,10 @@ export async function POST(req: NextRequest) {
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
 
+    const usageContextBlock = usageContext
+      ? `\n⚠ CONTEXTE D'USAGE DÉCLARÉ : "${usageContext}"\nIMPÉRATIF : inclus AU MOINS UNE question directement liée à ce contexte d'usage. Exemples — si "publicité" : quel produit/service, quel message, quelle cible, quel format ; si "jeu vidéo" : quel genre, quelle plateforme, quel personnage. Les autres questions tiennent également compte de ce contexte.\n`
+      : "";
+
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
       max_tokens: 900,
@@ -38,32 +73,36 @@ export async function POST(req: NextRequest) {
 
 Contexte de l'outil : ${promptContext}
 
-Ton rôle : analyser la description et générer DEUX choses distinctes.
-${usageContext ? `\nContexte d'usage fourni par l'utilisateur : "${usageContext}"\nAdapte tes questions à ce contexte : ton, contraintes de format, qualité requise (commerciale vs personnelle), etc. Si le contexte change la nature des informations manquantes, priorise les questions en conséquence.` : ""}
+━━━ ÉTAPE 1 — ANALYSE INTERNE QQOQCP (ne jamais mentionner ces axes dans les questions) ━━━
+Avant de générer quoi que ce soit, évalue mentalement combien de ces axes sont DÉJÀ couverts dans la description :
+${getQQOQCPAxes(category)}
 
-━━━ RÈGLE FONDAMENTALE SUR LES QUESTIONS ━━━
+Compte les axes non couverts et applique :
+- 4-5 axes manquants → poser 3-4 questions
+- 2-3 axes manquants → poser 1-2 questions
+- 0-1 axe manquant  → 0-1 question ou readyToGenerate: true
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${usageContextBlock}
+━━━ ÉTAPE 2 — GÉNÉRATION ━━━
 Une question est valide pour DEUX raisons, pas une seule :
 a) APPROFONDIR quelque chose de VAGUE/GÉNÉRIQUE déjà mentionné
    → Ex : l'utilisateur écrit "ambiance sombre" — c'est présent mais trop flou pour ${toolName}
    → Question : "Quelle nuance d'ambiance sombre ?" + suggestions : Oppressant, Mélancolique, Mystérieux, Inquiétant
-b) COMBLER un MANQUE ESSENTIEL pour ce type de prompt sur ${toolName}
+b) COMBLER un MANQUE ESSENTIEL détecté dans l'analyse QQOQCP
    → Ex : aucune mention du style alors que c'est structurant pour ${toolName}
    → Question ciblée + suggestions adaptées au contexte
 
-Tu dois décider pour chaque question si elle est de type (a) ou (b) selon ce que tu détectes.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. "questions" — les 2-3 questions les plus impactantes (types a ou b)
+1. "questions" — nombre proportionnel aux axes manquants (voir Étape 1)
    - Chaque question avec 4-5 suggestions courtes et TRÈS contextuelles (3 mots max)
    - Les suggestions doivent coller à la description spécifique, pas être génériques
-   - Maximum 3 questions
+   - Ne jamais utiliser les noms QQOQCP comme formulation de question
 
 2. "categories" — catégories optionnelles supplémentaires pour affiner davantage
    - Points secondaires UNIQUEMENT, pas ceux déjà couverts par les questions
    - Maximum 4 catégories, priority: true pour les 2 plus pertinentes
    - Labels courts (2-3 mots) en français, ids en snake_case anglais
 
-Si la description est déjà très précise et complète : questions: [], categories: [], readyToGenerate: true.
+Si tous les axes QQOQCP sont couverts : questions: [], categories: [], readyToGenerate: true.
 
 Catégories possibles : ${getCategoryHints(category)}
 
