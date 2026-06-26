@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
-      max_tokens: 900,
+      max_tokens: 1200,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
 Contexte de l'outil : ${promptContext}
@@ -59,7 +59,7 @@ Génère de NOUVELLES questions et catégories pour améliorer le résultat.
 Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
 {
   "questions": [
-    { "id": "id_snake", "label": "Question ciblée ?", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
+    { "id": "id_snake", "label": "Question ciblée ?", "theme": "Thème court en français", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
   ],
   "categories": [
     { "id": "id_snake", "label": "Catégorie", "priority": true }

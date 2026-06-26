@@ -89,10 +89,20 @@ export default async function HomePage() {
               <span className="text-accent">Voxstel trouve les mots.</span>
             </h1>
 
-            <p className="text-xl text-muted leading-relaxed max-w-xl mx-auto mb-11 text-balance">
+            <p className="text-xl text-muted leading-relaxed max-w-xl mx-auto mb-6 text-balance">
               Décrivez ce que vous imaginez — même en quelques mots.
               Voxstel pose les bonnes questions et génère le prompt parfait
               pour votre IA, en anglais et en français.
+            </p>
+
+            {/* FOMO phrase */}
+            <p
+              className="text-base text-muted/80 leading-relaxed max-w-lg mx-auto mb-11 text-balance italic pl-4"
+              style={{ borderLeft: "2px solid rgba(200,145,10,0.35)" }}
+            >
+              Vous pouvez écrire un prompt vous-même. Mais celui que Voxstel génère ira chercher
+              les détails qui font la différence entre un résultat approximatif et un résultat
+              qui correspond vraiment à ce que vous aviez en tête.
             </p>
 
             {/* CTA unique */}
@@ -103,6 +113,17 @@ export default async function HomePage() {
               >
                 {isLoggedIn ? "Accéder au générateur" : "Essayer gratuitement"} <span aria-hidden>→</span>
               </Link>
+            </div>
+
+            {/* Trust badges */}
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-7 text-sm text-muted/60">
+              <span>🔒 Paiement sécurisé</span>
+              <span className="hidden sm:inline text-muted/30" aria-hidden>·</span>
+              <span>❌ Sans engagement</span>
+              <span className="hidden sm:inline text-muted/30" aria-hidden>·</span>
+              <span>🇫🇷 Conçu en France</span>
+              <span className="hidden sm:inline text-muted/30" aria-hidden>·</span>
+              <span>🛡️ Conforme RGPD</span>
             </div>
           </div>
         </section>

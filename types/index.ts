@@ -22,6 +22,7 @@ export interface DirectQuestion {
   id: string;
   label: string;
   suggestions: string[];
+  theme?: string;
 }
 
 /** Catégorie optionnelle dans la section "Aller plus loin" */

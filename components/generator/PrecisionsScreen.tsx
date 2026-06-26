@@ -99,7 +99,7 @@ export default function PrecisionsScreen({
       {hasDirectQuestions && (
         <div>
           <p className="text-sm font-semibold text-foreground mb-3">
-            {isRefinement ? "Nouvelles pistes à explorer" : "Quelques précisions rapides"}
+            {isRefinement ? "Nouvelles pistes à explorer" : "Précisez votre intention"}
           </p>
           <DirectQuestions
             questions={directQuestions}

@@ -19,6 +19,41 @@ function getCategoryHints(categoryId: string): string {
   }
 }
 
+function getThemeHints(categoryId: string): string {
+  switch (categoryId) {
+    case "image":
+      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
+- "Sujet & Composition" — sujet principal, personnages, éléments visuels, cadrage
+- "Style & Esthétique" — style artistique, technique, medium (photo, peinture, 3D, illustration…)
+- "Lumière & Couleurs" — éclairage, palette, heure, ambiance colorée
+- "Décor & Contexte" — lieu, environnement, époque, contexte d'usage
+- "Détails Techniques" — ratio, texte affiché, contraintes spécifiques à l'outil`;
+    case "video":
+      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
+- "Action & Scène" — sujet, action principale, personnages
+- "Style Visuel" — esthétique, références visuelles, grade colorimétrique
+- "Mouvement & Rythme" — mouvements caméra, transitions, rythme de montage
+- "Ambiance & Atmosphère" — humeur, émotion, son d'ambiance
+- "Détails Techniques" — durée, format, plateforme de destination`;
+    case "text":
+      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
+- "Sujet & Contenu" — tâche précise, périmètre, angle
+- "Audience & Ton" — destinataire, niveau, registre, voix
+- "Structure & Format" — longueur, mise en forme, plan, format de sortie
+- "Objectif & Contraintes" — but final (SEO, conversion, documentation…), ce qu'il faut éviter
+- "Technique" — langage, framework, version, environnement (pour les demandes de code)`;
+    case "music":
+      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
+- "Style & Genre" — genre, sous-genre, ère musicale, influences
+- "Instrumentation" — instruments, arrangement, présence vocale
+- "Énergie & Émotion" — tempo, intensité, humeur, dynamique
+- "Structure & Durée" — structure du morceau, durée, intro/outro
+- "Usage & Contexte" — usage final (bande-son, méditation, danse, générique…)`;
+    default:
+      return `Attribue un thème court et descriptif en français à chaque question (ex: "Style", "Contexte", "Technique").`;
+  }
+}
+
 function getQQOQCPAxes(categoryId: string): string {
   switch (categoryId) {
     case "image":
@@ -74,7 +109,7 @@ export async function POST(req: NextRequest) {
 
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
-      max_tokens: 900,
+      max_tokens: 2500,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
 Contexte de l'outil : ${promptContext}
@@ -83,9 +118,17 @@ Contexte de l'outil : ${promptContext}
 Évalue mentalement quels axes sont DÉJÀ couverts dans la description :
 ${getQQOQCPAxes(category)}
 
-Règle : génère une question UNIQUEMENT pour un axe clairement ABSENT de la description. Ne génère PAS de question pour un axe déjà couvert ou facilement inférable. Si la description couvre déjà la quasi-totalité des axes, retourne readyToGenerate: true.
+Règle : génère une question UNIQUEMENT pour un axe clairement ABSENT de la description ou insuffisamment précis pour ${toolName}. Ne génère PAS de question pour un axe déjà couvert ou facilement inférable. Si la description couvre déjà la quasi-totalité des axes, retourne readyToGenerate: true.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${usageContextBlock}
+━━━ PRINCIPE CENTRAL — NOMBRE DE QUESTIONS ━━━
+Il n'y a AUCUNE limite ni objectif chiffré. Pose exactement autant de questions que nécessaire pour lever toutes les ambiguïtés réelles — ni plus, ni moins.
+- Description très vague (ex: "un portrait", "une mélodie triste", "écris un article") → pose toutes les questions nécessaires pour couvrir les axes manquants, qu'il y en ait 6, 10 ou 14.
+- Description déjà précise avec un seul axe flou → pose uniquement cette question.
+- Ne t'arrête JAMAIS artificiellement tôt si des axes importants restent non couverts.
+- Ne fabrique JAMAIS de question redondante ou triviale juste pour augmenter le nombre.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Une question est valide pour DEUX raisons, pas une seule :
 a) APPROFONDIR quelque chose de VAGUE/GÉNÉRIQUE déjà mentionné
    → Ex : l'utilisateur écrit "ambiance sombre" — c'est présent mais trop flou pour ${toolName}
@@ -94,10 +137,13 @@ b) COMBLER un MANQUE ESSENTIEL détecté dans l'analyse QQOQCP
    → Ex : aucune mention du style alors que c'est structurant pour ${toolName}
    → Question ciblée + suggestions adaptées au contexte
 
-1. "questions" — uniquement pour les axes réellement manquants
+1. "questions" — pour chaque axe réellement manquant ou insuffisamment précis
    - Chaque question avec 4-5 suggestions courtes et TRÈS contextuelles (3 mots max)
    - Les suggestions doivent coller à la description spécifique, pas être génériques
    - Ne jamais utiliser les noms QQOQCP comme formulation de question
+   - Chaque question doit inclure un champ "theme" choisi parmi les thèmes valides ci-dessous
+
+${getThemeHints(category)}
 
 2. "categories" — catégories optionnelles supplémentaires pour affiner davantage
    - Points secondaires UNIQUEMENT, pas ceux déjà couverts par les questions
@@ -111,7 +157,7 @@ Catégories possibles : ${getCategoryHints(category)}
 Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
 {
   "questions": [
-    { "id": "id_snake", "label": "Question en français ?", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
+    { "id": "id_snake", "label": "Question en français ?", "theme": "Thème valide", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
   ],
   "categories": [
     { "id": "id_snake", "label": "Catégorie", "priority": true }
@@ -146,11 +192,6 @@ Génère les questions directes et les catégories optionnelles pour enrichir so
 
     if (!Array.isArray(parsed.questions)) parsed.questions = [];
     if (!Array.isArray(parsed.categories)) parsed.categories = [];
-
-    // Server-side cap: richer/longer descriptions need fewer follow-up questions
-    const totalChars = description.length + (usageContext?.length ?? 0);
-    const maxQ = totalChars < 20 ? 4 : totalChars < 50 ? 3 : totalChars < 100 ? 2 : 1;
-    parsed.questions = parsed.questions.slice(0, maxQ);
 
     if (parsed.questions.length === 0 && parsed.categories.length === 0) {
       parsed.readyToGenerate = true;
