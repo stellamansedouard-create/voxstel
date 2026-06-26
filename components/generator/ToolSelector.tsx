@@ -1,12 +1,20 @@
 "use client";
 
-import type { CategoryMeta, AITool } from "@/types";
+import { ImageIcon, Video, FileText, Music } from "lucide-react";
+import type { CategoryMeta, AITool, ToolCapability } from "@/types";
 import Badge from "@/components/ui/Badge";
 
 interface ToolSelectorProps {
   category: CategoryMeta;
   onSelect: (tool: AITool) => void;
 }
+
+const CAPABILITY_CONFIG: Record<ToolCapability, { label: string; Icon: React.ElementType }> = {
+  image: { label: "Image", Icon: ImageIcon },
+  video: { label: "Vidéo", Icon: Video },
+  text:  { label: "Texte", Icon: FileText },
+  music: { label: "Musique", Icon: Music },
+};
 
 export default function ToolSelector({ category, onSelect }: ToolSelectorProps) {
   return (
@@ -35,11 +43,29 @@ export default function ToolSelector({ category, onSelect }: ToolSelectorProps) 
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
-                  <span className="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">
-                    {tool.name}
-                  </span>
-                  {tool.badge && <Badge label={tool.badge} />}
+                <div className="flex items-start justify-between gap-2 mb-0.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">
+                      {tool.name}
+                    </span>
+                    {tool.badge && <Badge label={tool.badge} />}
+                  </div>
+                  {tool.capabilities && tool.capabilities.length > 0 && (
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {tool.capabilities.map((cap) => {
+                        const { Icon } = CAPABILITY_CONFIG[cap];
+                        return (
+                          <span
+                            key={cap}
+                            title={CAPABILITY_CONFIG[cap].label}
+                            className="w-5 h-5 flex items-center justify-center rounded-md bg-accent/8 text-accent/60"
+                          >
+                            <Icon size={11} />
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs text-muted leading-relaxed line-clamp-2">
                   {tool.description}

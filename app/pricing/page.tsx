@@ -189,27 +189,16 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* FAQ-style note */}
-        <section className="py-16 px-4" style={{ backgroundColor: "#F5F5F3" }}>
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-foreground mb-4">
-              Une question ?
-            </h2>
-            <p className="text-muted mb-6 leading-relaxed">
-              Consultez la page d'accueil pour découvrir comment fonctionne Voxstel,
-              ou contactez-nous directement.
+        {/* Lien retour accueil */}
+        <section className="py-14 px-4" style={{ backgroundColor: "#F5F5F3" }}>
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-muted mb-5 leading-relaxed">
+              Vous souhaitez en savoir plus sur le fonctionnement de Voxstel
+              avant de choisir un plan ?
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/" className="btn-secondary inline-flex items-center justify-center gap-2">
-                ← Retour à l'accueil
-              </Link>
-              <a
-                href="mailto:hello@voxstel.com"
-                className="btn-secondary inline-flex items-center justify-center gap-2"
-              >
-                Nous écrire
-              </a>
-            </div>
+            <Link href="/" className="btn-secondary inline-flex items-center justify-center gap-2">
+              ← Découvrir comment ça marche
+            </Link>
           </div>
         </section>
       </main>

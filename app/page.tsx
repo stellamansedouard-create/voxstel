@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Lock, RefreshCcw, MapPin, ShieldCheck } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getCurrentUser } from "@/lib/auth";
@@ -89,20 +90,10 @@ export default async function HomePage() {
               <span className="text-accent">Voxstel trouve les mots.</span>
             </h1>
 
-            <p className="text-xl text-muted leading-relaxed max-w-xl mx-auto mb-6 text-balance">
+            <p className="text-xl text-muted leading-relaxed max-w-xl mx-auto mb-11 text-balance">
               Décrivez ce que vous imaginez — même en quelques mots.
               Voxstel pose les bonnes questions et génère le prompt parfait
               pour votre IA, en anglais et en français.
-            </p>
-
-            {/* FOMO phrase */}
-            <p
-              className="text-base text-muted/80 leading-relaxed max-w-lg mx-auto mb-11 text-balance italic pl-4"
-              style={{ borderLeft: "2px solid rgba(200,145,10,0.35)" }}
-            >
-              Vous pouvez écrire un prompt vous-même. Mais celui que Voxstel génère ira chercher
-              les détails qui font la différence entre un résultat approximatif et un résultat
-              qui correspond vraiment à ce que vous aviez en tête.
             </p>
 
             {/* CTA unique */}
@@ -115,16 +106,42 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-7 text-sm text-muted/60">
-              <span>🔒 Paiement sécurisé</span>
-              <span className="hidden sm:inline text-muted/30" aria-hidden>·</span>
-              <span>❌ Sans engagement</span>
-              <span className="hidden sm:inline text-muted/30" aria-hidden>·</span>
-              <span>🇫🇷 Conçu en France</span>
-              <span className="hidden sm:inline text-muted/30" aria-hidden>·</span>
-              <span>🛡️ Conforme RGPD</span>
+            {/* Trust badges — icônes Lucide */}
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-8">
+              {[
+                { Icon: Lock, label: "Paiement sécurisé" },
+                { Icon: RefreshCcw, label: "Sans engagement" },
+                { Icon: MapPin, label: "Conçu en France" },
+                { Icon: ShieldCheck, label: "Conforme RGPD" },
+              ].map(({ Icon, label }, i, arr) => (
+                <span key={label} className="flex items-center gap-4">
+                  <span className="flex items-center gap-1.5 text-sm text-muted/60">
+                    <Icon size={14} className="text-accent/70 flex-shrink-0" />
+                    {label}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <span className="hidden sm:inline text-muted/25" aria-hidden>·</span>
+                  )}
+                </span>
+              ))}
             </div>
+          </div>
+        </section>
+
+        {/* ─────────────────────────────────────────────────────────────
+            FOMO — Pourquoi pas seul
+        ───────────────────────────────────────────────────────────── */}
+        <section className="py-20 px-4" style={{ backgroundColor: "rgba(200,145,10,0.03)" }}>
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-6 block">
+              Pourquoi pas seul ?
+            </span>
+            <p className="text-2xl sm:text-3xl font-semibold text-foreground leading-[1.35] text-balance">
+              Vous pouvez écrire un prompt vous-même. Mais celui que Voxstel génère ira chercher
+              les détails qui font la différence entre un résultat{" "}
+              <span className="text-muted">approximatif</span> et un résultat qui correspond{" "}
+              <span className="text-accent">vraiment à ce que vous aviez en tête.</span>
+            </p>
           </div>
         </section>
 
@@ -212,7 +229,7 @@ export default async function HomePage() {
                 De l'idée brute au prompt parfait
               </h2>
               <p className="text-lg text-muted max-w-md mx-auto">
-                En 30 secondes. Sans connaître les règles du prompt engineering.
+                En quelques questions. Sans connaître les règles du prompt engineering.
               </p>
             </div>
 
@@ -232,14 +249,6 @@ export default async function HomePage() {
                   </div>
                 </div>
                 <div className="space-y-3 mb-4">
-                  <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-muted/70 block mb-1.5">
-                      🇬🇧 English
-                    </span>
-                    <p className="text-xs text-foreground font-mono leading-relaxed bg-card-hover rounded-xl p-3 italic">
-                      "a person thinking"
-                    </p>
-                  </div>
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-wider text-muted/70 block mb-1.5">
                       🇫🇷 Français
@@ -316,9 +325,14 @@ export default async function HomePage() {
 
                 <div className="space-y-3 mb-5">
                   <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-muted/70 block mb-1.5">
-                      🇬🇧 English
-                    </span>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted/70">
+                        🇬🇧 English
+                      </span>
+                      <span className="text-[10px] font-semibold bg-accent/10 text-accent px-2 py-0.5 rounded-full">
+                        Recommandé pour l'IA
+                      </span>
+                    </div>
                     <p className="text-xs text-foreground font-mono leading-relaxed bg-card-hover rounded-xl p-3">
                       A young woman gazing thoughtfully out a rain-streaked window, warm amber lamplight illuminating her face, cinematic side lighting, shallow depth of field, photorealistic portrait
                     </p>

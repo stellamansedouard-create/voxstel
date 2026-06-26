@@ -84,12 +84,15 @@ export interface GeneratorState {
   usageContext: string;
 }
 
+export type ToolCapability = "image" | "video" | "text" | "music";
+
 export interface ToolMeta {
   id: AITool;
   name: string;
   description: string;
   badge?: string;
   promptContext: string;
+  capabilities?: ToolCapability[];
 }
 
 export interface CategoryMeta {

@@ -67,13 +67,18 @@ export default function PromptResult({
             <button
               key={lang}
               onClick={() => setActiveTab(lang)}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-1.5 ${
                 activeTab === lang
                   ? "text-accent bg-accent/5 border-b-2 border-accent"
                   : "text-muted hover:text-foreground"
               }`}
             >
               {lang === "en" ? "🇬🇧 English" : "🇫🇷 Français"}
+              {lang === "en" && (
+                <span className="text-[10px] font-semibold bg-accent/10 text-accent px-1.5 py-0.5 rounded-full leading-none hidden sm:inline">
+                  recommandé
+                </span>
+              )}
             </button>
           ))}
         </div>
