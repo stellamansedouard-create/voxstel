@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { UTMTracker } from "@/components/UTMTracker";
+import CookieBanner from "@/components/CookieBanner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,6 +30,9 @@ export default function RootLayout({
           <UTMTracker />
         </Suspense>
         {children}
+        <Suspense fallback={null}>
+          <CookieBanner />
+        </Suspense>
       </body>
     </html>
   );

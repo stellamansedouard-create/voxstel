@@ -16,7 +16,7 @@ export default function PolitiqueConfidentialitePage() {
             Politique de confidentialité
           </h1>
           <p className="text-sm text-muted italic mb-6">
-            Dernière mise à jour : 24 juin 2026
+            Dernière mise à jour : 26 juin 2026
           </p>
           <p className="text-sm text-muted leading-relaxed mb-10">
             Chez Voxstel, la protection de vos données personnelles est une priorité. Cette
@@ -167,16 +167,22 @@ export default function PolitiqueConfidentialitePage() {
             </h2>
             <ul className="list-disc pl-5 space-y-2.5 text-sm text-muted">
               <li>
+                <strong className="font-semibold text-foreground">Historique des prompts</strong> :
+                les prompts générés sont conservés pendant <strong className="font-semibold text-foreground">12 mois</strong> à
+                compter de leur création, puis supprimés automatiquement.
+              </li>
+              <li>
                 <strong className="font-semibold text-foreground">Compte actif</strong> : vos
-                données sont conservées tant que votre compte est actif.
+                données de compte (email, plan, quota) sont conservées tant que votre compte est
+                actif.
               </li>
               <li>
                 <strong className="font-semibold text-foreground">
                   Après suppression de votre compte
                 </strong>{" "}
-                : vos données personnelles sont supprimées de nos bases dans un délai de 30 jours
-                suivant votre demande, sauf obligation légale de conservation plus longue (données
-                de facturation conservées 10 ans conformément aux obligations comptables françaises).
+                : vos données personnelles sont supprimées immédiatement et définitivement (prompts,
+                événements d&apos;utilisation, données de compte). Les données de facturation sont
+                conservées 10 ans conformément aux obligations comptables françaises.
               </li>
               <li>
                 <strong className="font-semibold text-foreground">Compte inactif</strong> : si vous
@@ -259,10 +265,51 @@ export default function PolitiqueConfidentialitePage() {
 
           <section className="mt-8 pt-8 border-t border-border">
             <h2 className="text-base font-bold text-foreground mb-3">8. Cookies</h2>
-            <p className="text-sm text-muted leading-relaxed">
-              Voxstel utilise des cookies strictement nécessaires au fonctionnement du service
-              (maintien de votre session de connexion). Nous ne déposons pas de cookies
-              publicitaires ou de tracking tiers sans votre consentement préalable.
+            <p className="text-sm text-muted leading-relaxed mb-4">
+              Voxstel utilise deux types de cookies :
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 pr-4 font-semibold text-foreground">Cookie</th>
+                    <th className="text-left py-3 pr-4 font-semibold text-foreground">Finalité</th>
+                    <th className="text-left py-3 pr-4 font-semibold text-foreground">Durée</th>
+                    <th className="text-left py-3 font-semibold text-foreground">Consentement</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-border">
+                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">sb-*-auth-token</td>
+                    <td className="py-3 pr-4 text-muted align-top">Session de connexion (Supabase Auth)</td>
+                    <td className="py-3 pr-4 text-muted align-top">Session</td>
+                    <td className="py-3 text-muted align-top">Non requis (essentiel)</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">vx_consent</td>
+                    <td className="py-3 pr-4 text-muted align-top">Mémorisation de votre choix de consentement</td>
+                    <td className="py-3 pr-4 text-muted align-top">12 mois</td>
+                    <td className="py-3 text-muted align-top">Non requis (essentiel)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">vx_utm</td>
+                    <td className="py-3 pr-4 text-muted align-top">
+                      Mesure d&apos;audience — enregistre la source d&apos;acquisition (lien
+                      marketing, réseau social, etc.) lors de votre première visite. Aucune donnée
+                      n&apos;est partagée avec des tiers.
+                    </td>
+                    <td className="py-3 pr-4 text-muted align-top">30 jours</td>
+                    <td className="py-3 text-muted align-top">
+                      <strong className="font-semibold text-foreground">Requis</strong> — posé
+                      uniquement si vous cliquez &laquo; Accepter &raquo; dans le bandeau
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-muted leading-relaxed mt-4">
+              Vous pouvez modifier votre choix à tout moment en effaçant les cookies de votre
+              navigateur. Nous ne déposons aucun cookie publicitaire ou de tracking tiers.
             </p>
           </section>
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PromptHistoryList from "@/components/dashboard/PromptHistoryList";
+import DeleteAccountButton from "@/components/dashboard/DeleteAccountButton";
 import AnalyticsCharts from "@/components/dashboard/AnalyticsCharts";
 import SourceBreakdown from "@/components/dashboard/SourceBreakdown";
 import type { PromptHistoryItem } from "@/components/dashboard/PromptHistoryList";
@@ -330,6 +331,15 @@ export default async function DashboardPage() {
               </Link>
             </div>
             <PromptHistoryList prompts={prompts} />
+          </section>
+
+          {/* ── Zone dangereuse ───────────────────────────────── */}
+          <section className="pt-8 border-t border-border">
+            <h2 className="text-base font-bold text-foreground mb-1">Zone dangereuse</h2>
+            <p className="text-sm text-muted mb-4">
+              La suppression de compte est définitive et irréversible.
+            </p>
+            <DeleteAccountButton isPaidPlan={plan !== "free"} />
           </section>
 
         </div>
