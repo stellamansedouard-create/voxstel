@@ -84,7 +84,7 @@ export default function Header() {
           <Link href="/pricing" className="hover:text-foreground transition-colors">
             Tarifs
           </Link>
-          <Link href="/generate/image" className="hover:text-foreground font-medium transition-colors">
+          <Link href="/generate" className="hover:text-foreground font-medium transition-colors">
             Générateur
           </Link>
         </nav>
@@ -176,7 +176,7 @@ export default function Header() {
           <Link href="/pricing" onClick={closeMenu} className="block text-sm text-muted hover:text-foreground py-2.5 px-2 rounded-lg hover:bg-card-hover transition-colors">
             Tarifs
           </Link>
-          <Link href="/generate/image" onClick={closeMenu} className="block text-sm font-medium text-foreground py-2.5 px-2 rounded-lg hover:bg-card-hover transition-colors">
+          <Link href="/generate" onClick={closeMenu} className="block text-sm font-medium text-foreground py-2.5 px-2 rounded-lg hover:bg-card-hover transition-colors">
             Générateur
           </Link>
 
