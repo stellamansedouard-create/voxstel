@@ -33,7 +33,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const categoryMeta = getCategoryById(category);
 
   useEffect(() => {
-    // After login redirect: restore tool + description so user lands at step Description
+    // After login redirect: replay analyze-description automatically with saved values
     const pendingRaw = sessionStorage.getItem("vx_pending_description");
     if (pendingRaw) {
       try {
@@ -43,15 +43,18 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
           usageContext: string;
         };
         sessionStorage.removeItem("vx_pending_description");
+        // Restore visible state (spinner + description pre-filled)
         store.restoreState({
           category,
           tool: pending.tool,
           description: pending.description,
           usageContext: pending.usageContext,
           step: "description",
-          isLoading: false,
+          isLoading: true,
           error: null,
         });
+        // Auto-replay using pending values directly — avoids stale store closure
+        autoAnalyzeAndAdvance(pending);
         return;
       } catch {
         sessionStorage.removeItem("vx_pending_description");
@@ -192,8 +195,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     store.restartDescription();
   }, [store]);
 
-  async function runGeneratePrompt(adaptiveAnswers: Record<string, string>) {
-    // Collect selected reference aspects for the active category
+  // explicit overrides allow calling this safely from useEffect closures with stale store snapshots
+  async function runGeneratePrompt(
+    adaptiveAnswers: Record<string, string>,
+    explicit?: { tool: AITool; description: string; usageContext: string }
+  ) {
+    const tool = explicit?.tool ?? store.tool;
+    const description = explicit?.description ?? store.description;
+    const usageContext = explicit?.usageContext ?? store.usageContext;
+
     let referenceAspects: import("@/types").ImageAspect[] = [];
     if (category === "image" && store.imageReference) {
       referenceAspects = store.imageReference.aspects.filter((a) =>
@@ -209,10 +219,10 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        tool: store.tool,
+        tool,
         category,
-        description: store.description,
-        usageContext: store.usageContext || undefined,
+        description,
+        usageContext: usageContext || undefined,
         adaptiveAnswers,
         useSonnet: false,
         referenceAspects: referenceAspects.length ? referenceAspects : undefined,
@@ -220,19 +230,44 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       }),
     });
     if (res.status === 401) {
-      sessionStorage.setItem("vx_pending_generate", JSON.stringify({
-        tool: store.tool,
-        description: store.description,
-        usageContext: store.usageContext,
-        adaptiveAnswers,
-        imageReference: store.imageReference,
-        textReference: store.textReference,
-      }));
+      sessionStorage.setItem("vx_pending_description", JSON.stringify({ tool, description, usageContext }));
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
       return;
     }
     if (!res.ok) throw new Error("generation failed");
     store.setGeneratedPrompt(await res.json());
+  }
+
+  // Called on mount when returning from login — uses pending values directly to avoid stale closure
+  async function autoAnalyzeAndAdvance(pending: { tool: AITool; description: string; usageContext: string }) {
+    try {
+      const res = await fetch("/api/analyze-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tool: pending.tool,
+          category,
+          description: pending.description,
+          usageContext: pending.usageContext || undefined,
+        }),
+      });
+      if (!res.ok) throw new Error("analyze failed");
+
+      const data: { questions: DirectQuestion[]; categories: PrecisionCategory[]; readyToGenerate: boolean } =
+        await res.json();
+
+      const hasContent = (data.questions?.length ?? 0) > 0 || (data.categories?.length ?? 0) > 0;
+
+      if (data.readyToGenerate || !hasContent) {
+        await runGeneratePrompt({}, pending);
+      } else {
+        store.setAdaptiveData({ directQuestions: data.questions ?? [], categories: data.categories ?? [] });
+      }
+    } catch {
+      store.setError("Erreur lors de l'analyse. Veuillez réessayer.");
+    } finally {
+      store.setLoading(false);
+    }
   }
 
   if (!categoryMeta) return null;
