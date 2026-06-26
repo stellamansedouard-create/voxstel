@@ -31,13 +31,13 @@ export async function POST(req: NextRequest) {
 
     // Auth + quota check — must run before calling Anthropic
     const user = await getCurrentUser().catch(() => null);
-    let quotaStatus = null;
+    if (!user) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
 
-    if (user) {
-      quotaStatus = await checkQuota(user.id);
-      if (!quotaStatus || !quotaStatus.allowed) {
-        return NextResponse.json({ error: "quota_exceeded" }, { status: 429 });
-      }
+    const quotaStatus = await checkQuota(user.id);
+    if (!quotaStatus || !quotaStatus.allowed) {
+      return NextResponse.json({ error: "quota_exceeded" }, { status: 429 });
     }
 
     const model = useSonnet ? MODELS.sonnet : MODELS.haiku;
@@ -98,14 +98,14 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
     }
 
     // Quota increment — fire-and-forget, only for plans with a monthly limit
-    if (user && quotaStatus && quotaStatus.limit !== null) {
+    if (quotaStatus.limit !== null) {
       void incrementQuota(user.id, quotaStatus.quotaUsed).catch((e) =>
         console.error("[quota]", e)
       );
     }
 
     // Prompt history — awaited to catch schema/table errors in Vercel logs
-    if (user) {
+    {
       const { error: histErr } = await createServerSupabase()
         .from("prompts_history")
         .insert({ user_id: user.id, category, tool, prompt_en: result.en, prompt_fr: result.fr });

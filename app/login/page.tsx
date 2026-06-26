@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 
@@ -25,8 +25,10 @@ function translateAuthError(msg: string): string {
   return "Une erreur est survenue. Veuillez réessayer.";
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") ?? "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,9 +39,9 @@ export default function LoginPage() {
   useEffect(() => {
     const supabase = createBrowserSupabaseClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) router.replace("/dashboard");
+      if (user) router.replace(next);
     });
-  }, [router]);
+  }, [router, next]);
 
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +60,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(next);
     router.refresh();
   }
 
@@ -69,7 +71,7 @@ export default function LoginPage() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
     if (authError) {
@@ -187,5 +189,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

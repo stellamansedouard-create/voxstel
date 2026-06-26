@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
@@ -27,6 +28,8 @@ const STEP_NUMBERS: Record<string, number> = {
 
 export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const store = useGeneratorStore();
+  const router = useRouter();
+  const pathname = usePathname();
   const categoryMeta = getCategoryById(category);
 
   useEffect(() => {
@@ -51,6 +54,10 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: store.tool, category, description: store.description, usageContext: store.usageContext || undefined }),
       });
+      if (res.status === 401) {
+        router.push(`/login?next=${encodeURIComponent(pathname)}`);
+        return;
+      }
       if (!res.ok) throw new Error("analyze failed");
 
       const data: {
@@ -183,6 +190,10 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         _tracking: getStoredUTM(),
       }),
     });
+    if (res.status === 401) {
+      router.push(`/login?next=${encodeURIComponent(pathname)}`);
+      return;
+    }
     if (!res.ok) throw new Error("generation failed");
     store.setGeneratedPrompt(await res.json());
   }
