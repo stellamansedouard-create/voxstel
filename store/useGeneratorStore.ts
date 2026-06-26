@@ -41,6 +41,7 @@ interface GeneratorActions {
   restartDescription: () => void;
   reset: () => void;
   goBack: () => void;
+  restoreState: (state: Partial<ExtendedState>) => void;
 }
 
 interface ExtendedState extends GeneratorState {
@@ -216,6 +217,8 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
       })),
 
     reset: () => set(initialState),
+
+    restoreState: (state) => set(state),
 
     goBack: () => {
       const { step } = get();

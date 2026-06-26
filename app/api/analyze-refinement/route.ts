@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
-import { getCurrentUser } from "@/lib/auth";
 import type { AITool, DirectQuestion, PrecisionCategory, PreviousQAItem } from "@/types";
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await getCurrentUser().catch(() => null);
-    if (!user) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-    }
-
     const { tool, category, description, usageContext, generatedPromptEn, previousQA } =
       await req.json() as {
         tool: AITool;
