@@ -33,36 +33,6 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const categoryMeta = getCategoryById(category);
 
   useEffect(() => {
-    const pendingRaw = sessionStorage.getItem("vx_pending_generate");
-    if (pendingRaw) {
-      try {
-        const pending = JSON.parse(pendingRaw) as {
-          tool: AITool;
-          description: string;
-          usageContext: string;
-          adaptiveAnswers: Record<string, string>;
-          imageReference: import("@/types").ImageReference | null;
-          textReference: import("@/types").TextReference | null;
-        };
-        sessionStorage.removeItem("vx_pending_generate");
-        store.restoreState({
-          category,
-          tool: pending.tool,
-          description: pending.description,
-          usageContext: pending.usageContext,
-          adaptiveAnswers: pending.adaptiveAnswers,
-          imageReference: pending.imageReference,
-          textReference: pending.textReference,
-          step: "description",
-          isLoading: true,
-          error: null,
-        });
-        runGeneratePrompt(pending.adaptiveAnswers);
-        return;
-      } catch {
-        sessionStorage.removeItem("vx_pending_generate");
-      }
-    }
     if (store.step === "category" || store.category !== category) {
       store.setCategory(category);
     }
@@ -84,6 +54,10 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: store.tool, category, description: store.description, usageContext: store.usageContext || undefined }),
       });
+      if (res.status === 401) {
+        router.push(`/login?next=${encodeURIComponent(pathname)}`);
+        return;
+      }
       if (!res.ok) throw new Error("analyze failed");
 
       const data: {
