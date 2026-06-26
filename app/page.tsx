@@ -111,17 +111,50 @@ export default async function HomePage() {
         {/* ─────────────────────────────────────────────────────────────
             FOMO — Pourquoi pas seul
         ───────────────────────────────────────────────────────────── */}
-        <section className="py-20 px-4" style={{ backgroundColor: "rgba(200,145,10,0.03)" }}>
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-6 block">
-              Pourquoi pas seul ?
-            </span>
-            <p className="text-2xl sm:text-3xl font-semibold text-foreground leading-[1.35] text-balance">
-              Vous pouvez écrire un prompt vous-même. Mais celui que Voxstel génère ira chercher
-              les détails qui font la différence entre un résultat{" "}
-              <span className="text-muted">approximatif</span> et un résultat qui correspond{" "}
-              <span className="text-accent">vraiment à ce que vous aviez en tête.</span>
-            </p>
+        <section
+          className="relative py-24 px-4 overflow-hidden"
+          style={{ backgroundColor: "rgba(200,145,10,0.035)" }}
+        >
+          <div className="relative max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+              {/* Texte — gauche */}
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-5 block">
+                  Pourquoi pas seul ?
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-7 text-balance leading-tight">
+                  Vous pouvez écrire un prompt vous-même.
+                </h2>
+                <p className="text-lg text-muted leading-relaxed text-balance">
+                  Mais celui que Voxstel génère ira chercher les détails qui font la différence
+                  entre un résultat{" "}
+                  <span className="text-foreground font-medium">approximatif</span>{" "}
+                  et un résultat qui correspond{" "}
+                  <span className="font-semibold text-accent">
+                    vraiment à ce que vous aviez en tête.
+                  </span>
+                </p>
+              </div>
+
+              {/* Image — droite */}
+              <div className="flex justify-center lg:justify-end">
+                <div className="w-full max-w-sm lg:max-w-md">
+                  <Image
+                    src="/images/fomo-visage.webp"
+                    alt="Résultat créatif réussi grâce à un prompt précis généré par Voxstel"
+                    width={960}
+                    height={524}
+                    className="rounded-2xl w-full h-auto object-cover"
+                    style={{
+                      boxShadow:
+                        "0 8px 40px rgba(200,145,10,0.14), 0 2px 12px rgba(0,0,0,0.07)",
+                    }}
+                  />
+                </div>
+              </div>
+
+            </div>
           </div>
         </section>
 
