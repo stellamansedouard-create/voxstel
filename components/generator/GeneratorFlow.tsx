@@ -33,6 +33,30 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const categoryMeta = getCategoryById(category);
 
   useEffect(() => {
+    // After login redirect: restore tool + description so user lands at step Description
+    const pendingRaw = sessionStorage.getItem("vx_pending_description");
+    if (pendingRaw) {
+      try {
+        const pending = JSON.parse(pendingRaw) as {
+          tool: AITool;
+          description: string;
+          usageContext: string;
+        };
+        sessionStorage.removeItem("vx_pending_description");
+        store.restoreState({
+          category,
+          tool: pending.tool,
+          description: pending.description,
+          usageContext: pending.usageContext,
+          step: "description",
+          isLoading: false,
+          error: null,
+        });
+        return;
+      } catch {
+        sessionStorage.removeItem("vx_pending_description");
+      }
+    }
     if (store.step === "category" || store.category !== category) {
       store.setCategory(category);
     }
@@ -55,6 +79,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         body: JSON.stringify({ tool: store.tool, category, description: store.description, usageContext: store.usageContext || undefined }),
       });
       if (res.status === 401) {
+        sessionStorage.setItem("vx_pending_description", JSON.stringify({
+          tool: store.tool,
+          description: store.description,
+          usageContext: store.usageContext,
+        }));
         router.push(`/login?next=${encodeURIComponent(pathname)}`);
         return;
       }
