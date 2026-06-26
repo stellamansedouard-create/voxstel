@@ -99,31 +99,11 @@ export default async function HomePage() {
             {/* CTA unique */}
             <div className="flex justify-center">
               <Link
-                href="/generate/image"
+                href="/generate"
                 className="btn-primary inline-flex items-center gap-2 text-base py-3.5 px-8 shadow-md"
               >
                 {isLoggedIn ? "Accéder au générateur" : "Essayer gratuitement"} <span aria-hidden>→</span>
               </Link>
-            </div>
-
-            {/* Trust badges — icônes Lucide */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-8">
-              {[
-                { Icon: Lock, label: "Paiement sécurisé" },
-                { Icon: RefreshCcw, label: "Sans engagement" },
-                { Icon: MapPin, label: "Conçu en France" },
-                { Icon: ShieldCheck, label: "Conforme RGPD" },
-              ].map(({ Icon, label }, i, arr) => (
-                <span key={label} className="flex items-center gap-4">
-                  <span className="flex items-center gap-1.5 text-sm text-muted/60">
-                    <Icon size={14} className="text-accent/70 flex-shrink-0" />
-                    {label}
-                  </span>
-                  {i < arr.length - 1 && (
-                    <span className="hidden sm:inline text-muted/25" aria-hidden>·</span>
-                  )}
-                </span>
-              ))}
             </div>
           </div>
         </section>
@@ -467,7 +447,7 @@ export default async function HomePage() {
             </p>
 
             <Link
-              href="/generate/image"
+              href="/generate"
               className="btn-primary inline-flex items-center gap-2.5 text-base py-4 px-9 shadow-md"
             >
               {isLoggedIn ? "Accéder au générateur" : "Créer mon premier prompt"} <span aria-hidden>→</span>
@@ -476,6 +456,21 @@ export default async function HomePage() {
             <p className="text-xs text-muted mt-5">
               Déjà 23 outils IA supportés · Image · Vidéo · Texte · Musique
             </p>
+
+            {/* Trust badges */}
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-10 pt-8 border-t border-border/50">
+              {[
+                { Icon: Lock, label: "Paiement sécurisé" },
+                { Icon: RefreshCcw, label: "Sans engagement" },
+                { Icon: MapPin, label: "Conçu en France" },
+                { Icon: ShieldCheck, label: "Conforme RGPD" },
+              ].map(({ Icon, label }) => (
+                <span key={label} className="flex items-center gap-2 text-sm text-foreground/70">
+                  <Icon size={16} className="text-accent flex-shrink-0" />
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
         </section>
 
