@@ -120,7 +120,7 @@ export default async function HomePage() {
 
               {/* Image — gauche */}
               <div className="flex justify-center lg:justify-start">
-                <div className="w-full max-w-sm lg:max-w-md">
+                <div className="w-full">
                   <Image
                     src="/images/fomo-visage.webp"
                     alt="Résultat créatif réussi grâce à un prompt précis généré par Voxstel"
