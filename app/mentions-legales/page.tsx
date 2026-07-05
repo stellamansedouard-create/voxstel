@@ -16,7 +16,7 @@ export default function MentionsLegalesPage() {
             Mentions légales
           </h1>
           <p className="text-sm text-muted italic mb-10">
-            Dernière mise à jour : 24 juin 2026
+            Dernière mise à jour : 5 juillet 2026
           </p>
 
           <section>
@@ -28,13 +28,14 @@ export default function MentionsLegalesPage() {
               (ci-après « le Site ») est édité par :
             </p>
             <div className="bg-card border border-border rounded-xl p-5 text-sm space-y-1">
-              <p className="font-semibold text-foreground">Edouard Stellamans</p>
-              <p className="text-muted">Entreprise individuelle (micro-entreprise)</p>
+              <p className="font-semibold text-foreground">STELLAMANS Edouard</p>
+              <p className="text-muted">Entrepreneur individuel (micro-entreprise)</p>
               <p className="text-muted">SIREN : 842 574 956</p>
+              <p className="text-muted">SIRET : 842 574 956 00038</p>
+              <p className="text-muted">Code APE : 6201Z - Programmation informatique</p>
               <p className="text-muted">
-                SIRET : en cours d&apos;attribution (déclaration en cours auprès de l&apos;INPI)
+                Adresse : 6 Mail Pierre Charlot, 41000 Blois, France
               </p>
-              <p className="text-muted">Adresse en cours de finalisation (déclaration INPI)</p>
               <a
                 href="mailto:essasdev@gmail.com"
                 className="text-accent hover:underline inline-block"
