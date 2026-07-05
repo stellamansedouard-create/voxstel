@@ -120,7 +120,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     store.setLoading(true);
     store.setError(null);
     try {
-      const allAnswers = { ...store.directAnswers, ...store.adaptiveAnswers };
+      const allAnswers = { ...store.directAnswers, ...store.adaptiveAnswers, ...store.refinePrecisionAnswers };
       await runGeneratePrompt(allAnswers);
     } catch {
       store.setError("Erreur lors de la génération. Veuillez réessayer.");
@@ -128,6 +128,46 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       store.setLoading(false);
     }
   }, [store]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleRefinePrecision = useCallback(async () => {
+    store.setLoading(true);
+    store.setError(null);
+    try {
+      const previousQA = store.directQuestions.map((q) => ({
+        question: q.label,
+        theme: q.theme ?? "",
+        answer: store.directAnswers[q.id] ?? "",
+      }));
+
+      const res = await fetch("/api/refine-precision", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tool: store.tool,
+          category,
+          description: store.description,
+          usageContext: store.usageContext || undefined,
+          previousQA,
+        }),
+      });
+      if (res.status === 401) {
+        router.push(`/login?next=${encodeURIComponent(pathname)}`);
+        return;
+      }
+      if (res.status === 403) {
+        router.push("/pricing");
+        return;
+      }
+      if (!res.ok) throw new Error("refine-precision failed");
+
+      const data: { questions: DirectQuestion[] } = await res.json();
+      store.setRefinePrecisionData(data.questions ?? []);
+    } catch {
+      store.setError("Erreur lors de l'affinage. Veuillez réessayer.");
+    } finally {
+      store.setLoading(false);
+    }
+  }, [store, category]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // "Renforcer" — async: calls analyze-refinement with full context, then shows editable PrecisionsScreen
   const handleRenforce = useCallback(async () => {
@@ -362,15 +402,14 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                 description={store.description}
                 directQuestions={store.directQuestions}
                 directAnswers={store.directAnswers}
-                categories={store.categories}
-                answeredCategories={store.answeredCategories}
                 adaptiveAnswers={store.adaptiveAnswers}
                 tool={store.tool!}
                 generatorCategory={category}
                 onDirectAnswer={store.setDirectAnswer}
                 onAdaptiveAnswer={store.setAdaptiveAnswer}
-                onMarkCategoryAnswered={store.markCategoryAnswered}
+                onRefinePrecisionAnswer={store.setRefinePrecisionAnswer}
                 onSubmit={handleAdaptiveSubmit}
+                onRefinePrecision={handleRefinePrecision}
                 onBack={store.goBack}
                 isSubmitting={store.isLoading}
               />

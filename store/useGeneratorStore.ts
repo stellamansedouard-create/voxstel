@@ -21,6 +21,8 @@ interface GeneratorActions {
   setDirectAnswer: (id: string, value: string) => void;
   setAdaptiveAnswer: (categoryId: string, value: string) => void;
   markCategoryAnswered: (categoryId: string) => void;
+  setRefinePrecisionData: (questions: DirectQuestion[]) => void;
+  setRefinePrecisionAnswer: (id: string, value: string) => void;
   setRefinementData: (data: {
     previousQA: PreviousQAItem[];
     newDirectQuestions: DirectQuestion[];
@@ -46,6 +48,9 @@ interface GeneratorActions {
 
 interface ExtendedState extends GeneratorState {
   refinementCount: number;
+  refinePrecisionQuestions: DirectQuestion[];
+  refinePrecisionAnswers: Record<string, string>;
+  hasUsedRefinePrecision: boolean;
 }
 
 const initialState: ExtendedState = {
@@ -67,6 +72,9 @@ const initialState: ExtendedState = {
   isLoading: false,
   error: null,
   refinementCount: 0,
+  refinePrecisionQuestions: [],
+  refinePrecisionAnswers: {},
+  hasUsedRefinePrecision: false,
 };
 
 const STEP_ORDER: GeneratorStep[] = [
@@ -99,6 +107,9 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         textReference: null,
         generatedPrompt: null,
         refinementCount: 0,
+        refinePrecisionQuestions: [],
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: false,
         error: null,
       }),
 
@@ -117,6 +128,9 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         isRefinement: false,
         generatedPrompt: null,
         refinementCount: 0,
+        refinePrecisionQuestions: [],
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: false,
         error: null,
       }),
 
@@ -130,6 +144,9 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         step: "adaptive",
         isRefinement: false,
         previousQA: [],
+        refinePrecisionQuestions: [],
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: false,
         error: null,
       }),
 
@@ -150,6 +167,18 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
           : [...state.answeredCategories, categoryId],
       })),
 
+    setRefinePrecisionData: (questions) =>
+      set({
+        refinePrecisionQuestions: questions,
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: true,
+      }),
+
+    setRefinePrecisionAnswer: (id, value) =>
+      set((state) => ({
+        refinePrecisionAnswers: { ...state.refinePrecisionAnswers, [id]: value },
+      })),
+
     setRefinementData: (data) =>
       set((state) => ({
         previousQA: data.previousQA,
@@ -160,6 +189,9 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         step: "adaptive",
         isRefinement: true,
         generatedPrompt: null,
+        refinePrecisionQuestions: [],
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: false,
         error: null,
       })),
 
@@ -208,6 +240,9 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         generatedPrompt: null,
         step: "description",
         refinementCount: 0,
+        refinePrecisionQuestions: [],
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: false,
         error: null,
         isLoading: false,
         category: state.category,

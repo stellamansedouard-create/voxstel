@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     const message = await anthropic.messages.create({
       model,
-      max_tokens: 1200,
+      max_tokens: 3000,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
 Contexte technique : ${promptContext}
@@ -94,6 +94,10 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
         .replace(/\s*```$/i, "");
       result = JSON.parse(cleaned);
     } catch {
+      console.error(
+        "[generate-prompt] Failed to parse JSON. Raw response:",
+        content.text.slice(0, 1000)
+      );
       throw new Error("Failed to parse prompt JSON");
     }
 

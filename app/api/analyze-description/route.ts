@@ -2,22 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/auth";
-import type { AITool, DirectQuestion, PrecisionCategory } from "@/types";
-
-function getCategoryHints(categoryId: string): string {
-  switch (categoryId) {
-    case "image":
-      return "style, ambiance, eclairage, couleurs, composition, ratio, personnages, decor, technique, texte_affiche";
-    case "video":
-      return "mouvement_camera, style_visuel, eclairage, cadrage, rythme, transitions, ambiance, duree_scene, son_ambiance";
-    case "text":
-      return "ton, longueur, structure, niveau_complexite, audience_cible, langage_programmation, format_sortie, exemples, contraintes";
-    case "music":
-      return "genre, tempo, instruments, ambiance, type_vocal, structure_morceau, tonalite, duree, influences, arrangement";
-    default:
-      return "style, ambiance, technique, format, contenu";
-  }
-}
+import type { AITool, DirectQuestion } from "@/types";
 
 function getThemeHints(categoryId: string): string {
   switch (categoryId) {
@@ -85,6 +70,19 @@ function getQQOQCPAxes(categoryId: string): string {
   }
 }
 
+function getUsageContextRule(categoryId: string, usageContext: string | undefined): string {
+  if (usageContext?.trim()) {
+    return `✅ CONTEXTE D'USAGE DÉJÀ FOURNI : "${usageContext}"
+Ne pose JAMAIS de question sur l'usage ou la destination du résultat — ce point est entièrement couvert. Concentre-toi sur les autres axes.`;
+  }
+  const themeLabel =
+    categoryId === "music" ? '"Usage & Contexte"' :
+    categoryId === "image" ? '"Décor & Contexte"' :
+    categoryId === "video" ? '"Détails Techniques"' :
+    '"Objectif & Contraintes"';
+  return `⚠ CONTEXTE D'USAGE ABSENT — Tu DOIS inclure au moins une question sur l'usage ou la destination du résultat (à quoi va servir cette création, dans quel cadre) dans le thème ${themeLabel}.`;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser().catch(() => null);
@@ -103,10 +101,6 @@ export async function POST(req: NextRequest) {
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
 
-    const usageContextBlock = usageContext
-      ? `\n⚠ CONTEXTE D'USAGE DÉCLARÉ : "${usageContext}"\nIMPÉRATIF : inclus AU MOINS UNE question directement liée à ce contexte d'usage. Exemples — si "publicité" : quel produit/service, quel message, quelle cible, quel format ; si "jeu vidéo" : quel genre, quelle plateforme, quel personnage. Les autres questions tiennent également compte de ce contexte.\n`
-      : "";
-
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
       max_tokens: 2500,
@@ -114,53 +108,59 @@ export async function POST(req: NextRequest) {
 
 Contexte de l'outil : ${promptContext}
 
-━━━ ANALYSE INTERNE QQOQCP (ne jamais mentionner ces axes dans les questions) ━━━
-Évalue mentalement quels axes sont DÉJÀ couverts dans la description :
+━━━ PLANCHER MINIMUM — JAMAIS MOINS DE 2 QUESTIONS ━━━
+Tu dois TOUJOURS générer au moins 2 questions, même si la description semble déjà très complète.
+Un utilisateur sur Voxstel a par définition besoin d'aide à la précision — ne renvoie jamais une liste vide.
+S'il ne reste presque aucune ambiguïté évidente, pose les 2 questions qui apporteraient le plus de valeur
+ajoutée même marginale (rendu final, usage, détail technique fin).
+Ne classe jamais une question comme "optionnelle" ou "bonus" — si elle vaut la peine d'être posée,
+elle a la même importance que les autres. Toutes les questions dans une seule liste plate, par thème.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ ANALYSE QQOQCP SYSTÉMATIQUE (ne jamais mentionner ces axes dans les questions) ━━━
+Pour CHAQUE axe ci-dessous, évalue SANS EXCEPTION : est-ce que connaître la réponse à cet axe
+changerait significativement le résultat final pour ${toolName} ?
+Ne présume jamais qu'un axe est "moins pertinent" par défaut pour cette catégorie — juge chaque axe
+AU CAS PAR CAS selon ce que son absence implique réellement pour CETTE description précise.
+
+Exemple : "un chat qui joue de la flûte" — l'absence totale d'indice sur l'époque (médiéval ? contemporain ?
+conte intemporel ?) change radicalement le style, les couleurs et le décor → c'est une ambiguïté réelle à poser.
+
 ${getQQOQCPAxes(category)}
 
-Règle : génère une question UNIQUEMENT pour un axe clairement ABSENT de la description ou insuffisamment précis pour ${toolName}. Ne génère PAS de question pour un axe déjà couvert ou facilement inférable. Si la description couvre déjà la quasi-totalité des axes, retourne readyToGenerate: true.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${usageContextBlock}
-━━━ PRINCIPE CENTRAL — NOMBRE DE QUESTIONS ━━━
-Il n'y a AUCUNE limite ni objectif chiffré. Pose exactement autant de questions que nécessaire pour lever toutes les ambiguïtés réelles — ni plus, ni moins.
-- Description très vague (ex: "un portrait", "une mélodie triste", "écris un article") → pose toutes les questions nécessaires pour couvrir les axes manquants, qu'il y en ait 6, 10 ou 14.
-- Description déjà précise avec un seul axe flou → pose uniquement cette question.
-- Ne t'arrête JAMAIS artificiellement tôt si des axes importants restent non couverts.
-- Ne fabrique JAMAIS de question redondante ou triviale juste pour augmenter le nombre.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Règle : génère une question pour tout axe ABSENT ou INSUFFISAMMENT PRÉCIS dont la réponse changerait le résultat.
+Ne saute jamais un axe uniquement parce qu'il "semble" secondaire — value chaque axe au cas par cas.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Une question est valide pour DEUX raisons, pas une seule :
+━━━ RÈGLE CONTEXTE D'USAGE ━━━
+${getUsageContextRule(category, usageContext)}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ NOMBRE DE QUESTIONS ━━━
+Pas de plafond haut. Pose exactement autant de questions que nécessaire pour lever toutes les ambiguïtés réelles.
+- Description très vague → beaucoup de questions (6, 10, 14…)
+- Description déjà précise → peu de questions, mais JAMAIS moins de 2
+- Ne t'arrête jamais artificiellement tôt si des axes importants restent non couverts.
+- Ne fabrique jamais de question redondante ou triviale.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Une question est valide pour DEUX raisons :
 a) APPROFONDIR quelque chose de VAGUE/GÉNÉRIQUE déjà mentionné
-   → Ex : l'utilisateur écrit "ambiance sombre" — c'est présent mais trop flou pour ${toolName}
-   → Question : "Quelle nuance d'ambiance sombre ?" + suggestions : Oppressant, Mélancolique, Mystérieux, Inquiétant
+   → Ex : "ambiance sombre" → "Quelle nuance d'ambiance sombre ?" + suggestions : Oppressant, Mélancolique, Mystérieux, Inquiétant
 b) COMBLER un MANQUE ESSENTIEL détecté dans l'analyse QQOQCP
-   → Ex : aucune mention du style alors que c'est structurant pour ${toolName}
-   → Question ciblée + suggestions adaptées au contexte
+   → Question ciblée + suggestions adaptées au contexte précis
 
-1. "questions" — pour chaque axe réellement manquant ou insuffisamment précis
-   - Chaque question avec 4-5 suggestions courtes et TRÈS contextuelles (3 mots max)
-   - Les suggestions doivent coller à la description spécifique, pas être génériques
-   - Ne jamais utiliser les noms QQOQCP comme formulation de question
-   - Chaque question doit inclure un champ "theme" choisi parmi les thèmes valides ci-dessous
+RÈGLES DE FORMAT pour chaque question :
+- 4-5 suggestions courtes et TRÈS contextuelles (3 mots max), collées à la description spécifique (pas génériques)
+- Ne jamais utiliser les noms QQOQCP comme formulation de question
+- Champ "theme" obligatoire, choisi EXACTEMENT parmi les libellés ci-dessous
 
 ${getThemeHints(category)}
-
-2. "categories" — catégories optionnelles supplémentaires pour affiner davantage
-   - Points secondaires UNIQUEMENT, pas ceux déjà couverts par les questions
-   - Maximum 4 catégories, priority: true pour les 2 plus pertinentes
-   - Labels courts (2-3 mots) en français, ids en snake_case anglais
-
-Si tous les axes QQOQCP sont couverts : questions: [], categories: [], readyToGenerate: true.
-
-Catégories possibles : ${getCategoryHints(category)}
 
 Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
 {
   "questions": [
     { "id": "id_snake", "label": "Question en français ?", "theme": "Thème valide", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
-  ],
-  "categories": [
-    { "id": "id_snake", "label": "Catégorie", "priority": true }
   ],
   "readyToGenerate": false
 }`,
@@ -170,8 +170,8 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
           content: `L'utilisateur veut créer avec ${toolName}. Sa description :
 
 "${description}"
-${usageContext ? `\nContexte d'usage : "${usageContext}"` : ""}
-Génère les questions directes et les catégories optionnelles pour enrichir son prompt.`,
+${usageContext ? `\nContexte d'usage déclaré : "${usageContext}"` : "\nContexte d'usage : non renseigné"}
+Génère les questions de précision.`,
         },
       ],
     });
@@ -179,7 +179,7 @@ Génère les questions directes et les catégories optionnelles pour enrichir so
     const content = message.content[0];
     if (content.type !== "text") throw new Error("Unexpected response type");
 
-    let parsed: { questions: DirectQuestion[]; categories: PrecisionCategory[]; readyToGenerate: boolean };
+    let parsed: { questions: DirectQuestion[]; readyToGenerate: boolean };
     try {
       const cleaned = content.text
         .trim()
@@ -187,17 +187,23 @@ Génère les questions directes et les catégories optionnelles pour enrichir so
         .replace(/\s*```$/i, "");
       parsed = JSON.parse(cleaned);
     } catch {
-      parsed = { questions: [], categories: [], readyToGenerate: true };
+      parsed = { questions: [], readyToGenerate: false };
     }
 
     if (!Array.isArray(parsed.questions)) parsed.questions = [];
-    if (!Array.isArray(parsed.categories)) parsed.categories = [];
 
-    if (parsed.questions.length === 0 && parsed.categories.length === 0) {
-      parsed.readyToGenerate = true;
+    if (parsed.questions.length < 2) {
+      console.warn(
+        `[analyze-description] Moins de 2 questions retournées (${parsed.questions.length}). Réponse brute :`,
+        content.text.slice(0, 500)
+      );
     }
 
-    return NextResponse.json(parsed);
+    return NextResponse.json({
+      questions: parsed.questions,
+      categories: [],
+      readyToGenerate: parsed.questions.length === 0,
+    });
   } catch (error) {
     console.error("analyze-description error:", error);
     return NextResponse.json(
