@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PromptHistoryList from "@/components/dashboard/PromptHistoryList";
 import DeleteAccountButton from "@/components/dashboard/DeleteAccountButton";
+import ManageSubscriptionButton from "@/components/dashboard/ManageSubscriptionButton";
 import AnalyticsCharts from "@/components/dashboard/AnalyticsCharts";
 import SourceBreakdown from "@/components/dashboard/SourceBreakdown";
 import type { PromptHistoryItem } from "@/components/dashboard/PromptHistoryList";
@@ -254,12 +255,15 @@ export default async function DashboardPage() {
                     ({daysSinceSignup} jour{daysSinceSignup > 1 ? "s" : ""})
                   </span>
                 </p>
-                <Link
-                  href="/pricing"
-                  className="text-sm text-accent font-medium hover:underline inline-flex items-center gap-1"
-                >
-                  Voir les offres <span aria-hidden>→</span>
-                </Link>
+                <div className="flex items-center gap-4 flex-wrap">
+                  <Link
+                    href="/pricing"
+                    className="text-sm text-accent font-medium hover:underline inline-flex items-center gap-1"
+                  >
+                    Voir les offres <span aria-hidden>→</span>
+                  </Link>
+                  {plan !== "free" && <ManageSubscriptionButton />}
+                </div>
               </div>
 
               {/* Quota */}

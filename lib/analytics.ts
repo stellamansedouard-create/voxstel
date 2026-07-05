@@ -1,6 +1,10 @@
 import { createServerSupabase } from "@/lib/supabase";
 
-export type EventType = "prompt_generated" | "user_signup" | "plan_upgraded";
+export type EventType =
+  | "prompt_generated"
+  | "user_signup"
+  | "plan_upgraded"
+  | "plan_downgraded";
 
 export interface TrackEventPayload {
   userId?: string | null;

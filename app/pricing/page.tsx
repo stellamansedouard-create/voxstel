@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PricingCheckoutButton from "@/components/pricing/PricingCheckoutButton";
 import type { Metadata } from "next";
+import type { PricingPlan } from "@/types";
 
 export const metadata: Metadata = {
   title: "Tarifs — Voxstel",
@@ -19,7 +21,7 @@ const plans = [
     priceNote: "pour toujours",
     cta: "Commencer gratuitement",
     ctaPrimary: false,
-    href: "/bientot",
+    href: "/signup",
     popular: false,
     features: [
       { label: "5 prompts / mois", ok: true },
@@ -38,7 +40,6 @@ const plans = [
     priceNote: "/ mois",
     cta: "Choisir Pro",
     ctaPrimary: false,
-    href: "/bientot",
     popular: false,
     features: [
       { label: "50 prompts / mois", ok: true },
@@ -56,7 +57,6 @@ const plans = [
     priceNote: "/ mois",
     cta: "Choisir Illimité",
     ctaPrimary: true,
-    href: "/bientot",
     popular: true,
     features: [
       { label: "Prompts illimités", ok: true },
@@ -75,7 +75,6 @@ const plans = [
     priceNote: "/ mois",
     cta: "Choisir Pro Max",
     ctaPrimary: false,
-    href: "/bientot",
     popular: false,
     features: [
       { label: "Prompts illimités", ok: true },
@@ -145,17 +144,25 @@ export default function PricingPage() {
                   </div>
 
                   {/* CTA */}
-                  <Link
-                    href={plan.href}
-                    className={[
-                      "w-full text-center py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 mb-7",
-                      plan.ctaPrimary
-                        ? "bg-accent text-white hover:bg-accent-dark"
-                        : "bg-white border border-border text-foreground hover:bg-card-hover",
-                    ].join(" ")}
-                  >
-                    {plan.cta}
-                  </Link>
+                  {plan.id === "free" ? (
+                    <Link
+                      href={plan.href ?? "/signup"}
+                      className={[
+                        "w-full text-center py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 mb-7",
+                        plan.ctaPrimary
+                          ? "bg-accent text-white hover:bg-accent-dark"
+                          : "bg-white border border-border text-foreground hover:bg-card-hover",
+                      ].join(" ")}
+                    >
+                      {plan.cta}
+                    </Link>
+                  ) : (
+                    <PricingCheckoutButton
+                      plan={plan.id as Exclude<PricingPlan, "free">}
+                      label={plan.cta}
+                      primary={plan.ctaPrimary}
+                    />
+                  )}
 
                   {/* Features */}
                   <ul className="space-y-3">
@@ -183,8 +190,7 @@ export default function PricingPage() {
 
             {/* Note Stripe */}
             <p className="text-center text-xs text-muted mt-10">
-              Paiement sécurisé via Stripe — disponible prochainement.
-              Les boutons redirigent vers une page de liste d'attente.
+              Paiement sécurisé via Stripe. Résiliable à tout moment depuis votre dashboard.
             </p>
           </div>
         </section>

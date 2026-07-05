@@ -1,11 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { stripe, PLAN_BY_PRICE_ID } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
 import type Stripe from "stripe";
+import type { PricingPlan } from "@/types";
 
 // Stripe requires the raw body to verify the signature
 export const runtime = "nodejs";
+
+type SupabaseAdmin = ReturnType<typeof createServerSupabase>;
+
+/** Price id is the source of truth for the plan — metadata can go stale after a portal-side plan swap. */
+function planFromSubscription(subscription: Stripe.Subscription): PricingPlan | null {
+  const priceId = subscription.items.data[0]?.price?.id;
+  if (priceId && PLAN_BY_PRICE_ID[priceId]) return PLAN_BY_PRICE_ID[priceId];
+  const metaPlan = subscription.metadata?.plan as PricingPlan | undefined;
+  return metaPlan ?? null;
+}
+
+async function resolveUserId(
+  supabase: SupabaseAdmin,
+  subscription: Stripe.Subscription
+): Promise<string | null> {
+  if (subscription.metadata?.user_id) return subscription.metadata.user_id;
+
+  const { data } = await supabase
+    .from("users")
+    .select("id")
+    .eq("stripe_customer_id", subscription.customer as string)
+    .single();
+
+  return data?.id ?? null;
+}
+
+async function upsertSubscriptionRow(
+  supabase: SupabaseAdmin,
+  userId: string,
+  subscription: Stripe.Subscription,
+  plan: PricingPlan
+) {
+  await supabase.from("subscriptions").upsert(
+    {
+      user_id: userId,
+      stripe_customer_id: subscription.customer as string,
+      stripe_subscription_id: subscription.id,
+      plan,
+      status: subscription.status,
+      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "stripe_subscription_id" }
+  );
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -22,36 +69,111 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const userId = session.metadata?.user_id;
-    const newPlan = session.metadata?.plan;
+  const supabase = createServerSupabase();
 
-    if (userId && newPlan) {
-      const supabase = createServerSupabase();
+  switch (event.type) {
+    case "checkout.session.completed": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const userId = session.metadata?.user_id;
+      const newPlan = session.metadata?.plan as PricingPlan | undefined;
 
-      // Read old plan before overwriting it
-      const { data: currentUser } = await supabase
-        .from("users")
-        .select("plan")
-        .eq("id", userId)
-        .single();
-      const oldPlan = currentUser?.plan ?? null;
+      if (userId && newPlan && session.subscription) {
+        const subscription = await stripe.subscriptions.retrieve(
+          session.subscription as string
+        );
 
-      await supabase
-        .from("users")
-        .update({ plan: newPlan })
-        .eq("id", userId);
+        const { data: currentUser } = await supabase
+          .from("users")
+          .select("plan")
+          .eq("id", userId)
+          .single();
+        const oldPlan = currentUser?.plan ?? null;
 
-      await trackEvent({
-        userId,
-        eventType: "plan_upgraded",
-        utmSource: session.metadata?.utm_source ?? null,
-        utmMedium: session.metadata?.utm_medium ?? null,
-        utmCampaign: session.metadata?.utm_campaign ?? null,
-        metadata: { old_plan: oldPlan, new_plan: newPlan },
-      });
+        await supabase
+          .from("users")
+          .update({
+            plan: newPlan,
+            stripe_customer_id: subscription.customer as string,
+            stripe_subscription_id: subscription.id,
+            subscription_status: subscription.status,
+          })
+          .eq("id", userId);
+
+        await upsertSubscriptionRow(supabase, userId, subscription, newPlan);
+
+        await trackEvent({
+          userId,
+          eventType: "plan_upgraded",
+          utmSource: session.metadata?.utm_source ?? null,
+          utmMedium: session.metadata?.utm_medium ?? null,
+          utmCampaign: session.metadata?.utm_campaign ?? null,
+          metadata: { old_plan: oldPlan, new_plan: newPlan },
+        });
+      }
+      break;
     }
+
+    // Fires on renewals, plan swaps via the customer portal, and when a
+    // cancellation is scheduled for end-of-period (status stays "active"
+    // with cancel_at_period_end = true until the period actually ends).
+    case "customer.subscription.updated": {
+      const subscription = event.data.object as Stripe.Subscription;
+      const userId = await resolveUserId(supabase, subscription);
+      const plan = planFromSubscription(subscription);
+
+      if (userId && plan) {
+        await upsertSubscriptionRow(supabase, userId, subscription, plan);
+
+        const isActive =
+          subscription.status === "active" || subscription.status === "trialing";
+
+        await supabase
+          .from("users")
+          .update({
+            plan: isActive ? plan : "free",
+            subscription_status: subscription.status,
+            subscription_cancel_at: subscription.cancel_at
+              ? new Date(subscription.cancel_at * 1000).toISOString()
+              : null,
+          })
+          .eq("id", userId);
+      }
+      break;
+    }
+
+    // Fires once the subscription is actually terminated (period end reached,
+    // or immediate cancellation) — downgrade to free.
+    case "customer.subscription.deleted": {
+      const subscription = event.data.object as Stripe.Subscription;
+      const userId = await resolveUserId(supabase, subscription);
+      const oldPlan = planFromSubscription(subscription);
+
+      if (userId) {
+        await supabase
+          .from("subscriptions")
+          .update({ status: "canceled", updated_at: new Date().toISOString() })
+          .eq("stripe_subscription_id", subscription.id);
+
+        await supabase
+          .from("users")
+          .update({
+            plan: "free",
+            subscription_status: "canceled",
+            subscription_cancel_at: null,
+          })
+          .eq("id", userId);
+
+        await trackEvent({
+          userId,
+          eventType: "plan_downgraded",
+          metadata: { old_plan: oldPlan, new_plan: "free" },
+        });
+      }
+      break;
+    }
+
+    default:
+      break;
   }
 
   return NextResponse.json({ received: true });
