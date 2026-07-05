@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser, getAuthServerClient } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 const CATEGORY_LABELS: Record<string, string> = {
   image: "Image",
   video: "Vidéo",

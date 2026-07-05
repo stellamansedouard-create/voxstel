@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser, getAuthServerClient } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 function distribute(
   items: (string | null | undefined)[]
 ): { value: string; count: number }[] {
