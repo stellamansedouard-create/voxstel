@@ -11,7 +11,7 @@ import PrecisionsScreen from "@/components/generator/PrecisionsScreen";
 import PromptResult from "@/components/generator/PromptResult";
 import Progress from "@/components/ui/Progress";
 import Spinner from "@/components/ui/Spinner";
-import type { AITool, Category, DirectQuestion, PrecisionCategory, PreviousQAItem } from "@/types";
+import type { AITool, Category, DirectQuestion, PreviousQAItem } from "@/types";
 
 interface GeneratorFlowProps {
   category: Category;
@@ -94,20 +94,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
 
       const data: {
         questions: DirectQuestion[];
-        categories: PrecisionCategory[];
         readyToGenerate: boolean;
       } = await res.json();
 
-      const hasContent =
-        (data.questions?.length ?? 0) > 0 || (data.categories?.length ?? 0) > 0;
+      const hasContent = (data.questions?.length ?? 0) > 0;
 
       if (data.readyToGenerate || !hasContent) {
         await runGeneratePrompt({});
       } else {
-        store.setAdaptiveData({
-          directQuestions: data.questions ?? [],
-          categories: data.categories ?? [],
-        });
+        store.setAdaptiveData({ directQuestions: data.questions ?? [] });
       }
     } catch {
       store.setError("Erreur lors de l'analyse. Veuillez réessayer.");
@@ -120,7 +115,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     store.setLoading(true);
     store.setError(null);
     try {
-      const allAnswers = { ...store.directAnswers, ...store.adaptiveAnswers, ...store.refinePrecisionAnswers };
+      const allAnswers = { ...store.directAnswers, ...store.refinePrecisionAnswers };
       await runGeneratePrompt(allAnswers);
     } catch {
       store.setError("Erreur lors de la génération. Veuillez réessayer.");
@@ -186,19 +181,9 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
             value: store.directAnswers[q.id],
             type: "direct" as const,
           })),
-        ...store.categories
-          .filter((c) => store.answeredCategories.includes(c.id))
-          .map((c) => ({
-            id: c.id,
-            label: c.label,
-            value: store.adaptiveAnswers[c.id] ?? "",
-            type: "category" as const,
-          })),
         // Also carry over previous refinement Q&A that were modified
         ...store.previousQA.filter(
-          (prev) =>
-            !store.directQuestions.some((q) => q.id === prev.id) &&
-            !store.categories.some((c) => c.id === prev.id)
+          (prev) => !store.directQuestions.some((q) => q.id === prev.id)
         ),
       ];
 
@@ -216,13 +201,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       });
       if (!res.ok) throw new Error("refinement analysis failed");
 
-      const data: { questions: DirectQuestion[]; categories: PrecisionCategory[] } =
-        await res.json();
+      const data: { questions: DirectQuestion[] } = await res.json();
 
       store.setRefinementData({
         previousQA,
         newDirectQuestions: data.questions ?? [],
-        newCategories: data.categories ?? [],
       });
     } catch {
       store.setError("Erreur lors de l'analyse de renforcement. Veuillez réessayer.");
@@ -293,15 +276,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       });
       if (!res.ok) throw new Error("analyze failed");
 
-      const data: { questions: DirectQuestion[]; categories: PrecisionCategory[]; readyToGenerate: boolean } =
+      const data: { questions: DirectQuestion[]; readyToGenerate: boolean } =
         await res.json();
 
-      const hasContent = (data.questions?.length ?? 0) > 0 || (data.categories?.length ?? 0) > 0;
+      const hasContent = (data.questions?.length ?? 0) > 0;
 
       if (data.readyToGenerate || !hasContent) {
         await runGeneratePrompt({}, pending);
       } else {
-        store.setAdaptiveData({ directQuestions: data.questions ?? [], categories: data.categories ?? [] });
+        store.setAdaptiveData({ directQuestions: data.questions ?? [] });
       }
     } catch {
       store.setError("Erreur lors de l'analyse. Veuillez réessayer.");
@@ -402,11 +385,9 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                 description={store.description}
                 directQuestions={store.directQuestions}
                 directAnswers={store.directAnswers}
-                adaptiveAnswers={store.adaptiveAnswers}
                 tool={store.tool!}
                 generatorCategory={category}
                 onDirectAnswer={store.setDirectAnswer}
-                onAdaptiveAnswer={store.setAdaptiveAnswer}
                 onRefinePrecisionAnswer={store.setRefinePrecisionAnswer}
                 onSubmit={handleAdaptiveSubmit}
                 onRefinePrecision={handleRefinePrecision}

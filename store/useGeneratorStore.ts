@@ -3,7 +3,6 @@ import type {
   Category,
   AITool,
   DirectQuestion,
-  PrecisionCategory,
   PreviousQAItem,
   ImageReference,
   TextReference,
@@ -17,16 +16,13 @@ interface GeneratorActions {
   setTool: (tool: AITool) => void;
   setDescription: (description: string) => void;
   setUsageContext: (usageContext: string) => void;
-  setAdaptiveData: (data: { directQuestions: DirectQuestion[]; categories: PrecisionCategory[] }) => void;
+  setAdaptiveData: (data: { directQuestions: DirectQuestion[] }) => void;
   setDirectAnswer: (id: string, value: string) => void;
-  setAdaptiveAnswer: (categoryId: string, value: string) => void;
-  markCategoryAnswered: (categoryId: string) => void;
   setRefinePrecisionData: (questions: DirectQuestion[]) => void;
   setRefinePrecisionAnswer: (id: string, value: string) => void;
   setRefinementData: (data: {
     previousQA: PreviousQAItem[];
     newDirectQuestions: DirectQuestion[];
-    newCategories: PrecisionCategory[];
   }) => void;
   // Image reference
   setImageReference: (ref: ImageReference) => void;
@@ -60,9 +56,6 @@ const initialState: ExtendedState = {
   usageContext: "",
   directQuestions: [],
   directAnswers: {},
-  categories: [],
-  answeredCategories: [],
-  adaptiveAnswers: {},
   previousQA: [],
   isRefinement: false,
   imageReference: null,
@@ -98,9 +91,6 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         usageContext: "",
         directQuestions: [],
         directAnswers: {},
-        categories: [],
-        answeredCategories: [],
-        adaptiveAnswers: {},
         previousQA: [],
         isRefinement: false,
         imageReference: null,
@@ -121,9 +111,6 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         usageContext: "",
         directQuestions: [],
         directAnswers: {},
-        categories: [],
-        answeredCategories: [],
-        adaptiveAnswers: {},
         previousQA: [],
         isRefinement: false,
         generatedPrompt: null,
@@ -140,7 +127,6 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
     setAdaptiveData: (data) =>
       set({
         directQuestions: data.directQuestions,
-        categories: data.categories,
         step: "adaptive",
         isRefinement: false,
         previousQA: [],
@@ -153,18 +139,6 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
     setDirectAnswer: (id, value) =>
       set((state) => ({
         directAnswers: { ...state.directAnswers, [id]: value },
-      })),
-
-    setAdaptiveAnswer: (categoryId, value) =>
-      set((state) => ({
-        adaptiveAnswers: { ...state.adaptiveAnswers, [categoryId]: value },
-      })),
-
-    markCategoryAnswered: (categoryId) =>
-      set((state) => ({
-        answeredCategories: state.answeredCategories.includes(categoryId)
-          ? state.answeredCategories
-          : [...state.answeredCategories, categoryId],
       })),
 
     setRefinePrecisionData: (questions) =>
@@ -183,8 +157,6 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
       set((state) => ({
         previousQA: data.previousQA,
         directQuestions: data.newDirectQuestions,
-        categories: data.newCategories,
-        answeredCategories: [],
         refinementCount: state.refinementCount + 1,
         step: "adaptive",
         isRefinement: true,
@@ -232,9 +204,6 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         usageContext: "",
         directQuestions: [],
         directAnswers: {},
-        categories: [],
-        answeredCategories: [],
-        adaptiveAnswers: {},
         previousQA: [],
         isRefinement: false,
         generatedPrompt: null,

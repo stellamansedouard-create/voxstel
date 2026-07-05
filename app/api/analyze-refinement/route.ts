@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/auth";
-import type { AITool, DirectQuestion, PrecisionCategory, PreviousQAItem } from "@/types";
+import type { AITool, DirectQuestion, PreviousQAItem } from "@/types";
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,21 +48,16 @@ b) COMBLER un manque qui explique pourquoi le prompt est insuffisant
 Ce qui a déjà été précisé (NE PAS redemander ces points) :
 ${previousContext}
 
-Génère de NOUVELLES questions et catégories pour améliorer le résultat.
+Génère de NOUVELLES questions pour améliorer le résultat.
 - Analyse le prompt généré : qu'est-ce qui y est vague ou manquant ?
 - Propose 1-2 nouvelles questions (types a ou b)
-- Propose 2-3 nouvelles catégories optionnelles non déjà couvertes
-- Maximum 2 questions, maximum 3 catégories
+- Maximum 2 questions
 - Labels en français, ids en snake_case anglais
-- priority: true pour les catégories les plus impactantes
 
 Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
 {
   "questions": [
     { "id": "id_snake", "label": "Question ciblée ?", "theme": "Thème court en français", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
-  ],
-  "categories": [
-    { "id": "id_snake", "label": "Catégorie", "priority": true }
   ],
   "readyToGenerate": false
 }`,
@@ -82,7 +77,7 @@ Que faut-il améliorer ou préciser pour rendre ce prompt meilleur ?`,
     const content = message.content[0];
     if (content.type !== "text") throw new Error("Unexpected response type");
 
-    let parsed: { questions: DirectQuestion[]; categories: PrecisionCategory[]; readyToGenerate: boolean };
+    let parsed: { questions: DirectQuestion[]; readyToGenerate: boolean };
     try {
       const cleaned = content.text
         .trim()
@@ -90,17 +85,16 @@ Que faut-il améliorer ou préciser pour rendre ce prompt meilleur ?`,
         .replace(/\s*```$/i, "");
       parsed = JSON.parse(cleaned);
     } catch {
-      parsed = { questions: [], categories: [], readyToGenerate: false };
+      parsed = { questions: [], readyToGenerate: false };
     }
 
     if (!Array.isArray(parsed.questions)) parsed.questions = [];
-    if (!Array.isArray(parsed.categories)) parsed.categories = [];
 
     return NextResponse.json(parsed);
   } catch (error) {
     console.error("analyze-refinement error:", error);
     return NextResponse.json(
-      { questions: [], categories: [], readyToGenerate: false },
+      { questions: [], readyToGenerate: false },
       { status: 200 }
     );
   }

@@ -23,11 +23,19 @@ async function resolveUserId(
   subscription: Stripe.Subscription
 ): Promise<string | null> {
   if (subscription.metadata?.user_id) return subscription.metadata.user_id;
+  return resolveUserIdByCustomerId(supabase, subscription.customer as string);
+}
+
+async function resolveUserIdByCustomerId(
+  supabase: SupabaseAdmin,
+  customerId: string | null
+): Promise<string | null> {
+  if (!customerId) return null;
 
   const { data } = await supabase
     .from("users")
     .select("id")
-    .eq("stripe_customer_id", subscription.customer as string)
+    .eq("stripe_customer_id", customerId)
     .single();
 
   return data?.id ?? null;
@@ -199,6 +207,57 @@ export async function POST(req: NextRequest) {
           userId,
           eventType: "plan_downgraded",
           metadata: { old_plan: oldPlan, new_plan: "free" },
+        });
+      }
+      break;
+    }
+
+    // Fires on every failed renewal attempt (including Stripe's automatic
+    // dunning retries). No emailing system exists yet — this only logs a
+    // clear trace so failures are visible/queryable, both in Vercel logs
+    // and in analytics_events.
+    case "invoice.payment_failed": {
+      const invoice = event.data.object as Stripe.Invoice;
+      const customerId = (invoice.customer as string | null) ?? null;
+
+      const { data: userRow, error: userLookupError } = customerId
+        ? await supabase
+            .from("users")
+            .select("id, email")
+            .eq("stripe_customer_id", customerId)
+            .single()
+        : { data: null, error: null };
+
+      if (userLookupError) {
+        console.error(
+          "[stripe/webhook] user lookup failed (invoice.payment_failed) — message:",
+          userLookupError.message, "| code:", userLookupError.code, "| customer_id:", customerId
+        );
+      }
+
+      console.warn(
+        "[stripe/webhook] PAYMENT FAILED —",
+        "user_id:", userRow?.id ?? "unknown",
+        "| email:", userRow?.email ?? "unknown",
+        "| customer_id:", customerId,
+        "| amount_due:", invoice.amount_due, invoice.currency,
+        "| attempt:", invoice.attempt_count,
+        "| next_attempt:", invoice.next_payment_attempt
+          ? new Date(invoice.next_payment_attempt * 1000).toISOString()
+          : "none (final attempt)",
+        "| invoice_id:", invoice.id
+      );
+
+      if (userRow?.id) {
+        await trackEvent({
+          userId: userRow.id,
+          eventType: "payment_failed",
+          metadata: {
+            amount_due: invoice.amount_due,
+            currency: invoice.currency,
+            attempt_count: invoice.attempt_count,
+            invoice_id: invoice.id,
+          },
         });
       }
       break;

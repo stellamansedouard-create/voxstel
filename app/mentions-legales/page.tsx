@@ -21,32 +21,6 @@ export default function MentionsLegalesPage() {
 
           <section>
             <h2 className="text-base font-bold text-foreground mb-3">
-              Édition du site
-            </h2>
-            <p className="text-sm text-muted leading-relaxed mb-3">
-              Le site <strong className="font-semibold text-foreground">voxstel.com</strong>{" "}
-              (ci-après « le Site ») est édité par :
-            </p>
-            <div className="bg-card border border-border rounded-xl p-5 text-sm space-y-1">
-              <p className="font-semibold text-foreground">STELLAMANS Edouard</p>
-              <p className="text-muted">Entrepreneur individuel (micro-entreprise)</p>
-              <p className="text-muted">SIREN : 842 574 956</p>
-              <p className="text-muted">SIRET : 842 574 956 00038</p>
-              <p className="text-muted">Code APE : 6201Z - Programmation informatique</p>
-              <p className="text-muted">
-                Adresse : 6 Mail Pierre Charlot, 41000 Blois, France
-              </p>
-              <a
-                href="mailto:essasdev@gmail.com"
-                className="text-accent hover:underline inline-block"
-              >
-                essasdev@gmail.com
-              </a>
-            </div>
-          </section>
-
-          <section className="mt-8 pt-8 border-t border-border">
-            <h2 className="text-base font-bold text-foreground mb-3">
               Hébergement
             </h2>
             <h3 className="text-sm font-semibold text-foreground mb-2">
@@ -103,6 +77,32 @@ export default function MentionsLegalesPage() {
               DALL-E, Claude, etc.) auprès desquels ils sont utilisés. Voxstel ne contrôle pas ces
               outils tiers et ne saurait être tenu responsable des résultats obtenus.
             </p>
+          </section>
+
+          <section className="mt-8 pt-8 border-t border-border">
+            <h2 className="text-base font-bold text-foreground mb-3">
+              Édition du site
+            </h2>
+            <p className="text-sm text-muted leading-relaxed mb-3">
+              Le site <strong className="font-semibold text-foreground">voxstel.com</strong>{" "}
+              (ci-après « le Site ») est édité par :
+            </p>
+            <div className="bg-card border border-border rounded-xl p-5 text-sm space-y-1">
+              <p className="font-semibold text-foreground">STELLAMANS Edouard</p>
+              <p className="text-muted">Entrepreneur individuel (micro-entreprise)</p>
+              <p className="text-muted">SIREN : 842 574 956</p>
+              <p className="text-muted">SIRET : 842 574 956 00038</p>
+              <p className="text-muted">Code APE : 6201Z - Programmation informatique</p>
+              <p className="text-muted">
+                Adresse : 6 Mail Pierre Charlot, 41000 Blois, France
+              </p>
+              <a
+                href="mailto:essasdev@gmail.com"
+                className="text-accent hover:underline inline-block"
+              >
+                essasdev@gmail.com
+              </a>
+            </div>
           </section>
 
           <section className="mt-8 pt-8 border-t border-border">

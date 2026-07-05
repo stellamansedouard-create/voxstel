@@ -25,19 +25,12 @@ export interface DirectQuestion {
   theme?: string;
 }
 
-/** Catégorie optionnelle dans la section "Aller plus loin" */
-export interface PrecisionCategory {
-  id: string;
-  label: string;
-  priority: boolean;
-}
-
 /** Q&A d'un tour précédent, réaffiché modifiable lors d'un "Renforcer" */
 export interface PreviousQAItem {
   id: string;
   label: string;
   value: string;
-  type: "direct" | "category";
+  type: "direct";
 }
 
 /** Aspect visuel détecté dans une image de référence */
@@ -69,9 +62,6 @@ export interface GeneratorState {
   description: string;
   directQuestions: DirectQuestion[];
   directAnswers: Record<string, string>;
-  categories: PrecisionCategory[];
-  answeredCategories: string[];
-  adaptiveAnswers: Record<string, string>;
   previousQA: PreviousQAItem[];
   isRefinement: boolean;
   imageReference: ImageReference | null;

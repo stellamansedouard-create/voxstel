@@ -201,7 +201,6 @@ Génère les questions de précision.`,
 
     return NextResponse.json({
       questions: parsed.questions,
-      categories: [],
       readyToGenerate: parsed.questions.length === 0,
     });
   } catch (error) {

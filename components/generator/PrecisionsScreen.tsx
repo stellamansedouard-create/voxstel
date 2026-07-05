@@ -11,11 +11,9 @@ interface PrecisionsScreenProps {
   description: string;
   directQuestions: DirectQuestion[];
   directAnswers: Record<string, string>;
-  adaptiveAnswers: Record<string, string>;
   tool: AITool;
   generatorCategory: Category;
   onDirectAnswer: (id: string, value: string) => void;
-  onAdaptiveAnswer: (id: string, value: string) => void;
   onRefinePrecisionAnswer: (id: string, value: string) => void;
   onSubmit: () => void;
   onRefinePrecision: () => void;
@@ -27,11 +25,9 @@ export default function PrecisionsScreen({
   description,
   directQuestions,
   directAnswers,
-  adaptiveAnswers,
   tool: _tool,
   generatorCategory: _generatorCategory,
   onDirectAnswer,
-  onAdaptiveAnswer,
   onRefinePrecisionAnswer,
   onSubmit,
   onRefinePrecision,
@@ -113,15 +109,8 @@ export default function PrecisionsScreen({
                 <div className="w-px h-4 bg-border flex-none" />
                 <input
                   type="text"
-                  value={
-                    item.type === "direct"
-                      ? (directAnswers[item.id] ?? item.value)
-                      : (adaptiveAnswers[item.id] ?? item.value)
-                  }
-                  onChange={(e) => {
-                    if (item.type === "direct") onDirectAnswer(item.id, e.target.value);
-                    else onAdaptiveAnswer(item.id, e.target.value);
-                  }}
+                  value={directAnswers[item.id] ?? item.value}
+                  onChange={(e) => onDirectAnswer(item.id, e.target.value)}
                   className="flex-1 text-sm bg-transparent focus:outline-none text-foreground min-w-0"
                 />
               </div>

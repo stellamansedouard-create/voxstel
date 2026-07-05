@@ -4,7 +4,8 @@ export type EventType =
   | "prompt_generated"
   | "user_signup"
   | "plan_upgraded"
-  | "plan_downgraded";
+  | "plan_downgraded"
+  | "payment_failed";
 
 export interface TrackEventPayload {
   userId?: string | null;
