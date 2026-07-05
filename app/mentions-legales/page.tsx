@@ -88,7 +88,7 @@ export default function MentionsLegalesPage() {
               (ci-après « le Site ») est édité par :
             </p>
             <div className="bg-card border border-border rounded-xl p-5 text-sm space-y-1">
-              <p className="font-semibold text-foreground">STELLAMANS Edouard</p>
+              <p className="text-muted">STELLAMANS Edouard</p>
               <p className="text-muted">Entrepreneur individuel (micro-entreprise)</p>
               <p className="text-muted">SIREN : 842 574 956</p>
               <p className="text-muted">SIRET : 842 574 956 00038</p>
