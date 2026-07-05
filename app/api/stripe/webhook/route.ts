@@ -39,7 +39,7 @@ async function upsertSubscriptionRow(
   subscription: Stripe.Subscription,
   plan: PricingPlan
 ) {
-  await supabase.from("subscriptions").upsert(
+  const { error } = await supabase.from("subscriptions").upsert(
     {
       user_id: userId,
       stripe_customer_id: subscription.customer as string,
@@ -52,6 +52,13 @@ async function upsertSubscriptionRow(
     },
     { onConflict: "stripe_subscription_id" }
   );
+  if (error) {
+    console.error(
+      "[stripe/webhook] subscriptions upsert failed — message:", error.message,
+      "| code:", error.code, "| details:", error.details, "| hint:", error.hint,
+      "| stripe_subscription_id:", subscription.id
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -89,7 +96,7 @@ export async function POST(req: NextRequest) {
           .single();
         const oldPlan = currentUser?.plan ?? null;
 
-        await supabase
+        const { error: usersUpdateError } = await supabase
           .from("users")
           .update({
             plan: newPlan,
@@ -98,6 +105,12 @@ export async function POST(req: NextRequest) {
             subscription_status: subscription.status,
           })
           .eq("id", userId);
+        if (usersUpdateError) {
+          console.error(
+            "[stripe/webhook] users update failed (checkout.session.completed) — message:",
+            usersUpdateError.message, "| code:", usersUpdateError.code, "| user_id:", userId
+          );
+        }
 
         await upsertSubscriptionRow(supabase, userId, subscription, newPlan);
 
@@ -127,7 +140,7 @@ export async function POST(req: NextRequest) {
         const isActive =
           subscription.status === "active" || subscription.status === "trialing";
 
-        await supabase
+        const { error: usersUpdateError } = await supabase
           .from("users")
           .update({
             plan: isActive ? plan : "free",
@@ -137,6 +150,12 @@ export async function POST(req: NextRequest) {
               : null,
           })
           .eq("id", userId);
+        if (usersUpdateError) {
+          console.error(
+            "[stripe/webhook] users update failed (customer.subscription.updated) — message:",
+            usersUpdateError.message, "| code:", usersUpdateError.code, "| user_id:", userId
+          );
+        }
       }
       break;
     }
@@ -149,12 +168,19 @@ export async function POST(req: NextRequest) {
       const oldPlan = planFromSubscription(subscription);
 
       if (userId) {
-        await supabase
+        const { error: subsUpdateError } = await supabase
           .from("subscriptions")
           .update({ status: "canceled", updated_at: new Date().toISOString() })
           .eq("stripe_subscription_id", subscription.id);
+        if (subsUpdateError) {
+          console.error(
+            "[stripe/webhook] subscriptions update failed (customer.subscription.deleted) — message:",
+            subsUpdateError.message, "| code:", subsUpdateError.code,
+            "| stripe_subscription_id:", subscription.id
+          );
+        }
 
-        await supabase
+        const { error: usersUpdateError } = await supabase
           .from("users")
           .update({
             plan: "free",
@@ -162,6 +188,12 @@ export async function POST(req: NextRequest) {
             subscription_cancel_at: null,
           })
           .eq("id", userId);
+        if (usersUpdateError) {
+          console.error(
+            "[stripe/webhook] users update failed (customer.subscription.deleted) — message:",
+            usersUpdateError.message, "| code:", usersUpdateError.code, "| user_id:", userId
+          );
+        }
 
         await trackEvent({
           userId,
