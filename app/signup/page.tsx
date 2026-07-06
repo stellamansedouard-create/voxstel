@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
+import { fbTrack } from "@/lib/fbq";
 
 function GoogleIcon() {
   return (
@@ -62,6 +63,8 @@ export default function SignupPage() {
       setLoading(false);
       return;
     }
+
+    fbTrack("CompleteRegistration");
 
     if (data.session) {
       // Session immédiate (ex: OAuth ou confirmation désactivée côté Supabase)

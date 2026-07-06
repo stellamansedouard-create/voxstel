@@ -36,6 +36,8 @@ export async function GET(request: Request) {
       // Ensure user row exists in public.users (fallback — DB trigger is primary)
       await ensureUserRow(data.user.id, data.user.email ?? "");
 
+      let isNewGoogleUser = false;
+
       // Track user_signup only on the very first confirmation (first_visit_at is null)
       try {
         const adminSupabase = createServerSupabase();
@@ -46,6 +48,7 @@ export async function GET(request: Request) {
           .single();
 
         if (!userRow?.first_visit_at) {
+          isNewGoogleUser = data.user.app_metadata?.provider === "google";
           const utmRaw = cookieStore.get("vx_utm")?.value;
           const utm = utmRaw ? JSON.parse(decodeURIComponent(utmRaw)) : {};
 
@@ -72,7 +75,10 @@ export async function GET(request: Request) {
         console.error("[analytics] user_signup:", e);
       }
 
-      return NextResponse.redirect(`${origin}${next}`);
+      const redirectUrl = new URL(`${origin}${next}`);
+      if (isNewGoogleUser) redirectUrl.searchParams.set("fbq_event", "registration");
+
+      return NextResponse.redirect(redirectUrl);
     }
   }
 
