@@ -57,6 +57,11 @@ export async function POST(req: NextRequest) {
           .join("\n")}`
       : "";
 
+    const outputLanguageRule =
+      category === "text" || category === "music"
+        ? `\n\nRègle sur la langue de sortie du contenu généré : sauf indication contraire explicite de l'utilisateur (ex. "en anglais", "pour un client anglophone/US", "cible internationale", ou un texte déjà rédigé par l'utilisateur dans une autre langue), le contenu que ${toolName} doit produire est attendu en français par défaut. Ajoute une ligne explicite et distincte dans le prompt généré (ex. "Language: French" ou "Réponds en français", selon le style de structuration utilisé pour ${toolName}) indiquant la langue de sortie attendue — ne la noie pas dans le texte libre descriptif. Si l'utilisateur a explicitement indiqué une autre langue de sortie, respecte ce choix à la place et indique cette langue-là. Cette règle porte sur la langue du contenu que ${toolName} va générer, pas sur la langue du texte littéral déjà fourni par l'utilisateur (slogans, citations — voir règle ci-dessus).`
+        : "";
+
     const message = await anthropic.messages.create({
       model,
       max_tokens: 3000,
@@ -67,7 +72,7 @@ Contexte technique : ${promptContext}
 Crée un prompt professionnel, complet et directement utilisable dans ${toolName}.
 Le prompt EN doit être riche, détaillé, et respecter la syntaxe exacte de ${toolName}.
 
-Règle impérative sur le texte littéral : si l'utilisateur a fourni un texte destiné à apparaître tel quel dans le résultat (slogan, citation, titre exact, nom de marque, paroles de chanson, texte à afficher sur une image ou une vidéo — typiquement introduit entre guillemets ou par une formulation du type "avec le texte...", "qui dit...", "les paroles..."), ce texte doit être reproduit strictement à l'identique, dans sa langue et sa formulation d'origine, entre guillemets dans le prompt généré (y compris dans le champ "en"). Ne le traduis JAMAIS et ne le reformule JAMAIS, même si le reste du prompt "en" est rédigé en anglais. Seul le contenu librement descriptif (contexte, style, ambiance, instructions techniques) doit être traduit/rédigé en anglais dans le champ "en".
+Règle impérative sur le texte littéral : si l'utilisateur a fourni un texte destiné à apparaître tel quel dans le résultat (slogan, citation, titre exact, nom de marque, paroles de chanson, texte à afficher sur une image ou une vidéo — typiquement introduit entre guillemets ou par une formulation du type "avec le texte...", "qui dit...", "les paroles..."), ce texte doit être reproduit strictement à l'identique, dans sa langue et sa formulation d'origine, entre guillemets dans le prompt généré (y compris dans le champ "en"). Ne le traduis JAMAIS et ne le reformule JAMAIS, même si le reste du prompt "en" est rédigé en anglais. Seul le contenu librement descriptif (contexte, style, ambiance, instructions techniques) doit être traduit/rédigé en anglais dans le champ "en".${outputLanguageRule}
 
 Réponds UNIQUEMENT avec du JSON valide, sans markdown :
 {
