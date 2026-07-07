@@ -17,46 +17,33 @@ interface FreeTextInputProps {
 }
 
 const TOOL_EXAMPLES: Record<string, string> = {
-  midjourney:
-    "Ex : \"Un renard roux assis sur un livre ancien dans une forêt brumeuse, atmosphère mystérieuse au coucher du soleil...\"",
-  dalle3:
-    "Ex : \"Une ville futuriste la nuit sous la pluie, néons colorés reflétés dans les flaques, style cyberpunk...\"",
-  firefly:
-    "Ex : \"Un bouquet de fleurs sauvages dans un vase en verre dépoli, lumière naturelle douce, fond clair...\"",
-  imagen:
-    "Ex : \"Portrait d'une femme souriante dans un café parisien vintage, bokeh, lumière du matin...\"",
-  stablediffusion:
-    "Ex : \"Un dragon majestueux perché sur une montagne enneigée sous un ciel étoilé, style fantasy...\"",
-  leonardoai:
-    "Ex : \"Un guerrier en armure dorée dans une forêt enchantée, lumières féériques, très détaillé...\"",
-  ideogram:
-    "Ex : \"Un poster vintage de film d'horreur avec le titre 'The Last Night' en grandes lettres rouges...\"",
-  sora: "Ex : \"Un astronaute marche lentement sur la lune, caméra qui le suit en tracking shot, lumière rasante...\"",
-  runway: "Ex : \"Une cascade tropicale avec des oiseaux colorés qui s'envolent, plan large panoramique...\"",
-  pika: "Ex : \"Un robot dansant dans une rue de Tokyo la nuit, lumières néon, mouvement fluide...\"",
-  lumaai: "Ex : \"Des vagues océaniques qui s'écrasent sur des rochers au coucher de soleil, ralenti...\"",
-  klingai: "Ex : \"Un chef cuisinier qui jongle avec des légumes dans une cuisine moderne, souriant...\"",
-  veo: "Ex : \"Un troupeau de chevaux galopant dans un champ au lever du soleil, filmé par drone...\"",
-  claude:
-    "Ex : \"Écris un article de blog de 800 mots sur les bienfaits de la méditation pour les débutants, ton chaleureux...\"",
-  gpt4: "Ex : \"Crée un plan de marketing digital pour une startup B2B SaaS avec un budget limité...\"",
-  gemini:
-    "Ex : \"Analyse les tendances du marché de l'IA en 2025 et propose 3 opportunités d'investissement...\"",
-  llama:
-    "Ex : \"Tu es un tuteur bienveillant. Explique la relativité générale à un lycéen sans jargon...\"",
-  mistral:
-    "Ex : \"Traduis ce contrat légal en langage clair et identifie les clauses potentiellement risquées...\"",
-  deepseek:
-    "Ex : \"Écris une fonction Python optimisée pour détecter les doublons dans une liste de millions d'éléments...\"",
-  suno: "Ex : \"Une chanson pop mélancolique sur un voyage en train sous la pluie, voix féminine douce, tempo lent...\"",
-  udio: "Ex : \"Un morceau de jazz fusion avec piano, basse électrique et batterie, ambiance nocturne de club...\"",
-  stableaudio:
-    "Ex : \"Musique épique orchestrale pour une scène de bataille fantasy, cordes et percussions, très intense...\"",
-  aiva: "Ex : \"Une composition pour quatuor à cordes, style romantique tardif, thème mélancolique qui évolue vers l'espoir...\"",
+  midjourney: "Ex : \"Un renard roux dans une forêt\"",
+  dalle3: "Ex : \"Une ville futuriste sous la pluie\"",
+  firefly: "Ex : \"Un bouquet de fleurs dans un vase\"",
+  imagen: "Ex : \"Une femme qui sourit dans un café\"",
+  stablediffusion: "Ex : \"Un dragon sur une montagne enneigée\"",
+  leonardoai: "Ex : \"Un guerrier dans une forêt enchantée\"",
+  ideogram: "Ex : \"Une affiche de film d'horreur\"",
+  sora: "Ex : \"Un astronaute qui boit un café sur la lune\"",
+  runway: "Ex : \"Une cascade dans la jungle\"",
+  pika: "Ex : \"Un robot qui danse dans une rue\"",
+  lumaai: "Ex : \"Des vagues qui s'écrasent sur des rochers\"",
+  klingai: "Ex : \"Un chef qui cuisine dans sa cuisine\"",
+  veo: "Ex : \"Des chevaux qui galopent dans un champ\"",
+  geminivideo: "Ex : \"Un chat qui joue avec une pelote de laine\"",
+  claude: "Ex : \"Un article de blog sur la méditation\"",
+  gpt4: "Ex : \"Un plan marketing pour une startup\"",
+  gemini: "Ex : \"Une analyse des tendances de l'IA\"",
+  llama: "Ex : \"Une explication simple de la relativité\"",
+  mistral: "Ex : \"Un résumé clair d'un contrat\"",
+  deepseek: "Ex : \"Une fonction Python pour détecter les doublons\"",
+  suno: "Ex : \"Une chanson pop mélancolique\"",
+  udio: "Ex : \"Un morceau de jazz pour un soir d'hiver\"",
+  stableaudio: "Ex : \"Une musique épique pour une bataille\"",
+  aiva: "Ex : \"Une composition pour quatuor à cordes\"",
 };
 
-const DEFAULT_PLACEHOLDER =
-  "Décrivez librement ce que vous voulez créer. Plus vous êtes précis, meilleur sera le prompt généré...";
+const DEFAULT_PLACEHOLDER = "Décrivez librement ce que vous voulez créer.";
 
 const CONTEXT_PLACEHOLDERS: Partial<Record<Category, string>> = {
   image: "Ex : affiche de festival, fond d'écran, pub pour une marque, usage personnel...",

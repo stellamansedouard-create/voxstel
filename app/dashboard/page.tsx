@@ -6,7 +6,6 @@ import PromptHistoryList from "@/components/dashboard/PromptHistoryList";
 import DeleteAccountButton from "@/components/dashboard/DeleteAccountButton";
 import ManageSubscriptionButton from "@/components/dashboard/ManageSubscriptionButton";
 import AnalyticsCharts from "@/components/dashboard/AnalyticsCharts";
-import SourceBreakdown from "@/components/dashboard/SourceBreakdown";
 import type { PromptHistoryItem } from "@/components/dashboard/PromptHistoryList";
 import { getCurrentUser } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
@@ -38,17 +37,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   music: "Musique",
 };
 
-function distribute(items: (string | null | undefined)[]) {
-  const counts: Record<string, number> = {};
-  for (const item of items) {
-    if (!item) continue;
-    counts[item] = (counts[item] ?? 0) + 1;
-  }
-  return Object.entries(counts)
-    .map(([value, count]) => ({ value, count }))
-    .sort((a, b) => b.count - a.count);
-}
-
 export default async function DashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
@@ -71,7 +59,6 @@ export default async function DashboardPage() {
     { data: userData },
     { data: allEvents },
     { data: recentEvents },
-    { data: sourceEvents },
     { data: promptsRaw },
   ] = await Promise.all([
     supabase
@@ -91,10 +78,6 @@ export default async function DashboardPage() {
       .eq("event_type", "prompt_generated")
       .gte("created_at", thirtyDaysAgo)
       .order("created_at", { ascending: true }),
-    supabase
-      .from("analytics_events")
-      .select("utm_source, utm_medium")
-      .eq("user_id", user.id),
     supabase
       .from("prompts_history")
       .select("id, category, tool, prompt_en, prompt_fr, created_at")
@@ -170,11 +153,6 @@ export default async function DashboardPage() {
     const key = d.toISOString().slice(0, 10);
     return { date: key, count: dailyCounts[key] ?? 0 };
   });
-
-  // ── Source data ─────────────────────────────────────────────────
-  const sourceRows = sourceEvents ?? [];
-  const bySource = distribute(sourceRows.map((r) => r.utm_source));
-  const byMedium = distribute(sourceRows.map((r) => r.utm_medium));
 
   const prompts: PromptHistoryItem[] = promptsRaw ?? [];
 
@@ -315,12 +293,6 @@ export default async function DashboardPage() {
             <AnalyticsCharts categories={categories} daily={daily} />
           </section>
 
-          {/* ── Source d'acquisition ──────────────────────────── */}
-          <section>
-            <SectionTitle>Source d&apos;acquisition</SectionTitle>
-            <SourceBreakdown bySource={bySource} byMedium={byMedium} />
-          </section>
-
           {/* ── Prompts récents ───────────────────────────────── */}
           <section>
             <div className="flex items-center justify-between mb-5">
@@ -337,12 +309,9 @@ export default async function DashboardPage() {
             <PromptHistoryList prompts={prompts} />
           </section>
 
-          {/* ── Zone dangereuse ───────────────────────────────── */}
+          {/* ── Gestion de compte ───────────────────────────────── */}
           <section className="pt-8 border-t border-border">
-            <h2 className="text-base font-bold text-foreground mb-1">Zone dangereuse</h2>
-            <p className="text-sm text-muted mb-4">
-              La suppression de compte est définitive et irréversible.
-            </p>
+            <h2 className="text-base font-bold text-foreground mb-4">Gestion de compte</h2>
             <DeleteAccountButton isPaidPlan={plan !== "free"} />
           </section>
 

@@ -9,7 +9,7 @@ export type ImageTool =
   | "leonardoai"
   | "ideogram";
 
-export type VideoTool = "sora" | "runway" | "pika" | "lumaai" | "klingai" | "veo";
+export type VideoTool = "sora" | "runway" | "pika" | "lumaai" | "klingai" | "veo" | "geminivideo";
 
 export type TextTool = "claude" | "gpt4" | "gemini" | "llama" | "mistral" | "deepseek";
 

@@ -29,6 +29,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/dashboard";
+  const fromGenerator = next.startsWith("/generate");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -92,11 +93,17 @@ function LoginForm() {
               Vox<span className="text-accent">stel</span>
             </span>
           </Link>
-          <p className="text-muted mt-2 text-sm">Content de vous revoir !</p>
+          <p className="text-muted mt-2 text-sm">
+            {fromGenerator
+              ? "Pour recevoir votre prompt affiné, créez un compte gratuit en quelques secondes."
+              : "Content de vous revoir !"}
+          </p>
         </div>
 
         <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
-          <h1 className="text-xl font-bold text-foreground mb-6">Se connecter</h1>
+          <h1 className="text-xl font-bold text-foreground mb-6">
+            {fromGenerator ? "Créez votre compte gratuit" : "Se connecter"}
+          </h1>
 
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-5 text-sm text-red-700">

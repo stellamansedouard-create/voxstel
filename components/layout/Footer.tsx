@@ -74,10 +74,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@voxstel.com"
+                  href="mailto:essasdev@gmail.com"
                   className="text-sm text-muted hover:text-foreground transition-colors"
                 >
-                  hello@voxstel.com
+                  essasdev@gmail.com
                 </a>
               </li>
             </ul>

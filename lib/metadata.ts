@@ -120,6 +120,14 @@ export const CATEGORIES: CategoryMeta[] = [
         promptContext:
           "Google Veo. Éléments clés : description de scène, travail de caméra, mouvement, style visuel, ambiance.",
       },
+      {
+        id: "geminivideo",
+        name: "Gemini",
+        description: "Génération vidéo intégrée à l'écosystème Google",
+        capabilities: ["video", "image"],
+        promptContext:
+          "Google Gemini (vidéo). Éléments clés : description de scène, mouvement de caméra, style visuel, ambiance, éclairage.",
+      },
     ],
   },
   {

@@ -67,6 +67,8 @@ Contexte technique : ${promptContext}
 Crée un prompt professionnel, complet et directement utilisable dans ${toolName}.
 Le prompt EN doit être riche, détaillé, et respecter la syntaxe exacte de ${toolName}.
 
+Règle impérative sur le texte littéral : si l'utilisateur a fourni un texte destiné à apparaître tel quel dans le résultat (slogan, citation, titre exact, nom de marque, paroles de chanson, texte à afficher sur une image ou une vidéo — typiquement introduit entre guillemets ou par une formulation du type "avec le texte...", "qui dit...", "les paroles..."), ce texte doit être reproduit strictement à l'identique, dans sa langue et sa formulation d'origine, entre guillemets dans le prompt généré (y compris dans le champ "en"). Ne le traduis JAMAIS et ne le reformule JAMAIS, même si le reste du prompt "en" est rédigé en anglais. Seul le contenu librement descriptif (contexte, style, ambiance, instructions techniques) doit être traduit/rédigé en anglais dans le champ "en".
+
 Réponds UNIQUEMENT avec du JSON valide, sans markdown :
 {
   "en": "Prompt complet en anglais pour ${toolName}...",
