@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
+import { captureGA4ClientId } from "@/lib/utm.client";
 
 function GoogleIcon() {
   return (
@@ -68,6 +69,7 @@ function LoginForm() {
   async function handleGoogleLogin() {
     setGoogleLoading(true);
     setError(null);
+    captureGA4ClientId();
     const supabase = createBrowserSupabaseClient();
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",

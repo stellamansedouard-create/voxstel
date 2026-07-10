@@ -11,6 +11,8 @@ export interface UTMData {
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
+  gclid?: string;
+  ga_client_id?: string;
   referrer?: string;
   first_visit_at?: string;
   session_id?: string;
@@ -27,14 +29,16 @@ export function storeUTM(params: {
   utmSource: string | null;
   utmMedium: string | null;
   utmCampaign: string | null;
+  gclid: string | null;
 }): void {
-  if (!params.utmSource) return;
+  if (!params.utmSource && !params.gclid) return;
   if (localStorage.getItem(UTM_KEY)) return; // first-touch attribution — never overwrite
 
   const data: UTMData = {
-    utm_source: params.utmSource,
+    utm_source: params.utmSource ?? undefined,
     utm_medium: params.utmMedium ?? undefined,
     utm_campaign: params.utmCampaign ?? undefined,
+    gclid: params.gclid ?? undefined,
     referrer: document.referrer || undefined,
     first_visit_at: new Date().toISOString(),
   };
@@ -79,6 +83,36 @@ export function applyConsent(accepted: boolean): void {
 /** Returns the consent value, or null if not yet decided. */
 export function getConsentStatus(): ConsentValue | null {
   return getConsent();
+}
+
+/**
+ * Reads the GA4 client_id out of the _ga cookie (set by gtag.js once loaded —
+ * see lib/gtag.ts) and merges it into the existing vx_utm payload. Unlike
+ * storeUTM's first-touch guard, this always overwrites with the freshest
+ * value: it's a technical identifier needed to stitch a later server-side
+ * purchase event back to this browser, not attribution data.
+ *
+ * Call this right before any signup action (email or Google OAuth) — by then
+ * the user has necessarily accepted cookies, so gtag.js has had a chance to
+ * set _ga. Safe to call repeatedly (e.g. also from UTMTracker on every page
+ * load) since a missing cookie is a silent no-op.
+ */
+export function captureGA4ClientId(): void {
+  if (typeof window === "undefined") return;
+  if (getConsent() !== "accepted") return;
+
+  const match = document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);
+  const clientId = match?.[1];
+  if (!clientId) return;
+
+  const raw = localStorage.getItem(UTM_KEY);
+  const data: UTMData = raw ? JSON.parse(raw) : {};
+  if (data.ga_client_id === clientId) return;
+
+  data.ga_client_id = clientId;
+  const serialized = JSON.stringify(data);
+  localStorage.setItem(UTM_KEY, serialized);
+  document.cookie = `${UTM_KEY}=${encodeURIComponent(serialized)}; max-age=2592000; path=/; SameSite=Lax`;
 }
 
 /** Returns stored UTM + live session_id. Safe to call server-side (returns {}). */

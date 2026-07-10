@@ -57,6 +57,8 @@ export async function GET(request: Request) {
               utm_source: utm.utm_source ?? null,
               utm_medium: utm.utm_medium ?? null,
               utm_campaign: utm.utm_campaign ?? null,
+              gclid: utm.gclid ?? null,
+              ga_client_id: utm.ga_client_id ?? null,
               referrer: utm.referrer ?? null,
               first_visit_at: utm.first_visit_at ?? new Date().toISOString(),
             }).eq("id", data.user.id),

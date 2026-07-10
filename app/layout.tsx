@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Suspense } from "react";
 import { UTMTracker } from "@/components/UTMTracker";
 import CookieBanner from "@/components/CookieBanner";
 import { PixelEventHandler } from "@/components/PixelEventHandler";
 import { FacebookPixelLoader } from "@/components/FacebookPixelLoader";
+import { GoogleAdsTagLoader } from "@/components/GoogleAdsTagLoader";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,10 +28,40 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        {/*
+          Google tag (gtag.js) + Consent Mode v2. Loaded unconditionally for every
+          visitor — this is Google's recommended pattern: default all storage to
+          "denied" so no cookie/ID is set pre-consent, then update to "granted"
+          once the existing cookie banner (components/CookieBanner.tsx) is
+          accepted. See lib/gtag.ts for the consent-update call.
+        */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18310195091"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-consent-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('consent', 'default', {
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
+              'analytics_storage': 'denied'
+            });
+            gtag('js', new Date());
+            gtag('config', 'AW-18310195091');
+            gtag('config', 'G-960CH3E68D');
+          `}
+        </Script>
       </head>
       <body className="bg-background text-foreground min-h-screen">
         <Suspense fallback={null}>
           <FacebookPixelLoader />
+        </Suspense>
+        <Suspense fallback={null}>
+          <GoogleAdsTagLoader />
         </Suspense>
         <Suspense fallback={null}>
           <UTMTracker />

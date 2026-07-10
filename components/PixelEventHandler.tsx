@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { fbTrack } from "@/lib/fbq";
+import { gtagTrackConversion, GOOGLE_ADS_CONVERSION } from "@/lib/gtag";
 
 /** Fires Meta Pixel events signalled via redirect query params, then strips them from the URL. */
 export function PixelEventHandler() {
@@ -20,6 +21,7 @@ export function PixelEventHandler() {
     async function run() {
       if (fbqEvent === "registration") {
         fbTrack("CompleteRegistration");
+        gtagTrackConversion(GOOGLE_ADS_CONVERSION.signup);
       }
 
       if (checkout === "success") {

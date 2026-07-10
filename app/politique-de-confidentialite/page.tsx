@@ -266,7 +266,9 @@ export default function PolitiqueConfidentialitePage() {
           <section className="mt-8 pt-8 border-t border-border">
             <h2 className="text-base font-bold text-foreground mb-3">8. Cookies</h2>
             <p className="text-sm text-muted leading-relaxed mb-4">
-              Voxstel utilise deux types de cookies :
+              Voxstel utilise des cookies essentiels ainsi que des cookies de mesure d&apos;audience
+              et publicitaires tiers (Meta, Google Ads, Google Analytics), ces derniers uniquement
+              après votre consentement explicite :
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
@@ -291,7 +293,7 @@ export default function PolitiqueConfidentialitePage() {
                     <td className="py-3 pr-4 text-muted align-top">12 mois</td>
                     <td className="py-3 text-muted align-top">Non requis (essentiel)</td>
                   </tr>
-                  <tr>
+                  <tr className="border-b border-border">
                     <td className="py-3 pr-4 text-muted align-top font-mono text-xs">vx_utm</td>
                     <td className="py-3 pr-4 text-muted align-top">
                       Mesure d&apos;audience — enregistre la source d&apos;acquisition (lien
@@ -304,12 +306,41 @@ export default function PolitiqueConfidentialitePage() {
                       uniquement si vous cliquez &laquo; Accepter &raquo; dans le bandeau
                     </td>
                   </tr>
+                  <tr className="border-b border-border">
+                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">_fbp, _fbc</td>
+                    <td className="py-3 pr-4 text-muted align-top">
+                      Pixel publicitaire Meta — mesure l&apos;efficacité de nos campagnes
+                      publicitaires sur Facebook/Instagram. Déposé par un tiers (Meta Platforms,
+                      Inc., États-Unis).
+                    </td>
+                    <td className="py-3 pr-4 text-muted align-top">90 jours</td>
+                    <td className="py-3 text-muted align-top">
+                      <strong className="font-semibold text-foreground">Requis</strong> — posé
+                      uniquement si vous cliquez &laquo; Accepter &raquo; dans le bandeau
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">
+                      _ga, _ga_*, _gcl_au
+                    </td>
+                    <td className="py-3 pr-4 text-muted align-top">
+                      Balise Google Ads / Google Analytics (GA4) — mesure l&apos;efficacité de nos
+                      campagnes Google Ads et notre audience. Déposé par un tiers (Google Ireland
+                      Ltd).
+                    </td>
+                    <td className="py-3 pr-4 text-muted align-top">Jusqu&apos;à 13 mois</td>
+                    <td className="py-3 text-muted align-top">
+                      <strong className="font-semibold text-foreground">Requis</strong> — posé
+                      uniquement si vous cliquez &laquo; Accepter &raquo; dans le bandeau
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
             <p className="text-sm text-muted leading-relaxed mt-4">
               Vous pouvez modifier votre choix à tout moment en effaçant les cookies de votre
-              navigateur. Nous ne déposons aucun cookie publicitaire ou de tracking tiers.
+              navigateur ou en refusant dans le bandeau. Les cookies publicitaires et de mesure
+              d&apos;audience tiers ci-dessus ne sont jamais déposés avant votre acceptation.
             </p>
           </section>
 

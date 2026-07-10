@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import { fbTrack } from "@/lib/fbq";
+import { gtagTrackConversion, GOOGLE_ADS_CONVERSION } from "@/lib/gtag";
+import { captureGA4ClientId } from "@/lib/utm.client";
 
 function GoogleIcon() {
   return (
@@ -51,6 +53,7 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
+    captureGA4ClientId();
 
     const supabase = createBrowserSupabaseClient();
     const { data, error: authError } = await supabase.auth.signUp({
@@ -65,6 +68,7 @@ export default function SignupPage() {
     }
 
     fbTrack("CompleteRegistration");
+    gtagTrackConversion(GOOGLE_ADS_CONVERSION.signup);
 
     if (data.session) {
       // Session immédiate (ex: OAuth ou confirmation désactivée côté Supabase)
@@ -80,6 +84,7 @@ export default function SignupPage() {
   async function handleGoogleSignup() {
     setGoogleLoading(true);
     setError(null);
+    captureGA4ClientId();
     const supabase = createBrowserSupabaseClient();
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",

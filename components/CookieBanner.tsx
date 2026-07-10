@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { applyConsent, getConsentStatus } from "@/lib/utm.client";
 import { loadFacebookPixel } from "@/lib/fbq";
+import { grantAdsConsent } from "@/lib/gtag";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
@@ -16,6 +17,7 @@ export default function CookieBanner() {
   function handleAccept() {
     applyConsent(true);
     loadFacebookPixel();
+    grantAdsConsent();
     setVisible(false);
   }
 
@@ -34,9 +36,9 @@ export default function CookieBanner() {
     >
       <div className="max-w-2xl mx-auto bg-card border border-border rounded-2xl shadow-lg p-5 flex flex-col sm:flex-row sm:items-center gap-4">
         <p className="text-sm text-muted leading-relaxed flex-1">
-          Nous utilisons des cookies de mesure d&apos;audience (UTM) et un pixel publicitaire (Meta)
-          pour comprendre d&apos;où viennent nos visiteurs et mesurer nos campagnes. Rien n&apos;est
-          déposé tant que vous n&apos;avez pas accepté.{" "}
+          Nous utilisons des cookies de mesure d&apos;audience (UTM) et des balises publicitaires
+          (Meta, Google Ads) pour comprendre d&apos;où viennent nos visiteurs et mesurer nos
+          campagnes. Rien n&apos;est déposé tant que vous n&apos;avez pas accepté.{" "}
           <a
             href="/politique-de-confidentialite"
             className="text-accent underline hover:no-underline"

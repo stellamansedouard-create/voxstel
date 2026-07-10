@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, PLAN_BY_PRICE_ID } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
+import { uploadPurchaseEvent } from "@/lib/ga4-conversion";
+import { PRICING } from "@/lib/pricing";
 import type Stripe from "stripe";
 import type { PricingPlan } from "@/types";
 
@@ -99,7 +101,7 @@ export async function POST(req: NextRequest) {
 
         const { data: currentUser } = await supabase
           .from("users")
-          .select("plan")
+          .select("plan, ga_client_id")
           .eq("id", userId)
           .single();
         const oldPlan = currentUser?.plan ?? null;
@@ -129,6 +131,13 @@ export async function POST(req: NextRequest) {
           utmMedium: session.metadata?.utm_medium ?? null,
           utmCampaign: session.metadata?.utm_campaign ?? null,
           metadata: { old_plan: oldPlan, new_plan: newPlan },
+        });
+
+        await uploadPurchaseEvent({
+          clientId: currentUser?.ga_client_id,
+          value: PRICING[newPlan].price,
+          currency: PRICING[newPlan].currency,
+          transactionId: session.id,
         });
       }
       break;
