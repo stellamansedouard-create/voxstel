@@ -1,4 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase";
+import { ensureUserRow } from "@/lib/auth";
 import { PRICING } from "@/lib/pricing";
 import type { PricingPlan } from "@/types";
 
@@ -19,16 +20,28 @@ export interface QuotaStatus {
  * Reads the user's quota via the service role key (bypasses RLS — the users
  * table has no UPDATE permission for authenticated clients).
  * Resets quota_used to 0 when a new calendar month has started since the
- * last reset date.  Returns null if the user row is missing.
+ * last reset date. Returns null if the row is still missing after a
+ * self-heal attempt (email/password signups don't hit any server route
+ * before this — see ensureUserRow in lib/auth.ts — so the row may not
+ * exist yet on a user's very first quota-gated request).
  */
-export async function checkQuota(userId: string): Promise<QuotaStatus | null> {
+export async function checkQuota(userId: string, email?: string): Promise<QuotaStatus | null> {
   const supabase = createServerSupabase();
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("users")
     .select("plan, quota_used, quota_reset_date")
     .eq("id", userId)
     .single();
+
+  if ((error || !data) && email) {
+    await ensureUserRow(userId, email);
+    ({ data, error } = await supabase
+      .from("users")
+      .select("plan, quota_used, quota_reset_date")
+      .eq("id", userId)
+      .single());
+  }
 
   if (error || !data) return null;
 

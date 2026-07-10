@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
-    const quotaStatus = await checkQuota(user.id);
+    const quotaStatus = await checkQuota(user.id, user.email ?? undefined);
     if (!quotaStatus || !quotaStatus.allowed) {
       return NextResponse.json({ error: "quota_exceeded" }, { status: 429 });
     }

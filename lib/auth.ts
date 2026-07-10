@@ -40,7 +40,9 @@ export async function getCurrentUser(): Promise<User | null> {
 /**
  * Idempotent — inserts the user row into public.users if it doesn't exist yet.
  * Uses the service role key so it bypasses RLS.
- * Called from the OAuth callback and (as fallback) from the signup form.
+ * Called from the OAuth callback, the dashboard page, and (self-heal) from
+ * checkQuota — email/password signups never hit a server route between
+ * supabase.auth.signUp() and the user's first authenticated page/request.
  */
 export async function ensureUserRow(userId: string, email: string) {
   const supabase = createClient(

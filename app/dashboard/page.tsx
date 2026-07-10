@@ -7,7 +7,7 @@ import DeleteAccountButton from "@/components/dashboard/DeleteAccountButton";
 import ManageSubscriptionButton from "@/components/dashboard/ManageSubscriptionButton";
 import AnalyticsCharts from "@/components/dashboard/AnalyticsCharts";
 import type { PromptHistoryItem } from "@/components/dashboard/PromptHistoryList";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, ensureUserRow } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
 import { PRICING } from "@/lib/pricing";
 import type { Metadata } from "next";
@@ -40,6 +40,11 @@ const CATEGORY_LABELS: Record<string, string> = {
 export default async function DashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
+
+  // Fallback for email/password signups: the OAuth callback creates the row
+  // via ensureUserRow, but a confirmed email/password signup never hits a
+  // server route beforehand — the dashboard is the first guaranteed one.
+  await ensureUserRow(user.id, user.email ?? "");
 
   const supabase = createServerSupabase();
 
