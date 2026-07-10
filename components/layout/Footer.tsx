@@ -84,10 +84,30 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border pt-6">
+        <div className="border-t border-border pt-6 flex flex-wrap items-center justify-between gap-4">
           <p className="text-xs text-muted">
             © {new Date().getFullYear()} Voxstel. Tous droits réservés.
           </p>
+          <a
+            href="https://www.instagram.com/voxstelpro/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#1A1A1A] hover:text-[#C8910A] transition-colors"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
+            </svg>
+            Suivez-nous sur Instagram
+          </a>
         </div>
       </div>
     </footer>
