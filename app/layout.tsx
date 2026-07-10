@@ -34,12 +34,18 @@ export default function RootLayout({
           "denied" so no cookie/ID is set pre-consent, then update to "granted"
           once the existing cookie banner (components/CookieBanner.tsx) is
           accepted. See lib/gtag.ts for the consent-update call.
+
+          strategy="beforeInteractive" (not afterInteractive): Next.js only
+          renders beforeInteractive scripts into the server-rendered <head> —
+          afterInteractive scripts are injected client-side wherever the
+          component happens to mount, which for this layout meant the end of
+          <body>, not <head> as Google's own tag-installation check expects.
         */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18310195091"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
-        <Script id="gtag-consent-init" strategy="afterInteractive">
+        <Script id="gtag-consent-init" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
