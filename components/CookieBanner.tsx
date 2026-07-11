@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { applyConsent, getConsentStatus } from "@/lib/utm.client";
-import { loadFacebookPixel } from "@/lib/fbq";
 import { grantAdsConsent } from "@/lib/gtag";
 
 export default function CookieBanner() {
@@ -16,7 +15,6 @@ export default function CookieBanner() {
 
   function handleAccept() {
     applyConsent(true);
-    loadFacebookPixel();
     grantAdsConsent();
     setVisible(false);
   }

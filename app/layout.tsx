@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { UTMTracker } from "@/components/UTMTracker";
 import CookieBanner from "@/components/CookieBanner";
 import { PixelEventHandler } from "@/components/PixelEventHandler";
-import { FacebookPixelLoader } from "@/components/FacebookPixelLoader";
 import { GoogleAdsTagLoader } from "@/components/GoogleAdsTagLoader";
 import "./globals.css";
 
@@ -49,6 +48,12 @@ export default function RootLayout({
           first hit (and every hit before hydration finishes) sent with
           denied consent regardless, which is what was making Google Ads
           diagnostics report ~100% of signals as denied.
+
+          url_passthrough: while consent is still denied (new visitor who
+          hasn't clicked the banner yet), gtag forwards gclid/dclid through
+          internal navigations via URL params instead of cookies, so the click
+          ID survives until the visitor accepts — improves Google Ads
+          conversion attribution without storing anything pre-consent.
         */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18310195091"
@@ -67,15 +72,13 @@ export default function RootLayout({
               'analytics_storage': vxConsentState
             });
             gtag('js', new Date());
+            gtag('set', 'url_passthrough', true);
             gtag('config', 'AW-18310195091');
             gtag('config', 'G-960CH3E68D');
           `}
         </Script>
       </head>
       <body className="bg-background text-foreground min-h-screen">
-        <Suspense fallback={null}>
-          <FacebookPixelLoader />
-        </Suspense>
         <Suspense fallback={null}>
           <GoogleAdsTagLoader />
         </Suspense>

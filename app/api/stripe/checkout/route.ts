@@ -26,6 +26,31 @@ export async function POST(req: NextRequest) {
     const priceId = STRIPE_PRICES[plan];
     const supabase = createServerSupabase();
 
+    // Backfill GA4 client_id / gclid from the vx_utm cookie. The OAuth
+    // callback only writes these once, at first signup (first_visit_at null) —
+    // any user who signed up before the consent fix (or via email/password
+    // without the cookie populated yet) keeps ga_client_id = NULL forever,
+    // and the server-side "purchase" upload (lib/ga4-conversion.ts) is then
+    // silently skipped. The checkout request is the last moment to capture it.
+    // Best-effort: a tracking backfill must never block a paying customer.
+    try {
+      const utmRaw = req.cookies.get("vx_utm")?.value;
+      if (utmRaw) {
+        const utm = JSON.parse(decodeURIComponent(utmRaw)) as {
+          ga_client_id?: string;
+          gclid?: string;
+        };
+        const backfill: Record<string, string> = {};
+        if (utm.ga_client_id) backfill.ga_client_id = utm.ga_client_id;
+        if (utm.gclid) backfill.gclid = utm.gclid;
+        if (Object.keys(backfill).length > 0) {
+          await supabase.from("users").update(backfill).eq("id", user.id);
+        }
+      }
+    } catch {
+      // malformed cookie — ignore
+    }
+
     const { data: userRow } = await supabase
       .from("users")
       .select("stripe_customer_id")
