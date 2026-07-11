@@ -40,6 +40,15 @@ export default function RootLayout({
           afterInteractive scripts are injected client-side wherever the
           component happens to mount, which for this layout meant the end of
           <body>, not <head> as Google's own tag-installation check expects.
+
+          The 'consent default' value below reads the vx_consent cookie
+          synchronously, right here in the inline script — not via a React
+          useEffect (components/GoogleAdsTagLoader.tsx) — because gtag('config', ...)
+          fires an automatic page_view hit immediately, before React hydrates.
+          A returning visitor who already accepted would otherwise have that
+          first hit (and every hit before hydration finishes) sent with
+          denied consent regardless, which is what was making Google Ads
+          diagnostics report ~100% of signals as denied.
         */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18310195091"
@@ -50,11 +59,12 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             window.gtag = gtag;
+            var vxConsentState = /(?:^|; )vx_consent=accepted(?:;|$)/.test(document.cookie) ? 'granted' : 'denied';
             gtag('consent', 'default', {
-              'ad_storage': 'denied',
-              'ad_user_data': 'denied',
-              'ad_personalization': 'denied',
-              'analytics_storage': 'denied'
+              'ad_storage': vxConsentState,
+              'ad_user_data': vxConsentState,
+              'ad_personalization': vxConsentState,
+              'analytics_storage': vxConsentState
             });
             gtag('js', new Date());
             gtag('config', 'AW-18310195091');
