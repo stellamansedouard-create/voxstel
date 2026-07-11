@@ -3,6 +3,46 @@
 import { useState } from "react";
 import Link from "next/link";
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard write can fail (permissions, insecure context) — no-op
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      aria-label="Copier le prompt"
+      className="inline-flex items-center gap-1.5 flex-shrink-0 rounded-lg bg-[#F8F6F0] text-[#1A1A1A] text-xs font-medium px-2.5 py-1.5 border border-border hover:border-accent transition-colors"
+    >
+      {copied ? (
+        <>
+          <svg className="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          Copié
+        </>
+      ) : (
+        <>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          Copier
+        </>
+      )}
+    </button>
+  );
+}
+
 export interface PromptHistoryItem {
   id: string;
   category: string;
@@ -56,12 +96,12 @@ export default function PromptHistoryList({ prompts }: { prompts: PromptHistoryI
 
         return (
           <li key={prompt.id}>
-            <button
-              type="button"
-              onClick={() => setExpandedId(isExpanded ? null : prompt.id)}
-              className="w-full text-left bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-accent/20 transition-all duration-200"
-            >
-              <div className="flex items-start justify-between gap-4">
+            <div className="bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-accent/20 transition-all duration-200">
+              <button
+                type="button"
+                onClick={() => setExpandedId(isExpanded ? null : prompt.id)}
+                className="w-full text-left flex items-start justify-between gap-4"
+              >
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   <span className="text-xl flex-shrink-0 mt-0.5">{icon}</span>
                   <div className="min-w-0 text-left">
@@ -90,7 +130,7 @@ export default function PromptHistoryList({ prompts }: { prompts: PromptHistoryI
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
-              </div>
+              </button>
 
               {isExpanded && (
                 <div
@@ -99,24 +139,30 @@ export default function PromptHistoryList({ prompts }: { prompts: PromptHistoryI
                 >
                   <p className="text-xs text-muted sm:hidden">{formatDate(prompt.created_at)}</p>
                   <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-muted block mb-2">
-                      🇬🇧 English
-                    </span>
-                    <p className="text-sm text-foreground font-mono bg-card-hover rounded-xl p-3 break-words leading-relaxed whitespace-pre-wrap">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+                        🇬🇧 English
+                      </span>
+                      <CopyButton text={prompt.prompt_en} />
+                    </div>
+                    <p className="text-sm text-foreground font-mono bg-card-hover rounded-xl p-3 break-words leading-relaxed whitespace-pre-wrap select-text">
                       {prompt.prompt_en}
                     </p>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-muted block mb-2">
-                      🇫🇷 Français
-                    </span>
-                    <p className="text-sm text-foreground bg-card-hover rounded-xl p-3 break-words leading-relaxed whitespace-pre-wrap">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+                        🇫🇷 Français
+                      </span>
+                      <CopyButton text={prompt.prompt_fr} />
+                    </div>
+                    <p className="text-sm text-foreground bg-card-hover rounded-xl p-3 break-words leading-relaxed whitespace-pre-wrap select-text">
                       {prompt.prompt_fr}
                     </p>
                   </div>
                 </div>
               )}
-            </button>
+            </div>
           </li>
         );
       })}
