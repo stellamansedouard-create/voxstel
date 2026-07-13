@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
+import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
 import type { AITool, DirectQuestion } from "@/types";
 
@@ -90,9 +91,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
-    const { tool, category, description, usageContext } = await req.json() as {
+    const { tool, category, useCase, description, usageContext } = await req.json() as {
       tool: AITool;
       category: string;
+      useCase?: string;
       description: string;
       usageContext?: string;
     };
@@ -101,12 +103,24 @@ export async function POST(req: NextRequest) {
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
 
+    const useCaseMeta = useCase ? getUseCaseById(category, useCase) : undefined;
+    // Le cas d'usage (ex: "Fond d'écran") capture déjà la finalité — s'il est
+    // présent, le moteur ne doit pas reposer "à quoi ça va servir".
+    const effectiveUsage = usageContext?.trim() || useCaseMeta?.label || "";
+    const useCaseBlock = useCaseMeta
+      ? `\n\n━━━ TYPE DE CRÉATION CHOISI : ${useCaseMeta.label} ━━━
+L'utilisateur crée précisément : ${useCaseMeta.label} (${useCaseMeta.tagline}).
+${useCaseMeta.questionGuidance}
+Les questions marquées OBLIGATOIRE ci-dessus doivent impérativement figurer dans ta liste, même si la description n'en dit rien — elles font partie du minimum pour ce type de création. Ne les formule jamais en jargon technique : garde des libellés simples (ex : « Sur quel appareil ? » plutôt que « Quel ratio ? »), et laisse les suggestions guider vers la précision.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+      : "";
+
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
       max_tokens: 2500,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
-Contexte de l'outil : ${promptContext}
+Contexte de l'outil : ${promptContext}${useCaseBlock}
 
 ━━━ PLANCHER MINIMUM — JAMAIS MOINS DE 2 QUESTIONS ━━━
 Tu dois TOUJOURS générer au moins 2 questions, même si la description semble déjà très complète.
@@ -133,7 +147,7 @@ Ne saute jamais un axe uniquement parce qu'il "semble" secondaire — value chaq
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ━━━ RÈGLE CONTEXTE D'USAGE ━━━
-${getUsageContextRule(category, usageContext)}
+${getUsageContextRule(category, effectiveUsage)}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ━━━ NOMBRE DE QUESTIONS ━━━
@@ -167,10 +181,10 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
       messages: [
         {
           role: "user",
-          content: `L'utilisateur veut créer avec ${toolName}. Sa description :
+          content: `L'utilisateur veut créer avec ${toolName}.${useCaseMeta ? ` Type de création : ${useCaseMeta.label}.` : ""} Sa description :
 
 "${description}"
-${usageContext ? `\nContexte d'usage déclaré : "${usageContext}"` : "\nContexte d'usage : non renseigné"}
+${effectiveUsage ? `\nContexte d'usage déclaré : "${effectiveUsage}"` : "\nContexte d'usage : non renseigné"}
 Génère les questions de précision.`,
         },
       ],

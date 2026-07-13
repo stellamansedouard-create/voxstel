@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
-import PlanGate from "@/components/ui/PlanGate";
 
 const ACCEPTED_EXTENSIONS = [
   ".txt", ".md", ".markdown",
@@ -15,11 +14,7 @@ const ACCEPT_ATTR = ACCEPTED_EXTENSIONS.join(",");
 const MAX_BYTES = 500 * 1024; // 500 KB
 
 export default function TextReferenceUpload() {
-  return (
-    <PlanGate plan="unlimited">
-      <UploadWidget />
-    </PlanGate>
-  );
+  return <UploadWidget />;
 }
 
 function UploadWidget() {

@@ -192,7 +192,7 @@ function LoginForm() {
 
         <p className="text-center text-sm text-muted mt-6">
           Pas encore de compte ?{" "}
-          <Link href="/signup" className="text-accent font-medium hover:underline">
+          <Link href={`/signup?next=${encodeURIComponent(next)}`} className="text-accent font-medium hover:underline">
             S'inscrire gratuitement
           </Link>
         </p>

@@ -6,6 +6,7 @@ import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
 import ToolSelector from "@/components/generator/ToolSelector";
+import UseCaseSelector from "@/components/generator/UseCaseSelector";
 import FreeTextInput from "@/components/generator/FreeTextInput";
 import PrecisionsScreen from "@/components/generator/PrecisionsScreen";
 import PromptResult from "@/components/generator/PromptResult";
@@ -18,12 +19,14 @@ interface GeneratorFlowProps {
 }
 
 const MAX_REFINEMENTS = 5;
-const PROGRESS_LABELS = ["Outil IA", "Description", "Précisions", "Résultat"];
+const PROGRESS_LABELS = ["Type", "Outil IA", "Description", "Précisions", "Résultat"];
+const PROGRESS_TOTAL = PROGRESS_LABELS.length;
 const STEP_NUMBERS: Record<string, number> = {
-  tool: 1,
-  description: 2,
-  adaptive: 3,
-  result: 4,
+  usecase: 1,
+  tool: 2,
+  description: 3,
+  adaptive: 4,
+  result: 5,
 };
 
 export default function GeneratorFlow({ category }: GeneratorFlowProps) {
@@ -34,18 +37,20 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
 
   useEffect(() => {
     // After login redirect: replay analyze-description automatically with saved values
-    const pendingRaw = sessionStorage.getItem("vx_pending_description");
+    const pendingRaw = localStorage.getItem("vx_pending_description");
     if (pendingRaw) {
       try {
         const pending = JSON.parse(pendingRaw) as {
+          useCase: string | null;
           tool: AITool;
           description: string;
           usageContext: string;
         };
-        sessionStorage.removeItem("vx_pending_description");
+        localStorage.removeItem("vx_pending_description");
         // Restore visible state (spinner + description pre-filled)
         store.restoreState({
           category,
+          useCase: pending.useCase ?? null,
           tool: pending.tool,
           description: pending.description,
           usageContext: pending.usageContext,
@@ -57,13 +62,18 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         autoAnalyzeAndAdvance(pending);
         return;
       } catch {
-        sessionStorage.removeItem("vx_pending_description");
+        localStorage.removeItem("vx_pending_description");
       }
     }
     if (store.step === "category" || store.category !== category) {
       store.setCategory(category);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleSelectUseCase = useCallback(
+    (useCaseId: string) => store.setUseCase(useCaseId),
+    [store]
+  );
 
   const handleSelectTool = useCallback(
     (tool: AITool) => store.setTool(tool),
@@ -79,10 +89,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       const res = await fetch("/api/analyze-description", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tool: store.tool, category, description: store.description, usageContext: store.usageContext || undefined }),
+        body: JSON.stringify({ tool: store.tool, category, useCase: store.useCase || undefined, description: store.description, usageContext: store.usageContext || undefined }),
       });
       if (res.status === 401) {
-        sessionStorage.setItem("vx_pending_description", JSON.stringify({
+        localStorage.setItem("vx_pending_description", JSON.stringify({
+          useCase: store.useCase,
           tool: store.tool,
           description: store.description,
           usageContext: store.usageContext,
@@ -140,6 +151,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         body: JSON.stringify({
           tool: store.tool,
           category,
+          useCase: store.useCase || undefined,
           description: store.description,
           usageContext: store.usageContext || undefined,
           previousQA,
@@ -147,10 +159,6 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       });
       if (res.status === 401) {
         router.push(`/login?next=${encodeURIComponent(pathname)}`);
-        return;
-      }
-      if (res.status === 403) {
-        router.push("/pricing");
         return;
       }
       if (!res.ok) throw new Error("refine-precision failed");
@@ -193,6 +201,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         body: JSON.stringify({
           tool: store.tool,
           category,
+          useCase: store.useCase || undefined,
           description: store.description,
           usageContext: store.usageContext || undefined,
           generatedPromptEn: store.generatedPrompt?.en ?? "",
@@ -244,6 +253,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       body: JSON.stringify({
         tool,
         category,
+        useCase: store.useCase || undefined,
         description,
         usageContext: usageContext || undefined,
         adaptiveAnswers,
@@ -253,7 +263,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       }),
     });
     if (res.status === 401) {
-      sessionStorage.setItem("vx_pending_description", JSON.stringify({ tool, description, usageContext }));
+      localStorage.setItem("vx_pending_description", JSON.stringify({ useCase: store.useCase, tool, description, usageContext }));
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
       return;
     }
@@ -262,7 +272,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   }
 
   // Called on mount when returning from login — uses pending values directly to avoid stale closure
-  async function autoAnalyzeAndAdvance(pending: { tool: AITool; description: string; usageContext: string }) {
+  async function autoAnalyzeAndAdvance(pending: { useCase?: string | null; tool: AITool; description: string; usageContext: string }) {
     try {
       const res = await fetch("/api/analyze-description", {
         method: "POST",
@@ -270,10 +280,18 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         body: JSON.stringify({
           tool: pending.tool,
           category,
+          useCase: pending.useCase || undefined,
           description: pending.description,
           usageContext: pending.usageContext || undefined,
         }),
       });
+      if (res.status === 401) {
+        // Replay ran before the session was actually established — re-save
+        // the draft and send back to login instead of dead-ending on an error.
+        localStorage.setItem("vx_pending_description", JSON.stringify(pending));
+        router.push(`/login?next=${encodeURIComponent(pathname)}`);
+        return;
+      }
       if (!res.ok) throw new Error("analyze failed");
 
       const data: { questions: DirectQuestion[]; readyToGenerate: boolean } =
@@ -323,7 +341,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                   <span className="text-sm text-muted">/ {toolMeta.name}</span>
                 )}
               </div>
-              <Progress current={currentStep} total={4} labels={PROGRESS_LABELS} />
+              <Progress current={currentStep} total={PROGRESS_TOTAL} labels={PROGRESS_LABELS} />
             </>
           )}
         </div>
@@ -363,6 +381,10 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         {/* Steps */}
         {!store.isLoading && (
           <>
+            {store.step === "usecase" && (
+              <UseCaseSelector category={categoryMeta} onSelect={handleSelectUseCase} />
+            )}
+
             {store.step === "tool" && (
               <ToolSelector category={categoryMeta} onSelect={handleSelectTool} />
             )}
@@ -373,8 +395,6 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                 category={category}
                 value={store.description}
                 onChange={store.setDescription}
-                usageContext={store.usageContext}
-                onUsageContextChange={store.setUsageContext}
                 onSubmit={handleDescriptionSubmit}
                 onBack={store.goBack}
               />

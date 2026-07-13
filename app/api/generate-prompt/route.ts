@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
+import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { checkQuota, incrementQuota } from "@/lib/quota";
@@ -17,10 +18,11 @@ interface TrackingPayload {
 
 export async function POST(req: NextRequest) {
   try {
-    const { tool, category, description, usageContext, adaptiveAnswers, useSonnet, referenceAspects, _tracking } =
+    const { tool, category, useCase, description, usageContext, adaptiveAnswers, useSonnet, referenceAspects, _tracking } =
       await req.json() as {
         tool: AITool;
         category: string;
+        useCase?: string;
         description: string;
         usageContext?: string;
         adaptiveAnswers: Record<string, string>;
@@ -45,6 +47,13 @@ export async function POST(req: NextRequest) {
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
 
+    const useCaseMeta = useCase ? getUseCaseById(category, useCase) : undefined;
+    const useCaseSystemBlock = useCaseMeta?.promptGuidance
+      ? `\n\nType de création : ${useCaseMeta.label}. Consigne spécifique à ce type : ${useCaseMeta.promptGuidance}`
+      : useCaseMeta
+        ? `\n\nType de création : ${useCaseMeta.label}. Assure-toi que le prompt est cohérent avec ce type précis.`
+        : "";
+
     const extras = Object.entries(adaptiveAnswers)
       .filter(([, v]) => v?.trim())
       .map(([k, v]) => `- ${k} : ${v}`)
@@ -67,7 +76,7 @@ export async function POST(req: NextRequest) {
       max_tokens: 3000,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
-Contexte technique : ${promptContext}
+Contexte technique : ${promptContext}${useCaseSystemBlock}
 
 Crée un prompt professionnel, complet et directement utilisable dans ${toolName}.
 Le prompt EN doit être riche, détaillé, et respecter la syntaxe exacte de ${toolName}.

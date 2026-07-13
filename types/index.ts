@@ -54,10 +54,26 @@ export interface GeneratedPrompt {
   fr: string;
 }
 
-export type GeneratorStep = "category" | "tool" | "description" | "adaptive" | "result";
+export type GeneratorStep = "category" | "usecase" | "tool" | "description" | "adaptive" | "result";
+
+/** Cas d'usage concret dans une catégorie (ex: "Fond d'écran" pour Image).
+ *  Le libellé reste grand public ; c'est questionGuidance qui apporte la
+ *  précision en pilotant les questions posées par le moteur. */
+export interface UseCaseMeta {
+  id: string;
+  label: string;
+  icon: string;
+  tagline: string;
+  /** Injecté dans le moteur de questions pour forcer les questions
+   *  indispensables à ce type (ex: fond d'écran → appareil/format). */
+  questionGuidance: string;
+  /** Injecté dans la génération finale pour façonner le prompt. */
+  promptGuidance?: string;
+}
 
 export interface GeneratorState {
   category: Category | null;
+  useCase: string | null;
   tool: AITool | null;
   description: string;
   directQuestions: DirectQuestion[];

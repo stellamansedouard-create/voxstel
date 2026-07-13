@@ -95,16 +95,26 @@ export default function Footer() {
             className="inline-flex items-center gap-2 text-sm font-medium text-[#1A1A1A] hover:text-[#C8910A] transition-colors"
           >
             <svg
-              width="20"
-              height="20"
+              width="22"
+              height="22"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.8" />
-              <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
-              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
+              <defs>
+                <radialGradient id="ig-gradient" cx="30%" cy="107%" r="135%">
+                  <stop offset="0%" stopColor="#FDF497" />
+                  <stop offset="5%" stopColor="#FDF497" />
+                  <stop offset="45%" stopColor="#FD5949" />
+                  <stop offset="60%" stopColor="#D6249F" />
+                  <stop offset="90%" stopColor="#285AEB" />
+                </radialGradient>
+              </defs>
+              <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig-gradient)" />
+              <rect x="6.3" y="6.3" width="11.4" height="11.4" rx="3.6" fill="none" stroke="#fff" strokeWidth="1.6" />
+              <circle cx="12" cy="12" r="3.1" fill="none" stroke="#fff" strokeWidth="1.6" />
+              <circle cx="16.5" cy="7.5" r="1.15" fill="#fff" />
             </svg>
             Suivez-nous sur Instagram
           </a>

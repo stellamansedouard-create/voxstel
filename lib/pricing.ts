@@ -3,12 +3,14 @@ import type { PricingInfo, PricingPlan } from "@/types";
 export const PRICING: Record<PricingPlan, PricingInfo> = {
   free: {
     plan: "free",
-    monthlyLimit: 5,
+    monthlyLimit: 3,
     price: 0,
     currency: "EUR",
     features: [
-      "5 prompts par mois",
-      "Catégorie Image uniquement",
+      "3 prompts par mois",
+      "Toutes les catégories",
+      "Affinage supplémentaire inclus",
+      "Image & texte de référence inclus",
       "Génération standard",
       "Export EN + FR",
     ],

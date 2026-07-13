@@ -2,14 +2,9 @@
 
 import { useRef, useState } from "react";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
-import PlanGate from "@/components/ui/PlanGate";
 
 export default function ImageReferenceUpload() {
-  return (
-    <PlanGate plan="unlimited">
-      <UploadWidget />
-    </PlanGate>
-  );
+  return <UploadWidget />;
 }
 
 function UploadWidget() {

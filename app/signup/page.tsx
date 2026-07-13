@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import { fbTrack } from "@/lib/fbq";
@@ -28,8 +28,10 @@ function translateAuthError(msg: string): string {
   return "Une erreur est survenue. Veuillez réessayer.";
 }
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") ?? "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,9 +43,9 @@ export default function SignupPage() {
   useEffect(() => {
     const supabase = createBrowserSupabaseClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) router.replace("/dashboard");
+      if (user) router.replace(next);
     });
-  }, [router]);
+  }, [router, next]);
 
   async function handleEmailSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -59,6 +61,9 @@ export default function SignupPage() {
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+      },
     });
 
     if (authError) {
@@ -72,7 +77,7 @@ export default function SignupPage() {
 
     if (data.session) {
       // Session immédiate (ex: OAuth ou confirmation désactivée côté Supabase)
-      router.push("/dashboard");
+      router.push(next);
       router.refresh();
     } else {
       // Email confirmation enabled — Supabase renvoie session: null
@@ -89,7 +94,7 @@ export default function SignupPage() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
     if (authError) {
@@ -121,7 +126,7 @@ export default function SignupPage() {
           <p className="text-xs text-muted/60 mb-8">
             Pas de mail ? Vérifiez vos spams ou courriers indésirables.
           </p>
-          <Link href="/login" className="btn-secondary inline-flex items-center gap-2">
+          <Link href={`/login?next=${encodeURIComponent(next)}`} className="btn-secondary inline-flex items-center gap-2">
             ← Retour à la connexion
           </Link>
         </div>
@@ -233,11 +238,19 @@ export default function SignupPage() {
 
         <p className="text-center text-sm text-muted mt-6">
           Déjà un compte ?{" "}
-          <Link href="/login" className="text-accent font-medium hover:underline">
+          <Link href={`/login?next=${encodeURIComponent(next)}`} className="text-accent font-medium hover:underline">
             Se connecter
           </Link>
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense>
+      <SignupForm />
+    </Suspense>
   );
 }

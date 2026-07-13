@@ -1,11 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
-import { useUserPlan } from "@/hooks/useUserPlan";
 import type { DirectQuestion, AITool, Category } from "@/types";
 import DirectQuestions from "./DirectQuestions";
-import ReferenceUpload from "./ReferenceUpload";
 
 interface PrecisionsScreenProps {
   description: string;
@@ -42,12 +39,9 @@ export default function PrecisionsScreen({
     refinePrecisionAnswers,
     hasUsedRefinePrecision,
   } = useGeneratorStore();
-  const { plan, isLoading: isPlanLoading } = useUserPlan();
-  const router = useRouter();
 
   const hasDirectQuestions = directQuestions.length > 0;
   const hasPreviousQA = isRefinement && previousQA.length > 0;
-  const isProMax = plan === "promax";
 
   // After refine-precision was used and returned questions → show refine round
   const showRefineRound = hasUsedRefinePrecision && refinePrecisionQuestions.length > 0;
@@ -58,11 +52,6 @@ export default function PrecisionsScreen({
   const showRefineButton = !isRefinement && !hasUsedRefinePrecision;
 
   function handleRefineClick() {
-    if (isPlanLoading) return;
-    if (!isProMax) {
-      router.push("/pricing");
-      return;
-    }
     onRefinePrecision();
   }
 
@@ -147,9 +136,6 @@ export default function PrecisionsScreen({
         </div>
       )}
 
-      {/* Référence optionnelle */}
-      <ReferenceUpload />
-
       {/* Boutons */}
       <div className="flex flex-col gap-3 pt-1">
         <div className="flex gap-3">
@@ -178,17 +164,10 @@ export default function PrecisionsScreen({
           <button
             type="button"
             onClick={handleRefineClick}
-            disabled={isPlanLoading || isSubmitting}
-            className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-medium transition-all duration-150 ${
-              isProMax
-                ? "border-accent/40 text-accent hover:bg-accent/5 hover:border-accent"
-                : "border-dashed border-border text-muted cursor-pointer hover:border-accent/40 hover:text-foreground/60"
-            }`}
+            disabled={isSubmitting}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-accent/40 text-accent text-sm font-medium transition-all duration-150 hover:bg-accent/5 hover:border-accent"
           >
-            {!isProMax && <span className="text-[13px]">🔒</span>}
-            <span>
-              {isProMax ? "Affinage supplémentaire" : "Affinage supplémentaire (Pro Max)"}
-            </span>
+            <span>Affinage supplémentaire</span>
           </button>
         )}
       </div>

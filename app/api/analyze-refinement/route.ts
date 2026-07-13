@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
+import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
 import type { AITool, DirectQuestion, PreviousQAItem } from "@/types";
 
@@ -11,10 +12,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
-    const { tool, category, description, usageContext, generatedPromptEn, previousQA } =
+    const { tool, category, useCase, description, usageContext, generatedPromptEn, previousQA } =
       await req.json() as {
         tool: AITool;
         category: string;
+        useCase?: string;
         description: string;
         usageContext?: string;
         generatedPromptEn: string;
@@ -25,6 +27,11 @@ export async function POST(req: NextRequest) {
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
 
+    const useCaseMeta = useCase ? getUseCaseById(category, useCase) : undefined;
+    const useCaseBlock = useCaseMeta
+      ? `\nType de création : ${useCaseMeta.label}. ${useCaseMeta.questionGuidance}`
+      : "";
+
     const previousContext = previousQA.length
       ? previousQA.map((q) => `- ${q.label} → ${q.value}`).join("\n")
       : "Aucune précision donnée précédemment.";
@@ -34,7 +41,7 @@ export async function POST(req: NextRequest) {
       max_tokens: 1200,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
-Contexte de l'outil : ${promptContext}
+Contexte de l'outil : ${promptContext}${useCaseBlock}
 
 L'utilisateur n'est PAS satisfait du prompt généré. Ton rôle : identifier des angles d'amélioration NON ENCORE EXPLORÉS pour l'enrichir.
 

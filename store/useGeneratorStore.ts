@@ -13,6 +13,7 @@ import type {
 
 interface GeneratorActions {
   setCategory: (category: Category) => void;
+  setUseCase: (useCase: string) => void;
   setTool: (tool: AITool) => void;
   setDescription: (description: string) => void;
   setUsageContext: (usageContext: string) => void;
@@ -51,6 +52,7 @@ interface ExtendedState extends GeneratorState {
 
 const initialState: ExtendedState = {
   category: null,
+  useCase: null,
   tool: null,
   description: "",
   usageContext: "",
@@ -72,6 +74,7 @@ const initialState: ExtendedState = {
 
 const STEP_ORDER: GeneratorStep[] = [
   "category",
+  "usecase",
   "tool",
   "description",
   "adaptive",
@@ -85,7 +88,8 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
     setCategory: (category) =>
       set({
         category,
-        step: "tool",
+        step: "usecase",
+        useCase: null,
         tool: null,
         description: "",
         usageContext: "",
@@ -95,6 +99,25 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         isRefinement: false,
         imageReference: null,
         textReference: null,
+        generatedPrompt: null,
+        refinementCount: 0,
+        refinePrecisionQuestions: [],
+        refinePrecisionAnswers: {},
+        hasUsedRefinePrecision: false,
+        error: null,
+      }),
+
+    setUseCase: (useCase) =>
+      set({
+        useCase,
+        step: "tool",
+        tool: null,
+        description: "",
+        usageContext: "",
+        directQuestions: [],
+        directAnswers: {},
+        previousQA: [],
+        isRefinement: false,
         generatedPrompt: null,
         refinementCount: 0,
         refinePrecisionQuestions: [],
@@ -215,6 +238,7 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         error: null,
         isLoading: false,
         category: state.category,
+        useCase: state.useCase,
         tool: state.tool,
         imageReference: state.imageReference,
         textReference: state.textReference,

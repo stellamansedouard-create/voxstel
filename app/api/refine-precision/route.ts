@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
+import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
-import { createServerSupabase } from "@/lib/supabase";
 import type { AITool, DirectQuestion } from "@/types";
-
-const REFINE_ALLOWED_PLANS = ["promax"];
 
 function getThemeHints(categoryId: string): string {
   switch (categoryId) {
@@ -49,19 +47,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
-    const supabase = createServerSupabase();
-    const { data: userData } = await supabase
-      .from("users")
-      .select("plan")
-      .eq("id", user.id)
-      .single();
-    if (!userData || !REFINE_ALLOWED_PLANS.includes(userData.plan)) {
-      return NextResponse.json({ error: "plan_required" }, { status: 403 });
-    }
+    // Affinage supplémentaire is available to every authenticated user
+    // (incl. free) — the monthly quota is the real limiter.
 
-    const { tool, category, description, usageContext, previousQA } = await req.json() as {
+    const { tool, category, useCase, description, usageContext, previousQA } = await req.json() as {
       tool: AITool;
       category: string;
+      useCase?: string;
       description: string;
       usageContext?: string;
       previousQA: Array<{ question: string; theme: string; answer: string }>;
@@ -70,6 +62,11 @@ export async function POST(req: NextRequest) {
     const toolMeta = getToolById(category, tool);
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
+
+    const useCaseMeta = useCase ? getUseCaseById(category, useCase) : undefined;
+    const useCaseBlock = useCaseMeta
+      ? `\n\n━━━ TYPE DE CRÉATION : ${useCaseMeta.label} ━━━\n${useCaseMeta.questionGuidance}\nToute question déjà couverte par le type ou les réponses précédentes ne doit PAS être reposée.\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+      : "";
 
     const previousQASummary = previousQA
       .map((item) => `- [${item.theme}] ${item.question} → "${item.answer}"`)
@@ -80,7 +77,7 @@ export async function POST(req: NextRequest) {
       max_tokens: 2000,
       system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
-Contexte de l'outil : ${promptContext}
+Contexte de l'outil : ${promptContext}${useCaseBlock}
 
 Tu reçois une description initiale, un contexte d'usage, et une liste de questions déjà posées avec leurs réponses. Ton rôle est d'identifier s'il reste des axes d'ambiguïté réels et non encore couverts par l'ensemble (description + contexte + réponses déjà données) — PAS de reposer une variante des questions déjà répondues, et PAS de redemander un niveau de détail supplémentaire sur un thème déjà traité en profondeur lors du premier tour, sauf si une réponse donnée révèle elle-même une nouvelle ambiguïté (par exemple, si l'utilisateur répond "pour un usage commercial" à une question d'usage, cela peut ouvrir une nouvelle question sur les droits d'utilisation ou la licence, qui n'aurait pas de sens à poser sans cette réponse).
 

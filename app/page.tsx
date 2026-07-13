@@ -78,26 +78,26 @@ export default async function HomePage() {
 
           <div className="relative max-w-3xl mx-auto text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-accent/10 text-accent text-sm font-semibold px-4 py-2 rounded-full mb-10 border border-accent/20">
+            <div className="reveal reveal-d1 inline-flex items-center gap-2 bg-accent/10 text-accent text-sm font-semibold px-4 py-2 rounded-full mb-10 border border-accent/20">
               <span aria-hidden>✦</span>
               <span>Prompts IA · Image · Vidéo · Texte · Musique</span>
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl sm:text-[64px] font-bold text-foreground leading-[1.06] tracking-tight mb-7 text-balance">
+            <h1 className="reveal-lcp text-5xl sm:text-[64px] font-bold text-foreground leading-[1.06] tracking-tight mb-7 text-balance">
               Vous avez l'idée.{" "}
               <br className="hidden sm:block" />
               <span className="text-accent">Voxstel trouve les mots.</span>
             </h1>
 
-            <p className="text-xl text-muted leading-relaxed max-w-xl mx-auto mb-11 text-balance">
+            <p className="reveal reveal-d2 text-xl text-muted leading-relaxed max-w-xl mx-auto mb-11 text-balance">
               Décrivez ce que vous imaginez — même en quelques mots.
               Voxstel pose les bonnes questions et génère le prompt parfait
               pour votre IA, en anglais et en français.
             </p>
 
             {/* CTA unique */}
-            <div className="flex justify-center">
+            <div className="reveal reveal-d3 flex justify-center">
               <Link
                 href="/generate"
                 className="btn-primary inline-flex items-center gap-2 text-base py-3.5 px-8 shadow-md"
