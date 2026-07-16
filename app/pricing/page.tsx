@@ -2,6 +2,9 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PricingCheckoutButton from "@/components/pricing/PricingCheckoutButton";
+import { PricingViewTracker } from "@/components/pricing/PricingViewTracker";
+import { getCurrentUser } from "@/lib/auth";
+import { createServerSupabase } from "@/lib/supabase";
 import type { Metadata } from "next";
 import type { PricingPlan } from "@/types";
 
@@ -89,9 +92,22 @@ const plans = [
   },
 ];
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  // Resolve quota_used for pricing_viewed's quota_used_at_time (null if anon).
+  let quotaUsed: number | null = null;
+  const user = await getCurrentUser().catch(() => null);
+  if (user) {
+    const { data } = await createServerSupabase()
+      .from("users")
+      .select("quota_used")
+      .eq("id", user.id)
+      .single();
+    quotaUsed = data?.quota_used ?? null;
+  }
+
   return (
     <>
+      <PricingViewTracker quotaUsed={quotaUsed} />
       <Header />
       <main className="min-h-screen bg-background">
         {/* Header section */}

@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { checkQuota, incrementQuota } from "@/lib/quota";
 import { createServerSupabase } from "@/lib/supabase";
+import { moderateInput, moderateOutput, moderationMessage, type ModerationResult } from "@/lib/moderation";
 import type { AITool, GeneratedPrompt, ImageAspect } from "@/types";
 
 interface TrackingPayload {
@@ -16,9 +17,16 @@ interface TrackingPayload {
   session_id?: string;
 }
 
+/** One Q&A pair, persisted to prompts_history.questions_answers (jsonb). */
+interface QAItem {
+  question: string;
+  answer: string;
+  skipped: boolean;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { tool, category, useCase, description, usageContext, adaptiveAnswers, useSonnet, referenceAspects, _tracking } =
+    const { tool, category, useCase, description, usageContext, adaptiveAnswers, questionsAnswers, userInput, inputLang, useSonnet, referenceAspects, _tracking } =
       await req.json() as {
         tool: AITool;
         category: string;
@@ -26,6 +34,9 @@ export async function POST(req: NextRequest) {
         description: string;
         usageContext?: string;
         adaptiveAnswers: Record<string, string>;
+        questionsAnswers?: Array<{ question: string; answer?: string; skipped?: boolean }>;
+        userInput?: string;
+        inputLang?: string;
         useSonnet?: boolean;
         referenceAspects?: ImageAspect[];
         _tracking?: TrackingPayload;
@@ -39,10 +50,48 @@ export async function POST(req: NextRequest) {
 
     const quotaStatus = await checkQuota(user.id, user.email ?? undefined);
     if (!quotaStatus || !quotaStatus.allowed) {
+      // Instrument the wall — this is the primary upgrade trigger.
+      void trackEvent({
+        userId: user.id,
+        eventType: "quota_limit_hit",
+        promptCategory: category,
+        sessionId: _tracking?.session_id ?? null,
+        metadata: { quota_used: quotaStatus?.quotaUsed ?? null, plan: quotaStatus?.plan ?? null },
+      }).catch((e) => console.error("[analytics]", e));
       return NextResponse.json({ error: "quota_exceeded" }, { status: 429 });
     }
 
     const model = useSonnet ? MODELS.sonnet : MODELS.haiku;
+
+    // Normalise the Q&A the user actually answered — the differentiator of the
+    // product, and (per audit) previously never persisted at all.
+    const qaItems: QAItem[] = normaliseQA(questionsAnswers, adaptiveAnswers);
+    const rawInput = (userInput ?? description ?? "").trim();
+
+    // generation_started — fired before any model call / moderation.
+    void trackEvent({
+      userId: user.id,
+      eventType: "generation_started",
+      promptCategory: category,
+      sessionId: _tracking?.session_id ?? null,
+      metadata: { category, tool },
+    }).catch((e) => console.error("[analytics]", e));
+
+    // ── Moderation, layer BEFORE generation, on the user input ──────────────
+    const moderationSubject = [rawInput, usageContext ?? "", qaItems.map((q) => q.answer).join(" ")]
+      .filter(Boolean)
+      .join("\n");
+    const inputMod = await moderateInput(moderationSubject);
+    if (inputMod.blocked) {
+      await logModerationBlock({
+        userId: user.id, category, tool, userInput: rawInput, inputLang: inputLang ?? null,
+        stage: "input", result: inputMod, sessionId: _tracking?.session_id ?? null,
+      });
+      return NextResponse.json(
+        { error: "moderation_blocked", message: moderationMessage(inputMod) },
+        { status: 422 }
+      );
+    }
     const toolMeta = getToolById(category, tool);
     const toolName = toolMeta?.name ?? tool;
     const promptContext = toolMeta?.promptContext ?? `Outil IA : ${tool}`;
@@ -71,6 +120,7 @@ export async function POST(req: NextRequest) {
         ? `\n\nRègle sur la langue de sortie du contenu généré : sauf indication contraire explicite de l'utilisateur (ex. "en anglais", "pour un client anglophone/US", "cible internationale", ou un texte déjà rédigé par l'utilisateur dans une autre langue), le contenu que ${toolName} doit produire est attendu en français par défaut. Ajoute une ligne explicite et distincte dans le prompt généré (ex. "Language: French" ou "Réponds en français", selon le style de structuration utilisé pour ${toolName}) indiquant la langue de sortie attendue — ne la noie pas dans le texte libre descriptif. Si l'utilisateur a explicitement indiqué une autre langue de sortie, respecte ce choix à la place et indique cette langue-là. Cette règle porte sur la langue du contenu que ${toolName} va générer, pas sur la langue du texte littéral déjà fourni par l'utilisateur (slogans, citations — voir règle ci-dessus).`
         : "";
 
+    const generationStart = Date.now();
     const message = await anthropic.messages.create({
       model,
       max_tokens: 3000,
@@ -99,6 +149,10 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       ],
     });
 
+    const generationMs = Date.now() - generationStart;
+    const tokensIn = message.usage?.input_tokens ?? null;
+    const tokensOut = message.usage?.output_tokens ?? null;
+
     const content = message.content[0];
     if (content.type !== "text") throw new Error("Unexpected response type");
 
@@ -117,6 +171,19 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       throw new Error("Failed to parse prompt JSON");
     }
 
+    // ── Moderation, layer AFTER generation, on the produced prompt ──────────
+    const outputMod = moderateOutput(`${result.en}\n${result.fr}`);
+    if (outputMod.blocked) {
+      await logModerationBlock({
+        userId: user.id, category, tool, userInput: rawInput, inputLang: inputLang ?? null,
+        stage: "output", result: outputMod, sessionId: _tracking?.session_id ?? null,
+      });
+      return NextResponse.json(
+        { error: "moderation_blocked", message: moderationMessage(outputMod) },
+        { status: 422 }
+      );
+    }
+
     // Quota increment — fire-and-forget, only for plans with a monthly limit
     if (quotaStatus.limit !== null) {
       void incrementQuota(user.id, quotaStatus.quotaUsed).catch((e) =>
@@ -124,21 +191,46 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       );
     }
 
-    // Prompt history — awaited to catch schema/table errors in Vercel logs
+    // moderation_flags: only the noteworthy allowed-with-log case (e.g. a real
+    // person mentioned in a neutral context). Clean generations store null —
+    // no point retaining the classifier output on every row (data minimisation).
+    const moderationFlags = inputMod.flags?.note ? inputMod.flags : null;
+
+    // Prompt history — now persists the raw input, the answered questions
+    // (priority-1 fix), generation metrics and moderation. Returns the id so
+    // the client can attribute prompt_copied / prompt_regenerated to this row.
+    let promptId: string | null = null;
     {
-      const { error: histErr } = await createServerSupabase()
+      const { data: inserted, error: histErr } = await createServerSupabase()
         .from("prompts_history")
-        .insert({ user_id: user.id, category, tool, prompt_en: result.en, prompt_fr: result.fr });
+        .insert({
+          user_id: user.id,
+          category,
+          tool,
+          prompt_en: result.en,
+          prompt_fr: result.fr,
+          questions_answers: qaItems,
+          user_input: rawInput || null,
+          input_lang: inputLang ?? null,
+          generation_ms: generationMs,
+          model_used: model,
+          tokens_in: tokensIn,
+          tokens_out: tokensOut,
+          moderation_flags: moderationFlags,
+        })
+        .select("id")
+        .single();
       if (histErr) {
         console.error("[prompts_history] INSERT failed — message:", histErr.message, "| code:", histErr.code, "| details:", histErr.details, "| hint:", histErr.hint);
       } else {
-        console.log("[prompts_history] INSERT ok — user:", user.id, "category:", category);
+        promptId = inserted?.id ?? null;
       }
     }
 
-    // Analytics — fire-and-forget
+    // Analytics — fire-and-forget, now with full metadata (never null).
+    const answeredCount = qaItems.filter((q) => !q.skipped).length;
     void trackEvent({
-      userId: user?.id ?? null,
+      userId: user.id,
       eventType: "prompt_generated",
       promptCategory: category,
       utmSource: _tracking?.utm_source ?? null,
@@ -146,9 +238,20 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       utmCampaign: _tracking?.utm_campaign ?? null,
       referrer: _tracking?.referrer ?? null,
       sessionId: _tracking?.session_id ?? null,
+      metadata: {
+        category,
+        tool,
+        prompt_length: result.en?.length ?? 0,
+        generation_ms: generationMs,
+        model_used: model,
+        tokens_in: tokensIn,
+        tokens_out: tokensOut,
+        nb_questions: qaItems.length,
+        nb_answered: answeredCount,
+      },
     }).catch((e) => console.error("[analytics]", e));
 
-    return NextResponse.json(result);
+    return NextResponse.json({ ...result, id: promptId });
   } catch (error) {
     console.error("generate-prompt error:", error);
     return NextResponse.json(
@@ -156,4 +259,69 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       { status: 500 }
     );
   }
+}
+
+/**
+ * Builds the questions_answers jsonb in the target shape
+ * [{question, answer, skipped}]. Prefers the client-supplied array (which
+ * carries the real question labels); falls back to the id→value map so the
+ * field is populated even for older clients.
+ */
+function normaliseQA(
+  questionsAnswers: Array<{ question: string; answer?: string; skipped?: boolean }> | undefined,
+  adaptiveAnswers: Record<string, string>
+): QAItem[] {
+  if (Array.isArray(questionsAnswers) && questionsAnswers.length) {
+    return questionsAnswers.map((q) => {
+      const answer = (q.answer ?? "").trim();
+      return {
+        question: q.question,
+        answer,
+        skipped: q.skipped ?? answer.length === 0,
+      };
+    });
+  }
+  return Object.entries(adaptiveAnswers ?? {}).map(([question, value]) => {
+    const answer = (value ?? "").trim();
+    return { question, answer, skipped: answer.length === 0 };
+  });
+}
+
+/**
+ * Logs a moderation block to prompts_history.moderation_flags (with an empty
+ * prompt so it never renders as a real generation — the dashboard filters
+ * empty prompts out) and mirrors it into analytics_events.
+ */
+async function logModerationBlock(args: {
+  userId: string;
+  category: string;
+  tool: AITool;
+  userInput: string;
+  inputLang: string | null;
+  stage: "input" | "output";
+  result: ModerationResult;
+  sessionId: string | null;
+}): Promise<void> {
+  const flags = { ...args.result.flags, blocked: true, stage: args.stage, categories: args.result.categories };
+  try {
+    await createServerSupabase().from("prompts_history").insert({
+      user_id: args.userId,
+      category: args.category,
+      tool: args.tool,
+      prompt_en: "",
+      prompt_fr: "",
+      user_input: args.userInput || null,
+      input_lang: args.inputLang,
+      moderation_flags: flags,
+    });
+  } catch (e) {
+    console.error("[moderation] failed to log block to prompts_history:", e);
+  }
+  void trackEvent({
+    userId: args.userId,
+    eventType: "moderation_blocked",
+    promptCategory: args.category,
+    sessionId: args.sessionId,
+    metadata: { stage: args.stage, categories: args.result.categories, source: args.result.source },
+  }).catch((e) => console.error("[analytics]", e));
 }

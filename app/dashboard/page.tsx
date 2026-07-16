@@ -87,6 +87,7 @@ export default async function DashboardPage() {
       .from("prompts_history")
       .select("id, category, tool, prompt_en, prompt_fr, created_at")
       .eq("user_id", user.id)
+      .neq("prompt_en", "") // exclude moderation-block placeholder rows
       .order("created_at", { ascending: false })
       .limit(10),
   ]);

@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
+import { track, detectLang } from "@/lib/track.client";
 import ToolSelector from "@/components/generator/ToolSelector";
 import UseCaseSelector from "@/components/generator/UseCaseSelector";
 import FreeTextInput from "@/components/generator/FreeTextInput";
@@ -70,6 +71,36 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // category_selected — the user is committed to a category by landing here.
+  useEffect(() => {
+    track("category_selected", { category }, { category });
+  }, [category]);
+
+  // Fires question_answered the first time a question flips from empty→answered.
+  const handleDirectAnswer = useCallback(
+    (id: string, value: string) => {
+      const prev = store.directAnswers[id] ?? "";
+      store.setDirectAnswer(id, value);
+      if (!prev.trim() && value.trim()) {
+        const idx = store.directQuestions.findIndex((q) => q.id === id);
+        track("question_answered", { question_index: idx, answer_length: value.trim().length }, { category });
+      }
+    },
+    [store, category]
+  );
+
+  const handleRefinePrecisionAnswer = useCallback(
+    (id: string, value: string) => {
+      const prev = store.refinePrecisionAnswers[id] ?? "";
+      store.setRefinePrecisionAnswer(id, value);
+      if (!prev.trim() && value.trim()) {
+        const idx = store.refinePrecisionQuestions.findIndex((q) => q.id === id);
+        track("question_answered", { question_index: idx, answer_length: value.trim().length, refine: true }, { category });
+      }
+    },
+    [store, category]
+  );
+
   const handleSelectUseCase = useCallback(
     (useCaseId: string) => store.setUseCase(useCaseId),
     [store]
@@ -84,6 +115,16 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     if (!store.description.trim() || !store.tool) return;
     store.setLoading(true);
     store.setError(null);
+
+    track(
+      "input_submitted",
+      {
+        category,
+        input_length: store.description.trim().length,
+        input_lang: detectLang(store.description),
+      },
+      { category }
+    );
 
     try {
       const res = await fetch("/api/analyze-description", {
@@ -114,6 +155,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         await runGeneratePrompt({});
       } else {
         store.setAdaptiveData({ directQuestions: data.questions ?? [] });
+        track(
+          "questions_shown",
+          {
+            category,
+            nb_questions: data.questions?.length ?? 0,
+            questions: (data.questions ?? []).map((q) => q.label),
+          },
+          { category }
+        );
       }
     } catch {
       store.setError("Erreur lors de l'analyse. Veuillez réessayer.");
@@ -126,6 +176,12 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     store.setLoading(true);
     store.setError(null);
     try {
+      const nbSkipped = store.directQuestions.filter(
+        (q) => !(store.directAnswers[q.id] ?? "").trim()
+      ).length;
+      if (nbSkipped > 0) {
+        track("questions_skipped", { nb_skipped: nbSkipped, nb_total: store.directQuestions.length }, { category });
+      }
       const allAnswers = { ...store.directAnswers, ...store.refinePrecisionAnswers };
       await runGeneratePrompt(allAnswers);
     } catch {
@@ -177,6 +233,9 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     if (store.refinementCount >= MAX_REFINEMENTS) return;
     store.setLoading(true);
     store.setError(null);
+
+    // Authenticated service action → always tracked (not consent-gated).
+    track("prompt_regenerated", { prompt_id: store.generatedPrompt?.id ?? null, category }, { service: true, category });
 
     try {
       // Build previousQA from everything answered in the current session
@@ -247,6 +306,19 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       );
     }
 
+    // Build the answered-questions payload WITH the real question labels so the
+    // server can persist prompts_history.questions_answers (the priority-1 fix).
+    const questionsAnswers = [
+      ...store.directQuestions.map((q) => {
+        const a = (store.directAnswers[q.id] ?? "").trim();
+        return { question: q.label, answer: a, skipped: a.length === 0 };
+      }),
+      ...store.refinePrecisionQuestions.map((q) => {
+        const a = (store.refinePrecisionAnswers[q.id] ?? "").trim();
+        return { question: q.label, answer: a, skipped: a.length === 0 };
+      }),
+    ];
+
     const res = await fetch("/api/generate-prompt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -257,6 +329,9 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         description,
         usageContext: usageContext || undefined,
         adaptiveAnswers,
+        questionsAnswers,
+        userInput: description,
+        inputLang: detectLang(description),
         useSonnet: false,
         referenceAspects: referenceAspects.length ? referenceAspects : undefined,
         _tracking: getStoredUTM(),
@@ -265,6 +340,17 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     if (res.status === 401) {
       localStorage.setItem("vx_pending_description", JSON.stringify({ useCase: store.useCase, tool, description, usageContext }));
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    if (res.status === 429) {
+      // Quota wall — the server already logged quota_limit_hit. Send to pricing.
+      router.push("/pricing?from=quota");
+      return;
+    }
+    if (res.status === 422) {
+      const data = (await res.json().catch(() => ({}))) as { message?: string };
+      store.setError(data.message ?? "Cette demande a été bloquée par notre filtre de contenu. Reformulez votre idée.");
+      store.setLoading(false);
       return;
     }
     if (!res.ok) throw new Error("generation failed");
@@ -303,6 +389,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         await runGeneratePrompt({}, pending);
       } else {
         store.setAdaptiveData({ directQuestions: data.questions ?? [] });
+        track(
+          "questions_shown",
+          {
+            category,
+            nb_questions: data.questions?.length ?? 0,
+            questions: (data.questions ?? []).map((q) => q.label),
+          },
+          { category }
+        );
       }
     } catch {
       store.setError("Erreur lors de l'analyse. Veuillez réessayer.");
@@ -407,8 +502,8 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                 directAnswers={store.directAnswers}
                 tool={store.tool!}
                 generatorCategory={category}
-                onDirectAnswer={store.setDirectAnswer}
-                onRefinePrecisionAnswer={store.setRefinePrecisionAnswer}
+                onDirectAnswer={handleDirectAnswer}
+                onRefinePrecisionAnswer={handleRefinePrecisionAnswer}
                 onSubmit={handleAdaptiveSubmit}
                 onRefinePrecision={handleRefinePrecision}
                 onBack={store.goBack}
@@ -421,6 +516,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                 key={store.generatedPrompt.en}
                 prompt={store.generatedPrompt}
                 tool={store.tool}
+                category={category}
                 refinementsLeft={refinementsLeft}
                 onRestart={() => {
                   store.reset();

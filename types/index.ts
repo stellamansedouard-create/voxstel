@@ -52,6 +52,9 @@ export type TextReference = ImageReference;
 export interface GeneratedPrompt {
   en: string;
   fr: string;
+  /** prompts_history row id — returned by /api/generate-prompt so the client
+   *  can attribute prompt_copied / prompt_regenerated back to this generation. */
+  id?: string | null;
 }
 
 export type GeneratorStep = "category" | "usecase" | "tool" | "description" | "adaptive" | "result";

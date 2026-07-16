@@ -13,8 +13,10 @@ export async function DELETE() {
 
   const supabase = createServerSupabase();
 
-  // Delete user data in dependency order
-  const tables = ["prompts_history", "analytics_events"] as const;
+  // Delete user data in dependency order. prompts_history now also holds the
+  // raw user input (personal data), and sessions link a browser to the user —
+  // both must go before the users row (FK) for a full RGPD cascade.
+  const tables = ["prompts_history", "analytics_events", "sessions"] as const;
   for (const table of tables) {
     const { error } = await supabase.from(table).delete().eq("user_id", user.id);
     if (error) {

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
+import { track } from "@/lib/track.client";
 import type { PricingPlan } from "@/types";
 
 interface PricingCheckoutButtonProps {
@@ -23,6 +24,8 @@ export default function PricingCheckoutButton({
   async function handleClick() {
     setLoading(true);
     setError(null);
+
+    track("upgrade_clicked", { plan_targeted: plan, source_page: "pricing" }, { category: null });
 
     const supabase = createBrowserSupabaseClient();
     const {

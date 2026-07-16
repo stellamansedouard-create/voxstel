@@ -16,6 +16,7 @@ export interface UTMData {
   referrer?: string;
   first_visit_at?: string;
   session_id?: string;
+  landing_page?: string;
 }
 
 function getConsent(): ConsentValue | null {
@@ -113,6 +114,27 @@ export function captureGA4ClientId(): void {
   const serialized = JSON.stringify(data);
   localStorage.setItem(UTM_KEY, serialized);
   document.cookie = `${UTM_KEY}=${encodeURIComponent(serialized)}; max-age=2592000; path=/; SameSite=Lax`;
+}
+
+/**
+ * Records the first path the visitor landed on, into the vx_utm payload, so the
+ * signup handler (app/auth/callback) can attribute users.landing_page. First
+ * touch only — never overwritten. Consent-gated, like captureGA4ClientId.
+ */
+export function captureLandingPage(path: string): void {
+  if (typeof window === "undefined") return;
+  if (getConsent() !== "accepted") return;
+  try {
+    const raw = localStorage.getItem(UTM_KEY);
+    const data: UTMData & { landing_page?: string } = raw ? JSON.parse(raw) : {};
+    if (data.landing_page) return;
+    data.landing_page = path;
+    const serialized = JSON.stringify(data);
+    localStorage.setItem(UTM_KEY, serialized);
+    document.cookie = `${UTM_KEY}=${encodeURIComponent(serialized)}; max-age=2592000; path=/; SameSite=Lax`;
+  } catch {
+    /* ignore */
+  }
 }
 
 /** Returns stored UTM + live session_id. Safe to call server-side (returns {}). */

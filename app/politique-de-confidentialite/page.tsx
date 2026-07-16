@@ -16,7 +16,7 @@ export default function PolitiqueConfidentialitePage() {
             Politique de confidentialité
           </h1>
           <p className="text-sm text-muted italic mb-6">
-            Dernière mise à jour : 26 juin 2026
+            Dernière mise à jour : 15 juillet 2026
           </p>
           <p className="text-sm text-muted leading-relaxed mb-10">
             Chez Voxstel, la protection de vos données personnelles est une priorité. Cette
@@ -61,10 +61,27 @@ export default function PolitiqueConfidentialitePage() {
             </h3>
             <ul className="list-disc pl-5 space-y-1.5 text-sm text-muted mb-5">
               <li>
+                <strong className="font-semibold text-foreground">Le texte que vous saisissez</strong> :
+                la description libre (votre idée brute), le contexte d&apos;usage et vos réponses aux
+                questions. Ce texte est une donnée personnelle et est conservé avec l&apos;historique
+                du prompt correspondant.
+              </li>
+              <li>
                 Historique des prompts générés (catégorie, IA cible, questions/réponses, prompt
                 final généré en anglais et français)
               </li>
+              <li>
+                Données de mesure d&apos;audience first-party : événements d&apos;usage (pages vues,
+                étapes du générateur, copies de prompt), type d&apos;appareil, pays approximatif et
+                identifiant de session. Ces mesures servent uniquement à comprendre et améliorer le
+                service&nbsp;; elles ne sont partagées avec aucun tiers.
+              </li>
               <li>Plan d&apos;abonnement souscrit et statut du quota mensuel</li>
+              <li>
+                Modération : afin de respecter nos règles d&apos;usage, votre saisie et le prompt
+                généré sont automatiquement analysés pour détecter les contenus interdits. En cas de
+                blocage, un enregistrement technique de la catégorie concernée est conservé.
+              </li>
               <li>
                 Si vous utilisez la fonctionnalité de référence (upload d&apos;image ou de texte) :
                 le contenu est analysé à la volée et n&apos;est jamais stocké, ni sur nos serveurs,
@@ -180,9 +197,10 @@ export default function PolitiqueConfidentialitePage() {
                 <strong className="font-semibold text-foreground">
                   Après suppression de votre compte
                 </strong>{" "}
-                : vos données personnelles sont supprimées immédiatement et définitivement (prompts,
-                événements d&apos;utilisation, données de compte). Les données de facturation sont
-                conservées 10 ans conformément aux obligations comptables françaises.
+                : vos données personnelles sont supprimées immédiatement et définitivement (prompts
+                et textes saisis, événements d&apos;utilisation, sessions de navigation, données de
+                compte). Les données de facturation sont conservées 10 ans conformément aux
+                obligations comptables françaises.
               </li>
               <li>
                 <strong className="font-semibold text-foreground">Compte inactif</strong> : si vous

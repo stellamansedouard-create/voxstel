@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import type { GeneratedPrompt, AITool } from "@/types";
+import { useState, useRef, useEffect, useCallback } from "react";
+import type { GeneratedPrompt, AITool, Category } from "@/types";
 import { CATEGORIES } from "@/lib/metadata";
+import { track } from "@/lib/track.client";
 
 interface PromptResultProps {
   prompt: GeneratedPrompt;
   tool: AITool;
+  category: Category;
   refinementsLeft: number;
   onRestart: () => void;
   onRenforce: () => void;
@@ -24,6 +26,7 @@ function getToolName(toolId: AITool): string {
 export default function PromptResult({
   prompt,
   tool,
+  category,
   refinementsLeft,
   onRestart,
   onRenforce,
@@ -33,11 +36,50 @@ export default function PromptResult({
   const [activeTab, setActiveTab] = useState<"en" | "fr">("en");
   const [showUnsatisfied, setShowUnsatisfied] = useState(false);
 
+  // Copy is our single strongest signal of value delivered — capture it via
+  // BOTH the button and manual Ctrl+C / selection, deduped so one gesture
+  // isn't double-counted. Component remounts per prompt (keyed on prompt.en),
+  // so mount time ≈ when the prompt became visible.
+  const generatedAt = useRef<number>(Date.now());
+  const lastCopyAt = useRef<number>(0);
+
+  const trackCopy = useCallback(
+    (method: "button" | "selection", lang: "en" | "fr") => {
+      const now = Date.now();
+      if (now - lastCopyAt.current < 800) return; // dedupe button↔selection
+      lastCopyAt.current = now;
+      track(
+        "prompt_copied",
+        {
+          prompt_id: prompt.id ?? null,
+          category,
+          tool,
+          lang,
+          method,
+          seconds_since_generated: Math.round((now - generatedAt.current) / 1000),
+        },
+        { service: true, category } // authenticated value delivery — not consent-gated
+      );
+    },
+    [prompt.id, category, tool]
+  );
+
   async function copyToClipboard(text: string, lang: "en" | "fr") {
     await navigator.clipboard.writeText(text);
     setCopied(lang);
+    trackCopy("button", lang);
     setTimeout(() => setCopied(null), 2000);
   }
+
+  // Manual copy (Ctrl+C or right-click → Copy) anywhere in the prompt card.
+  const cardRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const onCopy = () => trackCopy("selection", activeTab);
+    el.addEventListener("copy", onCopy);
+    return () => el.removeEventListener("copy", onCopy);
+  }, [trackCopy, activeTab]);
 
   const activePrompt = activeTab === "en" ? prompt.en : prompt.fr;
   const isCopied = copied === activeTab;
@@ -61,7 +103,7 @@ export default function PromptResult({
       </div>
 
       {/* Prompt card */}
-      <div className="bg-white rounded-2xl border border-border overflow-hidden mb-4">
+      <div ref={cardRef} className="bg-white rounded-2xl border border-border overflow-hidden mb-4">
         <div className="flex border-b border-border">
           {(["en", "fr"] as const).map((lang) => (
             <button

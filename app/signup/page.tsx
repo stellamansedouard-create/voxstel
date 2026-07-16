@@ -8,6 +8,7 @@ import { createBrowserSupabaseClient } from "@/lib/supabase";
 import { fbTrack } from "@/lib/fbq";
 import { gtagTrackConversion, GOOGLE_ADS_CONVERSION } from "@/lib/gtag";
 import { captureGA4ClientId } from "@/lib/utm.client";
+import { track } from "@/lib/track.client";
 
 function GoogleIcon() {
   return (
@@ -56,6 +57,7 @@ function SignupForm() {
     setLoading(true);
     setError(null);
     captureGA4ClientId();
+    track("signup_started", { method: "email" });
 
     const supabase = createBrowserSupabaseClient();
     const { data, error: authError } = await supabase.auth.signUp({
@@ -90,6 +92,7 @@ function SignupForm() {
     setGoogleLoading(true);
     setError(null);
     captureGA4ClientId();
+    track("signup_started", { method: "google" });
     const supabase = createBrowserSupabaseClient();
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",

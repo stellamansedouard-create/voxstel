@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, STRIPE_PRICES } from "@/lib/stripe";
 import { getCurrentUser } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
+import { trackEvent } from "@/lib/analytics";
 import type { PricingPlan } from "@/types";
 
 const CHECKOUT_PLANS = ["pro", "unlimited", "promax"] as const satisfies readonly PricingPlan[];
@@ -89,6 +90,12 @@ export async function POST(req: NextRequest) {
     if (!session.url) {
       return NextResponse.json({ error: "checkout_failed" }, { status: 500 });
     }
+
+    void trackEvent({
+      userId: user.id,
+      eventType: "checkout_started",
+      metadata: { plan },
+    }).catch((e) => console.error("[analytics]", e));
 
     return NextResponse.json({ url: session.url });
   } catch (error) {

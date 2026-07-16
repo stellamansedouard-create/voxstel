@@ -48,9 +48,12 @@ export async function GET(request: Request) {
           .single();
 
         if (!userRow?.first_visit_at) {
-          isNewGoogleUser = data.user.app_metadata?.provider === "google";
+          const provider = data.user.app_metadata?.provider;
+          isNewGoogleUser = provider === "google";
+          const method = provider === "google" ? "google" : "email";
           const utmRaw = cookieStore.get("vx_utm")?.value;
           const utm = utmRaw ? JSON.parse(decodeURIComponent(utmRaw)) : {};
+          const landingPage = utm.landing_page ?? utm.referrer ?? null;
 
           await Promise.all([
             adminSupabase.from("users").update({
@@ -61,6 +64,7 @@ export async function GET(request: Request) {
               ga_client_id: utm.ga_client_id ?? null,
               referrer: utm.referrer ?? null,
               first_visit_at: utm.first_visit_at ?? new Date().toISOString(),
+              landing_page: landingPage,
             }).eq("id", data.user.id),
 
             trackEvent({
@@ -70,6 +74,14 @@ export async function GET(request: Request) {
               utmMedium: utm.utm_medium ?? null,
               utmCampaign: utm.utm_campaign ?? null,
               referrer: utm.referrer ?? null,
+              metadata: {
+                method,
+                utm_source: utm.utm_source ?? null,
+                utm_medium: utm.utm_medium ?? null,
+                utm_campaign: utm.utm_campaign ?? null,
+                gclid: utm.gclid ?? null,
+                landing_page: landingPage,
+              },
             }),
           ]);
         }
