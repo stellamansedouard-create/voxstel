@@ -260,9 +260,14 @@ export async function POST(req: NextRequest) {
       break;
     }
 
-    // Fires on renewals, plan swaps via the customer portal, and when a
-    // cancellation is scheduled for end-of-period (status stays "active"
-    // with cancel_at_period_end = true until the period actually ends).
+    // `created` shares this handler: a subscription started outside Checkout
+    // (Stripe Dashboard, direct API) only emits `created`, and without it
+    // subscription_price_id would stay NULL — getBalance() gates unlimited on
+    // that field, so the subscriber would fail closed despite having paid.
+    // `updated` fires on renewals, plan swaps via the customer portal, and when
+    // a cancellation is scheduled for end-of-period (status stays "active" with
+    // cancel_at_period_end = true until the period actually ends).
+    case "customer.subscription.created":
     case "customer.subscription.updated": {
       const subscription = event.data.object as Stripe.Subscription;
       const userId = await resolveUserId(supabase, subscription);
