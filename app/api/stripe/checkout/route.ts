@@ -4,7 +4,10 @@ import { getCurrentUser } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
 import type { PricingPlan } from "@/types";
 
-const CHECKOUT_PLANS = ["pro", "unlimited", "promax"] as const satisfies readonly PricingPlan[];
+// `unlimited` is intentionally excluded: STRIPE_PRICE_UNLIMITED is repointed to
+// the new 19€/mo credits subscription, which is sold ONLY through /api/checkout
+// (product: 'unlimited'). The legacy 17,99€ unlimited can no longer be bought.
+const CHECKOUT_PLANS = ["pro", "promax"] as const satisfies readonly PricingPlan[];
 type CheckoutPlan = (typeof CHECKOUT_PLANS)[number];
 
 function isCheckoutPlan(value: unknown): value is CheckoutPlan {

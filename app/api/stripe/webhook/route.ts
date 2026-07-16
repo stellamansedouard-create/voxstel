@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, PLAN_BY_PRICE_ID } from "@/lib/stripe";
+import {
+  stripe,
+  PLAN_BY_PRICE_ID,
+  CREDITS_BY_PRICE_ID,
+  PACK_REASON_BY_CREDITS,
+} from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase";
+import { grantCredits } from "@/lib/credits";
 import { trackEvent } from "@/lib/analytics";
 import { uploadPurchaseEvent } from "@/lib/ga4-conversion";
 import { PRICING } from "@/lib/pricing";
 import type Stripe from "stripe";
 import type { PricingPlan } from "@/types";
+
+type ReasonGrant = "purchase_pack_10" | "purchase_pack_50" | "purchase_pack_200";
 
 // Stripe requires the raw body to verify the signature
 export const runtime = "nodejs";
@@ -88,16 +96,102 @@ export async function POST(req: NextRequest) {
 
   const supabase = createServerSupabase();
 
+  // Idempotence: record the event id first. On conflict (a Stripe retry of an
+  // event we already recorded) nothing is inserted — return 200 without
+  // reprocessing. NOTE: this is insert-first, so an event whose handler crashes
+  // mid-way is not reprocessed on retry; the money-moving grants are
+  // additionally idempotent via credit_transactions.stripe_event_id, and the
+  // subscription writes are upserts, so this is safe. `processed_at` (set at the
+  // end) lets an operator spot any event that never finished.
+  const { data: idem, error: idemError } = await supabase
+    .from("stripe_webhook_events")
+    .upsert(
+      { event_id: event.id, type: event.type },
+      { onConflict: "event_id", ignoreDuplicates: true }
+    )
+    .select("event_id");
+
+  if (!idemError && (!idem || idem.length === 0)) {
+    return NextResponse.json({ received: true, duplicate: true });
+  }
+  if (idemError) {
+    // Don't drop the event on a bookkeeping failure — log and process (handlers
+    // are idempotent). Worst case is a possible reprocess, not a lost payment.
+    console.error(
+      "[stripe/webhook] idempotence insert failed — message:",
+      idemError.message, "| code:", idemError.code, "| event_id:", event.id
+    );
+  }
+
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
-      const userId = session.metadata?.user_id;
+      const userId = session.metadata?.user_id ?? session.client_reference_id ?? undefined;
+
+      // --- Credit pack (one-shot payment) ---------------------------------
+      if (session.mode === "payment") {
+        if (userId) {
+          const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+            limit: 10,
+          });
+          const packLine = lineItems.data.find(
+            (li) => li.price?.id && CREDITS_BY_PRICE_ID[li.price.id] !== undefined
+          );
+          const priceId = packLine?.price?.id;
+          const perUnit = priceId ? CREDITS_BY_PRICE_ID[priceId] : undefined;
+
+          if (perUnit) {
+            const credits = perUnit * (packLine?.quantity ?? 1);
+            const reason = (PACK_REASON_BY_CREDITS[perUnit] ?? "purchase_pack_10") as ReasonGrant;
+
+            await grantCredits(userId, credits, reason, event.id, {
+              session_id: session.id,
+              price_id: priceId,
+            });
+
+            const { data: currentUser } = await supabase
+              .from("users")
+              .select("ga_client_id")
+              .eq("id", userId)
+              .single();
+
+            await trackEvent({
+              userId,
+              eventType: "checkout_completed",
+              metadata: {
+                product: session.metadata?.product ?? null,
+                credits,
+                amount: session.amount_total != null ? session.amount_total / 100 : null,
+                currency: (session.currency ?? "eur").toUpperCase(),
+              },
+            });
+
+            if (session.amount_total != null) {
+              await uploadPurchaseEvent({
+                clientId: currentUser?.ga_client_id,
+                value: session.amount_total / 100,
+                currency: (session.currency ?? "eur").toUpperCase(),
+                transactionId: session.id,
+              });
+            }
+          } else {
+            console.warn(
+              "[stripe/webhook] payment checkout with no recognized pack price —",
+              "session_id:", session.id, "| user_id:", userId
+            );
+          }
+        }
+        break;
+      }
+
+      // --- Subscription (unlimited) ---------------------------------------
       const newPlan = session.metadata?.plan as PricingPlan | undefined;
 
       if (userId && newPlan && session.subscription) {
         const subscription = await stripe.subscriptions.retrieve(
           session.subscription as string
         );
+        const subPriceId = subscription.items.data[0]?.price?.id ?? null;
 
         const { data: currentUser } = await supabase
           .from("users")
@@ -113,6 +207,10 @@ export async function POST(req: NextRequest) {
             stripe_customer_id: subscription.customer as string,
             stripe_subscription_id: subscription.id,
             subscription_status: subscription.status,
+            subscription_price_id: subPriceId,
+            subscription_current_period_end: new Date(
+              subscription.current_period_end * 1000
+            ).toISOString(),
           })
           .eq("id", userId);
         if (usersUpdateError) {
@@ -124,6 +222,15 @@ export async function POST(req: NextRequest) {
 
         await upsertSubscriptionRow(supabase, userId, subscription, newPlan);
 
+        // Report the amount actually charged by Stripe, not the PRICING table:
+        // STRIPE_PRICE_UNLIMITED is repointed to the new 19€/mo price while
+        // PRICING.unlimited still reads 17,99 (its update ships with the pricing
+        // page rework). Falls back to PRICING if the Stripe amount is absent.
+        const subPrice = subscription.items.data[0]?.price;
+        const purchaseValue =
+          subPrice?.unit_amount != null ? subPrice.unit_amount / 100 : PRICING[newPlan].price;
+        const purchaseCurrency = (subPrice?.currency ?? PRICING[newPlan].currency).toUpperCase();
+
         await trackEvent({
           userId,
           eventType: "plan_upgraded",
@@ -133,10 +240,20 @@ export async function POST(req: NextRequest) {
           metadata: { old_plan: oldPlan, new_plan: newPlan },
         });
 
+        await trackEvent({
+          userId,
+          eventType: "checkout_completed",
+          metadata: {
+            plan: newPlan,
+            amount: purchaseValue,
+            currency: purchaseCurrency,
+          },
+        });
+
         await uploadPurchaseEvent({
           clientId: currentUser?.ga_client_id,
-          value: PRICING[newPlan].price,
-          currency: PRICING[newPlan].currency,
+          value: purchaseValue,
+          currency: purchaseCurrency,
           transactionId: session.id,
         });
       }
@@ -162,6 +279,10 @@ export async function POST(req: NextRequest) {
           .update({
             plan: isActive ? plan : "free",
             subscription_status: subscription.status,
+            subscription_price_id: subscription.items.data[0]?.price?.id ?? null,
+            subscription_current_period_end: new Date(
+              subscription.current_period_end * 1000
+            ).toISOString(),
             subscription_cancel_at: subscription.cancel_at
               ? new Date(subscription.cancel_at * 1000).toISOString()
               : null,
@@ -202,6 +323,8 @@ export async function POST(req: NextRequest) {
           .update({
             plan: "free",
             subscription_status: "canceled",
+            subscription_price_id: null,
+            subscription_current_period_end: null,
             subscription_cancel_at: null,
           })
           .eq("id", userId);
@@ -275,6 +398,11 @@ export async function POST(req: NextRequest) {
     default:
       break;
   }
+
+  await supabase
+    .from("stripe_webhook_events")
+    .update({ processed_at: new Date().toISOString() })
+    .eq("event_id", event.id);
 
   return NextResponse.json({ received: true });
 }
