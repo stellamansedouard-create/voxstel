@@ -144,9 +144,7 @@ async function deliverMergedPrompt(
 
 Contexte technique : ${promptContext}
 
-${w.ambianceLabel} figé${category === "music" ? "" : "e"} — l'utilisateur l'a arrêté${
-      category === "music" ? "" : "e"
-    } et c'est NON NÉGOCIABLE :
+${w.ambianceLabel} figé${w.ambianceAgr} — l'utilisateur l'a arrêté${w.ambianceAgr} et c'est NON NÉGOCIABLE :
 """
 ${ambiance.prompt}
 """

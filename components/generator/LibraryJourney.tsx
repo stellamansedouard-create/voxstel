@@ -1,0 +1,316 @@
+"use client";
+
+// Drives the three library-page flows:
+//
+//   refine-ambiance     ambiance round -> refined ambiance. Stops there (free).
+//   keep-ambiance       straight to the subject, ambiance frozen as-is.
+//   refine-and-subject  ambiance round, then the subject.
+//
+// The ambiance is frozen the moment the subject step is entered, and the subject
+// rounds are seeded with the frozen text so they can never reopen it.
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useGeneratorStore } from "@/store/useGeneratorStore";
+import { getWording } from "@/lib/ambiance";
+import { writeHandoff } from "@/lib/ambiance-handoff";
+import { getStoredUTM } from "@/lib/utm.client";
+import DirectQuestions from "./DirectQuestions";
+import LockedAmbiance from "./LockedAmbiance";
+import SubjectInput from "./SubjectInput";
+import LayeredResult from "./LayeredResult";
+import Spinner from "@/components/ui/Spinner";
+import type { Category, DirectQuestion, LayeredOutput } from "@/types";
+
+interface LibraryJourneyProps {
+  category: Category;
+}
+
+interface QAEntry {
+  question: string;
+  theme: string;
+  answer: string;
+  layer: "ambiance" | "subject";
+}
+
+export default function LibraryJourney({ category }: LibraryJourneyProps) {
+  const store = useGeneratorStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const w = getWording(category);
+
+  // Q&A of every round, sent with the delivery so the journey is measurable.
+  const [qaLog, setQaLog] = useState<QAEntry[]>([]);
+  const askedRef = useRef(false);
+
+  const ambiance = store.ambiance;
+
+  /** Restores the handoff and bounces to login without losing the journey. */
+  const bounceToLogin = useCallback(() => {
+    if (!ambiance || !store.ambianceFlow || !store.tool) return;
+    writeHandoff({
+      category,
+      tool: store.tool,
+      ambiancePrompt: ambiance.prompt,
+      flow: store.ambianceFlow,
+      pageSlug: ambiance.sourcePageSlug ?? "",
+      pageTitle: "",
+    });
+    router.push(`/login?next=${encodeURIComponent(pathname)}`);
+  }, [ambiance, store.ambianceFlow, store.tool, category, router, pathname]);
+
+  /** Seeds the refining engine with the page prompt (or the subject). */
+  const askQuestions = useCallback(
+    async (mode: "ambiance" | "subject") => {
+      if (!ambiance || !store.tool) return;
+      store.setLoading(true);
+      store.setError(null);
+      try {
+        const res = await fetch("/api/refine-precision", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tool: store.tool,
+            category,
+            description: mode === "ambiance" ? ambiance.prompt : store.subject,
+            previousQA: [],
+            ambianceSeed: { mode, ambiancePrompt: ambiance.prompt },
+          }),
+        });
+        if (res.status === 401) return bounceToLogin();
+        if (!res.ok) throw new Error("questions failed");
+
+        const data: { questions: DirectQuestion[] } = await res.json();
+        const questions = data.questions ?? [];
+
+        if (mode === "subject" && questions.length === 0) {
+          await deliver({});
+          return;
+        }
+        store.setLayerQuestions(
+          questions,
+          mode === "ambiance" ? "ambiance" : "subject-questions"
+        );
+      } catch {
+        store.setError("Erreur lors de l'analyse. Veuillez réessayer.");
+      } finally {
+        store.setLoading(false);
+      }
+    },
+    [ambiance, store.tool, store.subject, category] // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
+  // Seed the ambiance round once, on entry.
+  useEffect(() => {
+    if (store.step === "ambiance" && !askedRef.current && store.directQuestions.length === 0) {
+      askedRef.current = true;
+      void askQuestions("ambiance");
+    }
+  }, [store.step, store.directQuestions.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /** Maps the current round's answers to `label -> answer` and logs the Q&A. */
+  function collectAnswers(layer: "ambiance" | "subject") {
+    const byLabel: Record<string, string> = {};
+    const entries: QAEntry[] = [];
+    for (const q of store.directQuestions) {
+      const answer = store.directAnswers[q.id]?.trim();
+      if (!answer) continue;
+      byLabel[q.label] = answer;
+      entries.push({ question: q.label, theme: q.theme ?? "", answer, layer });
+    }
+    setQaLog((log) => [...log, ...entries]);
+    return byLabel;
+  }
+
+  /** Layer 1 — free. Applies the answers, then stops or moves to the subject. */
+  async function submitAmbiance() {
+    if (!ambiance || !store.tool) return;
+    store.setLoading(true);
+    store.setError(null);
+    try {
+      const answers = collectAnswers("ambiance");
+      const res = await fetch("/api/ambiance/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category,
+          tool: store.tool,
+          ambiancePrompt: ambiance.prompt,
+          answers,
+        }),
+      });
+      if (res.status === 401) return bounceToLogin();
+      if (!res.ok) throw new Error("apply failed");
+
+      const { ambiance: refined } = (await res.json()) as { ambiance: string };
+      store.setAmbiancePrompt(refined);
+
+      if (store.ambianceFlow === "refine-and-subject") {
+        store.lockAmbiance();
+        store.setStep("subject");
+      } else {
+        store.setStep("result");
+      }
+    } catch {
+      store.setError("Erreur lors de l'affinage. Veuillez réessayer.");
+    } finally {
+      store.setLoading(false);
+    }
+  }
+
+  /** Entering the subject freezes the ambiance for the rest of the run. */
+  async function submitSubject() {
+    if (!store.subject.trim()) return;
+    store.lockAmbiance();
+    await askQuestions("subject");
+  }
+
+  async function submitSubjectAnswers() {
+    await deliver(collectAnswers("subject"));
+  }
+
+  /** Layer 2 — hits the single delivery point. Ungated until Prompt 4. */
+  async function deliver(subjectAnswers: Record<string, string>) {
+    if (!ambiance || !store.tool) return;
+    store.setLoading(true);
+    store.setError(null);
+    try {
+      const res = await fetch("/api/subject/deliver", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category,
+          tool: store.tool,
+          ambiance: { ...ambiance, locked: true },
+          subject: store.subject,
+          subjectAnswers,
+          questionsAnswers: [
+            ...qaLog,
+            ...Object.entries(subjectAnswers).map(([question, answer]) => ({
+              question,
+              theme: "",
+              answer,
+              layer: "subject" as const,
+            })),
+          ].filter(
+            // de-dupe: collectAnswers already logged this round
+            (entry, i, all) =>
+              all.findIndex(
+                (o) => o.question === entry.question && o.answer === entry.answer
+              ) === i
+          ),
+          _tracking: getStoredUTM(),
+        }),
+      });
+      if (res.status === 401) return bounceToLogin();
+      if (!res.ok) throw new Error("deliver failed");
+
+      store.setLayeredOutput((await res.json()) as LayeredOutput);
+    } catch {
+      store.setError("Erreur lors de la génération. Veuillez réessayer.");
+    } finally {
+      store.setLoading(false);
+    }
+  }
+
+  if (!ambiance) return null;
+
+  const hasAnswer = Object.values(store.directAnswers).some((v) => v?.trim());
+
+  return (
+    <div className="animate-fade-in space-y-6">
+      {store.error && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+          <p className="text-sm text-red-700">{store.error}</p>
+        </div>
+      )}
+
+      {store.isLoading && (
+        <div className="flex items-center justify-center py-20">
+          <Spinner size="lg" label="Voxstel travaille sur votre prompt..." />
+        </div>
+      )}
+
+      {!store.isLoading && store.step === "ambiance" && (
+        <>
+          <div>
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              Ajustons {w.ambiance}
+            </h2>
+            <p className="text-muted">
+              Vous gardez les grandes lignes de ce que vous avez choisi — ces
+              questions ne servent qu&apos;à le mettre à votre goût.
+            </p>
+          </div>
+
+          <LockedAmbiance category={category} ambiance={ambiance.prompt} />
+
+          <DirectQuestions
+            questions={store.directQuestions}
+            answers={store.directAnswers}
+            onAnswer={store.setDirectAnswer}
+          />
+
+          <button onClick={submitAmbiance} className="btn-primary w-full">
+            {hasAnswer ? "Appliquer mes choix →" : "Continuer sans changement →"}
+          </button>
+        </>
+      )}
+
+      {!store.isLoading && store.step === "subject" && (
+        <SubjectInput
+          category={category}
+          lockedAmbiance={ambiance.prompt}
+          value={store.subject}
+          onChange={store.setSubject}
+          onSubmit={submitSubject}
+        />
+      )}
+
+      {!store.isLoading && store.step === "subject-questions" && (
+        <>
+          <div>
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              Précisons {w.subject}
+            </h2>
+            <p className="text-muted">
+              {w.ambianceLabel} reste verrouillé{w.ambianceAgr} —
+              ces questions ne portent que sur {w.subject}.
+            </p>
+          </div>
+
+          <LockedAmbiance category={category} ambiance={ambiance.prompt} />
+
+          <DirectQuestions
+            questions={store.directQuestions}
+            answers={store.directAnswers}
+            onAnswer={store.setDirectAnswer}
+          />
+
+          <button onClick={submitSubjectAnswers} className="btn-primary w-full">
+            Générer mon prompt →
+          </button>
+        </>
+      )}
+
+      {!store.isLoading && store.step === "result" && (
+        <LayeredResult
+          category={category}
+          output={store.layeredOutput}
+          ambiance={ambiance.prompt}
+          onRestart={() => {
+            store.reset();
+            store.setCategory(category);
+          }}
+          onContinueToSubject={
+            store.ambianceFlow === "refine-ambiance"
+              ? () => {
+                  store.lockAmbiance();
+                  store.setStep("subject");
+                }
+              : undefined
+          }
+        />
+      )}
+    </div>
+  );
+}

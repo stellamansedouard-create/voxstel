@@ -3,10 +3,8 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
-import {
-  buildAmbianceRefineInstruction,
-  buildSubjectInstruction,
-} from "@/lib/ambiance";
+import { buildSeededQuestionSystem } from "@/lib/ambiance";
+import { getThemeHints } from "@/lib/question-themes";
 import type { AITool, Category, DirectQuestion } from "@/types";
 
 /**
@@ -18,41 +16,6 @@ interface AmbianceSeed {
   mode: "ambiance" | "subject";
   /** Ambiance prompt: the one being refined, or the frozen one for a subject. */
   ambiancePrompt: string;
-}
-
-function getThemeHints(categoryId: string): string {
-  switch (categoryId) {
-    case "image":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Sujet & Composition" — sujet principal, personnages, éléments visuels, cadrage
-- "Style & Esthétique" — style artistique, technique, medium (photo, peinture, 3D, illustration…)
-- "Lumière & Couleurs" — éclairage, palette, heure, ambiance colorée
-- "Décor & Contexte" — lieu, environnement, époque, contexte d'usage
-- "Détails Techniques" — ratio, texte affiché, contraintes spécifiques à l'outil`;
-    case "video":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Action & Scène" — sujet, action principale, personnages
-- "Style Visuel" — esthétique, références visuelles, grade colorimétrique
-- "Mouvement & Rythme" — mouvements caméra, transitions, rythme de montage
-- "Ambiance & Atmosphère" — humeur, émotion, son d'ambiance
-- "Détails Techniques" — durée, format, plateforme de destination`;
-    case "text":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Sujet & Contenu" — tâche précise, périmètre, angle
-- "Audience & Ton" — destinataire, niveau, registre, voix
-- "Structure & Format" — longueur, mise en forme, plan, format de sortie
-- "Objectif & Contraintes" — but final (SEO, conversion, documentation…), ce qu'il faut éviter
-- "Technique" — langage, framework, version, environnement (pour les demandes de code)`;
-    case "music":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Style & Genre" — genre, sous-genre, ère musicale, influences
-- "Instrumentation" — instruments, arrangement, présence vocale
-- "Énergie & Émotion" — tempo, intensité, humeur, dynamique
-- "Structure & Durée" — structure du morceau, durée, intro/outro
-- "Usage & Contexte" — usage final (bande-son, méditation, danse, générique…)`;
-    default:
-      return `Attribue un thème court et descriptif en français à chaque question (ex: "Style", "Contexte", "Technique").`;
-  }
 }
 
 export async function POST(req: NextRequest) {
@@ -90,40 +53,16 @@ export async function POST(req: NextRequest) {
 
     // Seeded run: the starting text is a library page's ambiance prompt (or a
     // subject sitting inside a frozen one) rather than a free-form description.
-    // The loop, the JSON contract and the theme hints below are unchanged — only
-    // the framing swaps, since the "no floor / 0 questions is fine" preamble of a
-    // second round does not apply to a first pass over an injected prompt.
+    // Same loop, same JSON contract, same theme taxonomy — only the framing swaps.
     const seedSystem = ambianceSeed
-      ? `Tu es un expert en prompt engineering pour l'IA "${toolName}".
-
-Contexte de l'outil : ${promptContext}${useCaseBlock}
-
-${
-  ambianceSeed.mode === "ambiance"
-    ? buildAmbianceRefineInstruction(category as Category, ambianceSeed.ambiancePrompt)
-    : buildSubjectInstruction(category as Category, ambianceSeed.ambiancePrompt)
-}
-
-━━━ NOMBRE DE QUESTIONS ━━━
-${
-  previousQA.length === 0
-    ? `C'est le premier tour. Pose une question par axe qui mérite réellement un arbitrage — jamais moins de 2, pas de plafond haut.`
-    : `Des questions ont déjà été posées et répondues. Ne repose jamais une variante d'une question déjà traitée. S'il ne reste aucune ambiguïté réelle, retourne un tableau VIDE — 0 question est un résultat valide et souhaitable ici.`
-}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-RÈGLES DE FORMAT pour chaque question :
-- 4-5 suggestions courtes et TRÈS contextuelles (3 mots max), collées au prompt injecté (pas génériques)
-- Champ "theme" obligatoire, choisi EXACTEMENT parmi les libellés ci-dessous
-
-${getThemeHints(category)}
-
-Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
-{
-  "questions": [
-    { "id": "id_snake", "label": "Question en français ?", "theme": "Thème valide", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
-  ]
-}`
+      ? buildSeededQuestionSystem({
+          toolName,
+          promptContext,
+          category: category as Category,
+          mode: ambianceSeed.mode,
+          ambiancePrompt: ambianceSeed.ambiancePrompt,
+          previousQACount: previousQA.length,
+        })
       : null;
 
     const message = await anthropic.messages.create({

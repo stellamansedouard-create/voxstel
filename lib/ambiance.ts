@@ -16,6 +16,7 @@
 //
 // Everything in this file that reaches the user says "Voxstel". The system
 // instructions below are internal and are never rendered.
+import { getThemeHints } from "@/lib/question-themes";
 import type { AmbianceFlow, Category } from "@/types";
 
 /** Whether the category's output keeps two fields instead of one merged prompt. */
@@ -29,8 +30,14 @@ interface CategoryWording {
   ambiance: string;
   /** Capitalised, standalone. */
   ambianceLabel: string;
+  /** Agreement suffix for participles qualifying `ambiance` ("" or "e"). */
+  ambianceAgr: "" | "e";
+  /** `ambiance` as a direct object kept as-is: "tel quel" / "telle quelle". */
+  ambianceAsIs: string;
   subject: string;
   subjectLabel: string;
+  /** `subject` with a contracted "à": "aux paroles" / "au sujet". */
+  subjectTo: string;
   /** Heading on the subject screen. */
   subjectHeading: string;
   subjectPlaceholder: string;
@@ -40,8 +47,11 @@ const WORDING: Record<Category, CategoryWording> = {
   music: {
     ambiance: "le style",
     ambianceLabel: "Style",
+    ambianceAgr: "",
+    ambianceAsIs: "tel quel",
     subject: "les paroles",
     subjectLabel: "Paroles",
+    subjectTo: "aux paroles",
     subjectHeading: "De quoi parle votre morceau ?",
     subjectPlaceholder:
       "Le thème de votre chanson — une histoire, une émotion, un message…",
@@ -49,8 +59,11 @@ const WORDING: Record<Category, CategoryWording> = {
   image: {
     ambiance: "l'ambiance",
     ambianceLabel: "Ambiance",
+    ambianceAgr: "e",
+    ambianceAsIs: "telle quelle",
     subject: "le sujet",
     subjectLabel: "Sujet",
+    subjectTo: "au sujet",
     subjectHeading: "Quel est votre sujet ?",
     subjectPlaceholder:
       "Ce que vous voulez placer dans cette ambiance — un personnage, un objet, une scène…",
@@ -58,8 +71,11 @@ const WORDING: Record<Category, CategoryWording> = {
   video: {
     ambiance: "l'ambiance",
     ambianceLabel: "Ambiance",
+    ambianceAgr: "e",
+    ambianceAsIs: "telle quelle",
     subject: "le sujet",
     subjectLabel: "Sujet",
+    subjectTo: "au sujet",
     subjectHeading: "Que se passe-t-il dans votre scène ?",
     subjectPlaceholder:
       "Ce qui se déroule dans cette ambiance — qui, quelle action, quel moment…",
@@ -67,8 +83,11 @@ const WORDING: Record<Category, CategoryWording> = {
   text: {
     ambiance: "la structure",
     ambianceLabel: "Structure",
+    ambianceAgr: "e",
+    ambianceAsIs: "telle quelle",
     subject: "le sujet",
     subjectLabel: "Sujet",
+    subjectTo: "au sujet",
     subjectHeading: "Quel est votre sujet ?",
     subjectPlaceholder:
       "Ce à quoi adapter cette structure — votre métier, votre secteur, votre parcours…",
@@ -98,7 +117,7 @@ export function getFlowDescription(flow: AmbianceFlow, category: Category): stri
     case "refine-ambiance":
       return `Ajustez ${w.ambiance} à votre goût, sans repartir de zéro.`;
     case "keep-ambiance":
-      return `Gardez ${w.ambiance} tel quel et passez directement à ${w.subject}.`;
+      return `Gardez ${w.ambiance} ${w.ambianceAsIs} et passez directement ${w.subjectTo}.`;
     case "refine-and-subject":
       return `Ajustez ${w.ambiance}, puis enchaînez sur ${w.subject}.`;
   }
@@ -202,7 +221,7 @@ export function buildSubjectInstruction(
 
   return `L'utilisateur a déjà arrêté ${w.ambiance} — c'est FIGÉ et NON NÉGOCIABLE. Tu ne peux plus le modifier, le questionner ni le rouvrir. Il t'est donné uniquement comme contexte, pour que ${w.subject} s'y intègre naturellement.
 
-${w.ambianceLabel} figé${category === "music" ? "" : "e"} :
+${w.ambianceLabel} figé${w.ambianceAgr} :
 """
 ${lockedAmbiance}
 """
@@ -223,4 +242,57 @@ RÈGLES ABSOLUES :
   }). Ces choix sont faits.
 - N'explique jamais comment un prompt est construit et n'emploie aucun vocabulaire de prompt engineering. Parle du résultat, pas de la technique.
 - Ne mentionne jamais la technologie sous-jacente. Le produit s'appelle Voxstel.`;
+}
+
+/** How the seeded round is framed: a first pass, or a loop-back. */
+export interface SeededQuestionContext {
+  toolName: string;
+  promptContext: string;
+  category: Category;
+  mode: "ambiance" | "subject";
+  /** The ambiance being refined, or the frozen one the subject sits in. */
+  ambiancePrompt: string;
+  /** Rounds already answered — drives whether an empty result is allowed. */
+  previousQACount: number;
+}
+
+/**
+ * System prompt for a seeded question round. The loop, the JSON contract and
+ * the theme taxonomy are the refining engine's own — only the framing swaps,
+ * since "no floor, 0 questions is fine" belongs to a second round and not to a
+ * first pass over an injected prompt.
+ */
+export function buildSeededQuestionSystem(ctx: SeededQuestionContext): string {
+  const instruction =
+    ctx.mode === "ambiance"
+      ? buildAmbianceRefineInstruction(ctx.category, ctx.ambiancePrompt)
+      : buildSubjectInstruction(ctx.category, ctx.ambiancePrompt);
+
+  const countRule =
+    ctx.previousQACount === 0
+      ? `C'est le premier tour. Pose une question par axe qui mérite réellement un arbitrage — jamais moins de 2, pas de plafond haut.`
+      : `Des questions ont déjà été posées et répondues. Ne repose jamais une variante d'une question déjà traitée. S'il ne reste aucune ambiguïté réelle, retourne un tableau VIDE — 0 question est un résultat valide et souhaitable ici.`;
+
+  return `Tu es un expert en prompt engineering pour l'IA "${ctx.toolName}".
+
+Contexte de l'outil : ${ctx.promptContext}
+
+${instruction}
+
+━━━ NOMBRE DE QUESTIONS ━━━
+${countRule}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RÈGLES DE FORMAT pour chaque question :
+- 4-5 suggestions courtes et TRÈS contextuelles (3 mots max), collées au prompt injecté (pas génériques)
+- Champ "theme" obligatoire, choisi EXACTEMENT parmi les libellés ci-dessous
+
+${getThemeHints(ctx.category)}
+
+Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
+{
+  "questions": [
+    { "id": "id_snake", "label": "Question en français ?", "theme": "Thème valide", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
+  ]
+}`;
 }

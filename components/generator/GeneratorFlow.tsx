@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
+import { consumeHandoff } from "@/lib/ambiance-handoff";
+import LibraryJourney from "@/components/generator/LibraryJourney";
 import ToolSelector from "@/components/generator/ToolSelector";
 import UseCaseSelector from "@/components/generator/UseCaseSelector";
 import FreeTextInput from "@/components/generator/FreeTextInput";
@@ -34,8 +36,30 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const router = useRouter();
   const pathname = usePathname();
   const categoryMeta = getCategoryById(category);
+  const didInitRef = useRef(false);
 
   useEffect(() => {
+    // Runs once per mount. StrictMode invokes effects twice and the handoff is
+    // consume-once, so without this the second pass would fall through to the
+    // blank-field branch and knock the seeded run off its step.
+    if (didInitRef.current) return;
+    didInitRef.current = true;
+
+    // Seeded from a library page — takes precedence over the blank-field flow.
+    const handoff = consumeHandoff();
+    if (handoff && handoff.category === category) {
+      store.startFromLibrary(handoff);
+      return;
+    }
+
+    // Reached the generator without a handoff: any journey left in the store is
+    // from a previous run and must not resurface here.
+    if (useGeneratorStore.getState().ambiance) {
+      store.reset();
+      store.setCategory(category);
+      return;
+    }
+
     // After login redirect: replay analyze-description automatically with saved values
     const pendingRaw = localStorage.getItem("vx_pending_description");
     if (pendingRaw) {
@@ -312,6 +336,29 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   }
 
   if (!categoryMeta) return null;
+
+  // Library-seeded run: the ambiance/subject journey replaces the step flow.
+  if (store.ambiance) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-2xl mx-auto px-4 py-20">
+          <a
+            href="/"
+            className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-6"
+          >
+            ← Changer de catégorie
+          </a>
+          <div className="flex items-center gap-2 mb-8">
+            <span className="text-2xl">{categoryMeta.icon}</span>
+            <h1 className="text-xl font-bold text-foreground">
+              Générateur — {categoryMeta.label}
+            </h1>
+          </div>
+          <LibraryJourney category={category} />
+        </div>
+      </div>
+    );
+  }
 
   const currentStep = STEP_NUMBERS[store.step] ?? 1;
   const toolMeta = store.tool ? getToolById(category, store.tool) : null;
