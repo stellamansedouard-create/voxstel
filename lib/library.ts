@@ -176,12 +176,18 @@ melancholic, no vocals, endless-loop feel
 [Tempo & key]
 72 BPM, major 7th chords, relaxed swing`,
     buttons: [
+      // Two buttons, not three. This ambiance is instrumental and ends on "no
+      // vocals", and music's subject layer is the Suno LYRICS field by
+      // construction — so a keep-ambiance entry here would freeze an
+      // instrumental style and then write lyrics over it. The brief's third
+      // button ("Décliner ce style") was dropped rather than mapped: declining
+      // a style means changing the STYLE field, which is what refining already
+      // does, so it would have duplicated the button above.
       { label: "Affiner le style", flow: "refine-ambiance" },
-      // Both this and the button above map to refine-ambiance: declining the
-      // style into a variant is a refining round, not a subject. Flagged for
-      // validation — this page has no refine-and-subject entry.
-      { label: "Décliner ce style (nuit / pluie / matin)", flow: "refine-ambiance" },
-      { label: "Ajouter une voix", flow: "keep-ambiance" },
+      // A vocal layer is a subject over the style. It goes through a refining
+      // round first because that is the step where the user lifts "no vocals"
+      // before any lyrics are written.
+      { label: "Ajouter une voix", flow: "refine-and-subject" },
     ],
     fomoMicrocopy:
       "Envie d'une version unique, calée sur ton ambiance exacte ? On l'affine avec toi.",
