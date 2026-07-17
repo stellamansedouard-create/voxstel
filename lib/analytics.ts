@@ -5,7 +5,11 @@ export type EventType =
   | "user_signup"
   | "plan_upgraded"
   | "plan_downgraded"
-  | "payment_failed";
+  | "payment_failed"
+  // Emitted by the credits checkout (/api/checkout) and Stripe webhook. The
+  // instrumentation branch's fuller taxonomy is a superset of these two.
+  | "checkout_started"
+  | "checkout_completed";
 
 export interface TrackEventPayload {
   userId?: string | null;
