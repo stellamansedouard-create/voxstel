@@ -3,41 +3,19 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
-import type { AITool, DirectQuestion } from "@/types";
+import { buildSeededQuestionSystem } from "@/lib/ambiance";
+import { getThemeHints } from "@/lib/question-themes";
+import type { AITool, Category, DirectQuestion } from "@/types";
 
-function getThemeHints(categoryId: string): string {
-  switch (categoryId) {
-    case "image":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Sujet & Composition" — sujet principal, personnages, éléments visuels, cadrage
-- "Style & Esthétique" — style artistique, technique, medium (photo, peinture, 3D, illustration…)
-- "Lumière & Couleurs" — éclairage, palette, heure, ambiance colorée
-- "Décor & Contexte" — lieu, environnement, époque, contexte d'usage
-- "Détails Techniques" — ratio, texte affiché, contraintes spécifiques à l'outil`;
-    case "video":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Action & Scène" — sujet, action principale, personnages
-- "Style Visuel" — esthétique, références visuelles, grade colorimétrique
-- "Mouvement & Rythme" — mouvements caméra, transitions, rythme de montage
-- "Ambiance & Atmosphère" — humeur, émotion, son d'ambiance
-- "Détails Techniques" — durée, format, plateforme de destination`;
-    case "text":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Sujet & Contenu" — tâche précise, périmètre, angle
-- "Audience & Ton" — destinataire, niveau, registre, voix
-- "Structure & Format" — longueur, mise en forme, plan, format de sortie
-- "Objectif & Contraintes" — but final (SEO, conversion, documentation…), ce qu'il faut éviter
-- "Technique" — langage, framework, version, environnement (pour les demandes de code)`;
-    case "music":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Style & Genre" — genre, sous-genre, ère musicale, influences
-- "Instrumentation" — instruments, arrangement, présence vocale
-- "Énergie & Émotion" — tempo, intensité, humeur, dynamique
-- "Structure & Durée" — structure du morceau, durée, intro/outro
-- "Usage & Contexte" — usage final (bande-son, méditation, danse, générique…)`;
-    default:
-      return `Attribue un thème court et descriptif en français à chaque question (ex: "Style", "Contexte", "Technique").`;
-  }
+/**
+ * Seeds this engine with a library page's ambiance prompt instead of a blank
+ * field. `description` then carries the ambiance prompt (mode "ambiance") or
+ * the user's subject (mode "subject"), and the ambiance layer is passed here.
+ */
+interface AmbianceSeed {
+  mode: "ambiance" | "subject";
+  /** Ambiance prompt: the one being refined, or the frozen one for a subject. */
+  ambiancePrompt: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -50,13 +28,14 @@ export async function POST(req: NextRequest) {
     // Affinage supplémentaire is available to every authenticated user
     // (incl. free) — the monthly quota is the real limiter.
 
-    const { tool, category, useCase, description, usageContext, previousQA } = await req.json() as {
+    const { tool, category, useCase, description, usageContext, previousQA, ambianceSeed } = await req.json() as {
       tool: AITool;
       category: string;
       useCase?: string;
       description: string;
       usageContext?: string;
       previousQA: Array<{ question: string; theme: string; answer: string }>;
+      ambianceSeed?: AmbianceSeed;
     };
 
     const toolMeta = getToolById(category, tool);
@@ -72,10 +51,24 @@ export async function POST(req: NextRequest) {
       .map((item) => `- [${item.theme}] ${item.question} → "${item.answer}"`)
       .join("\n");
 
+    // Seeded run: the starting text is a library page's ambiance prompt (or a
+    // subject sitting inside a frozen one) rather than a free-form description.
+    // Same loop, same JSON contract, same theme taxonomy — only the framing swaps.
+    const seedSystem = ambianceSeed
+      ? buildSeededQuestionSystem({
+          toolName,
+          promptContext,
+          category: category as Category,
+          mode: ambianceSeed.mode,
+          ambiancePrompt: ambianceSeed.ambiancePrompt,
+          previousQACount: previousQA.length,
+        })
+      : null;
+
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
       max_tokens: 2000,
-      system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
+      system: seedSystem ?? `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
 Contexte de l'outil : ${promptContext}${useCaseBlock}
 
@@ -100,7 +93,17 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
       messages: [
         {
           role: "user",
-          content: `L'utilisateur veut créer avec ${toolName}.
+          content: ambianceSeed
+            ? ambianceSeed.mode === "ambiance"
+              ? `L'utilisateur a choisi ce prompt et veut l'ajuster pour ${toolName}.
+${previousQA.length ? `\nQuestions déjà posées et réponses obtenues :\n${previousQASummary}\n` : ""}
+Génère les questions d'affinage, bloc par bloc, en variantes légères autour des valeurs actuelles.`
+              : `L'utilisateur crée avec ${toolName}. Son sujet :
+
+"${description}"
+${previousQA.length ? `\nQuestions déjà posées et réponses obtenues :\n${previousQASummary}\n` : ""}
+Génère les questions de précision portant UNIQUEMENT sur ce sujet. La couche déjà figée ne doit jamais être rouverte.`
+            : `L'utilisateur veut créer avec ${toolName}.
 
 Description initiale : "${description}"
 ${usageContext ? `Contexte d'usage : "${usageContext}"` : "Contexte d'usage : non renseigné"}

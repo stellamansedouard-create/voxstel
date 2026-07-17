@@ -9,6 +9,8 @@ import type {
   GeneratedPrompt,
   GeneratorState,
   GeneratorStep,
+  LayeredOutput,
+  LibraryHandoff,
 } from "@/types";
 
 interface GeneratorActions {
@@ -34,6 +36,15 @@ interface GeneratorActions {
   toggleTextAspect: (id: string) => void;
   clearTextReference: () => void;
   setGeneratedPrompt: (prompt: GeneratedPrompt) => void;
+  // Library-seeded journey
+  startFromLibrary: (handoff: LibraryHandoff) => void;
+  setAmbiancePrompt: (prompt: string) => void;
+  /** Freezes the ambiance. Irreversible for the rest of the run. */
+  lockAmbiance: () => void;
+  setSubject: (subject: string) => void;
+  /** Swaps in a fresh question round (ambiance or subject) and clears answers. */
+  setLayerQuestions: (questions: DirectQuestion[], step: GeneratorStep) => void;
+  setLayeredOutput: (output: LayeredOutput) => void;
   setStep: (step: GeneratorStep) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -70,6 +81,10 @@ const initialState: ExtendedState = {
   refinePrecisionQuestions: [],
   refinePrecisionAnswers: {},
   hasUsedRefinePrecision: false,
+  ambiance: null,
+  ambianceFlow: null,
+  subject: "",
+  layeredOutput: null,
 };
 
 const STEP_ORDER: GeneratorStep[] = [
@@ -93,6 +108,11 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         tool: null,
         description: "",
         usageContext: "",
+        // Starting a category fresh drops any library-seeded run.
+        ambiance: null,
+        ambianceFlow: null,
+        subject: "",
+        layeredOutput: null,
         directQuestions: [],
         directAnswers: {},
         previousQA: [],
@@ -216,6 +236,46 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
 
     setGeneratedPrompt: (prompt) =>
       set({ generatedPrompt: prompt, step: "result", error: null }),
+
+    startFromLibrary: (handoff) =>
+      set({
+        ...initialState,
+        category: handoff.category,
+        tool: handoff.tool,
+        ambiance: {
+          prompt: handoff.ambiancePrompt,
+          locked: handoff.flow === "keep-ambiance",
+          sourcePageSlug: handoff.pageSlug,
+        },
+        ambianceFlow: handoff.flow,
+        // "keep-ambiance" skips refining and lands straight on the subject.
+        step: handoff.flow === "keep-ambiance" ? "subject" : "ambiance",
+      }),
+
+    setAmbiancePrompt: (prompt) =>
+      set((state) =>
+        state.ambiance
+          ? { ambiance: { ...state.ambiance, prompt } }
+          : {}
+      ),
+
+    lockAmbiance: () =>
+      set((state) =>
+        state.ambiance ? { ambiance: { ...state.ambiance, locked: true } } : {}
+      ),
+
+    setSubject: (subject) => set({ subject }),
+
+    setLayerQuestions: (questions, step) =>
+      set({
+        directQuestions: questions,
+        directAnswers: {},
+        step,
+        error: null,
+      }),
+
+    setLayeredOutput: (output) =>
+      set({ layeredOutput: output, step: "result", error: null }),
 
     setStep: (step) => set({ step }),
     setLoading: (isLoading) => set({ isLoading }),
