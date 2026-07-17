@@ -54,7 +54,72 @@ export interface GeneratedPrompt {
   fr: string;
 }
 
-export type GeneratorStep = "category" | "usecase" | "tool" | "description" | "adaptive" | "result";
+export type GeneratorStep =
+  | "category"
+  | "usecase"
+  | "tool"
+  | "description"
+  | "adaptive"
+  | "result"
+  /** Ambiance refining round, seeded from a library page prompt. */
+  | "ambiance"
+  /** Subject entry — the ambiance is locked from here on. */
+  | "subject"
+  /** Subject questions; may never reopen an ambiance choice. */
+  | "subject-questions";
+
+/** Which of the three library-page entry points the user took. */
+export type AmbianceFlow =
+  /** Refine the ambiance only. Stops at the refined ambiance (free layer). */
+  | "refine-ambiance"
+  /** Skip refining, go straight to the subject with the ambiance as-is. */
+  | "keep-ambiance"
+  /** Refine the ambiance, then continue to the subject. */
+  | "refine-and-subject";
+
+/**
+ * The ambiance layer — free and reusable. Once `locked` is true the subject
+ * step may read it but must never reopen its choices.
+ */
+export interface AmbianceLayer {
+  /** The ambiance prompt text: the library page's, or its refined version. */
+  prompt: string;
+  /** Set when the flow enters the subject step. */
+  locked: boolean;
+  /** The library page this ambiance came from, for attribution/analytics. */
+  sourcePageSlug?: string;
+}
+
+/**
+ * Music is the one category the target tool already splits in two, so its
+ * output keeps two fields instead of one merged prompt.
+ */
+export interface MusicLayeredOutput {
+  kind: "music";
+  /** Suno STYLE field — the locked ambiance. */
+  style: string;
+  /** Suno LYRICS field — tagged structure + lyrics (the subject layer). */
+  lyrics: string;
+}
+
+/** image / video / text: ambiance and subject merge into a single prompt. */
+export interface MergedLayeredOutput {
+  kind: "merged";
+  en: string;
+  fr: string;
+}
+
+export type LayeredOutput = MusicLayeredOutput | MergedLayeredOutput;
+
+/** Handoff payload written by a library page and read by the generator. */
+export interface LibraryHandoff {
+  category: Category;
+  tool: AITool;
+  ambiancePrompt: string;
+  flow: AmbianceFlow;
+  pageSlug: string;
+  pageTitle: string;
+}
 
 /** Cas d'usage concret dans une catégorie (ex: "Fond d'écran" pour Image).
  *  Le libellé reste grand public ; c'est questionGuidance qui apporte la
@@ -88,6 +153,13 @@ export interface GeneratorState {
   error: string | null;
   refinementCount: number;
   usageContext: string;
+  /** Set only when the run was seeded from a library page. */
+  ambiance: AmbianceLayer | null;
+  ambianceFlow: AmbianceFlow | null;
+  /** The user's subject ("what do you want to talk about"). */
+  subject: string;
+  /** Two-field music output, or the merged prompt for other categories. */
+  layeredOutput: LayeredOutput | null;
 }
 
 export type ToolCapability = "image" | "video" | "text" | "music";

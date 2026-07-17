@@ -70,6 +70,10 @@ const initialState: ExtendedState = {
   refinePrecisionQuestions: [],
   refinePrecisionAnswers: {},
   hasUsedRefinePrecision: false,
+  ambiance: null,
+  ambianceFlow: null,
+  subject: "",
+  layeredOutput: null,
 };
 
 const STEP_ORDER: GeneratorStep[] = [

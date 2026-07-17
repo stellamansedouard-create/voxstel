@@ -3,7 +3,22 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
-import type { AITool, DirectQuestion } from "@/types";
+import {
+  buildAmbianceRefineInstruction,
+  buildSubjectInstruction,
+} from "@/lib/ambiance";
+import type { AITool, Category, DirectQuestion } from "@/types";
+
+/**
+ * Seeds this engine with a library page's ambiance prompt instead of a blank
+ * field. `description` then carries the ambiance prompt (mode "ambiance") or
+ * the user's subject (mode "subject"), and the ambiance layer is passed here.
+ */
+interface AmbianceSeed {
+  mode: "ambiance" | "subject";
+  /** Ambiance prompt: the one being refined, or the frozen one for a subject. */
+  ambiancePrompt: string;
+}
 
 function getThemeHints(categoryId: string): string {
   switch (categoryId) {
@@ -50,13 +65,14 @@ export async function POST(req: NextRequest) {
     // Affinage supplémentaire is available to every authenticated user
     // (incl. free) — the monthly quota is the real limiter.
 
-    const { tool, category, useCase, description, usageContext, previousQA } = await req.json() as {
+    const { tool, category, useCase, description, usageContext, previousQA, ambianceSeed } = await req.json() as {
       tool: AITool;
       category: string;
       useCase?: string;
       description: string;
       usageContext?: string;
       previousQA: Array<{ question: string; theme: string; answer: string }>;
+      ambianceSeed?: AmbianceSeed;
     };
 
     const toolMeta = getToolById(category, tool);
@@ -72,10 +88,48 @@ export async function POST(req: NextRequest) {
       .map((item) => `- [${item.theme}] ${item.question} → "${item.answer}"`)
       .join("\n");
 
+    // Seeded run: the starting text is a library page's ambiance prompt (or a
+    // subject sitting inside a frozen one) rather than a free-form description.
+    // The loop, the JSON contract and the theme hints below are unchanged — only
+    // the framing swaps, since the "no floor / 0 questions is fine" preamble of a
+    // second round does not apply to a first pass over an injected prompt.
+    const seedSystem = ambianceSeed
+      ? `Tu es un expert en prompt engineering pour l'IA "${toolName}".
+
+Contexte de l'outil : ${promptContext}${useCaseBlock}
+
+${
+  ambianceSeed.mode === "ambiance"
+    ? buildAmbianceRefineInstruction(category as Category, ambianceSeed.ambiancePrompt)
+    : buildSubjectInstruction(category as Category, ambianceSeed.ambiancePrompt)
+}
+
+━━━ NOMBRE DE QUESTIONS ━━━
+${
+  previousQA.length === 0
+    ? `C'est le premier tour. Pose une question par axe qui mérite réellement un arbitrage — jamais moins de 2, pas de plafond haut.`
+    : `Des questions ont déjà été posées et répondues. Ne repose jamais une variante d'une question déjà traitée. S'il ne reste aucune ambiguïté réelle, retourne un tableau VIDE — 0 question est un résultat valide et souhaitable ici.`
+}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RÈGLES DE FORMAT pour chaque question :
+- 4-5 suggestions courtes et TRÈS contextuelles (3 mots max), collées au prompt injecté (pas génériques)
+- Champ "theme" obligatoire, choisi EXACTEMENT parmi les libellés ci-dessous
+
+${getThemeHints(category)}
+
+Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentaire :
+{
+  "questions": [
+    { "id": "id_snake", "label": "Question en français ?", "theme": "Thème valide", "suggestions": ["Sug 1", "Sug 2", "Sug 3", "Sug 4"] }
+  ]
+}`
+      : null;
+
     const message = await anthropic.messages.create({
       model: MODELS.haiku,
       max_tokens: 2000,
-      system: `Tu es un expert en prompt engineering pour l'IA "${toolName}".
+      system: seedSystem ?? `Tu es un expert en prompt engineering pour l'IA "${toolName}".
 
 Contexte de l'outil : ${promptContext}${useCaseBlock}
 
@@ -100,7 +154,17 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
       messages: [
         {
           role: "user",
-          content: `L'utilisateur veut créer avec ${toolName}.
+          content: ambianceSeed
+            ? ambianceSeed.mode === "ambiance"
+              ? `L'utilisateur a choisi ce prompt et veut l'ajuster pour ${toolName}.
+${previousQA.length ? `\nQuestions déjà posées et réponses obtenues :\n${previousQASummary}\n` : ""}
+Génère les questions d'affinage, bloc par bloc, en variantes légères autour des valeurs actuelles.`
+              : `L'utilisateur crée avec ${toolName}. Son sujet :
+
+"${description}"
+${previousQA.length ? `\nQuestions déjà posées et réponses obtenues :\n${previousQASummary}\n` : ""}
+Génère les questions de précision portant UNIQUEMENT sur ce sujet. La couche déjà figée ne doit jamais être rouverte.`
+            : `L'utilisateur veut créer avec ${toolName}.
 
 Description initiale : "${description}"
 ${usageContext ? `Contexte d'usage : "${usageContext}"` : "Contexte d'usage : non renseigné"}
