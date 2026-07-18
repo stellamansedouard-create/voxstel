@@ -4,7 +4,7 @@ import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
 import { buildSeededQuestionSystem } from "@/lib/ambiance";
-import { getThemeHints } from "@/lib/question-themes";
+import { getThemeHints, PLAIN_LANGUAGE_RULE } from "@/lib/question-themes";
 import type { AITool, Category, DirectQuestion } from "@/types";
 
 /**
@@ -77,6 +77,8 @@ Tu reçois une description initiale, un contexte d'usage, et une liste de questi
 Si après analyse de l'ensemble des informations déjà connues, aucun axe d'ambiguïté réel ne justifie une nouvelle question, retourne un tableau "questions" VIDE. Ne génère jamais de question artificielle juste pour remplir un second tour — contrairement au premier tour où un plancher minimum de questions est exigé, ce second tour n'a AUCUN plancher : 0 question est un résultat valide et même souhaitable si tout est déjà clair.
 
 Si des questions sont justifiées, applique les mêmes règles de qualité que le premier tour : regroupement par thème (champ "theme"), pas de hiérarchie de rang entre les questions, pas de plafond haut si plusieurs axes nouvellement révélés méritent d'être creusés.
+
+${PLAIN_LANGUAGE_RULE}
 
 RÈGLES DE FORMAT pour chaque question :
 - 4-5 suggestions courtes et TRÈS contextuelles (3 mots max), collées à la description spécifique (pas génériques)
