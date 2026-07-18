@@ -3,42 +3,8 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
+import { getThemeHints, PLAIN_LANGUAGE_RULE } from "@/lib/question-themes";
 import type { AITool, DirectQuestion } from "@/types";
-
-function getThemeHints(categoryId: string): string {
-  switch (categoryId) {
-    case "image":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Sujet & Composition" — sujet principal, personnages, éléments visuels, cadrage
-- "Style & Esthétique" — style artistique, technique, medium (photo, peinture, 3D, illustration…)
-- "Lumière & Couleurs" — éclairage, palette, heure, ambiance colorée
-- "Décor & Contexte" — lieu, environnement, époque, contexte d'usage
-- "Détails Techniques" — ratio, texte affiché, contraintes spécifiques à l'outil`;
-    case "video":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Action & Scène" — sujet, action principale, personnages
-- "Style Visuel" — esthétique, références visuelles, grade colorimétrique
-- "Mouvement & Rythme" — mouvements caméra, transitions, rythme de montage
-- "Ambiance & Atmosphère" — humeur, émotion, son d'ambiance
-- "Détails Techniques" — durée, format, plateforme de destination`;
-    case "text":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Sujet & Contenu" — tâche précise, périmètre, angle
-- "Audience & Ton" — destinataire, niveau, registre, voix
-- "Structure & Format" — longueur, mise en forme, plan, format de sortie
-- "Objectif & Contraintes" — but final (SEO, conversion, documentation…), ce qu'il faut éviter
-- "Technique" — langage, framework, version, environnement (pour les demandes de code)`;
-    case "music":
-      return `Thèmes valides pour cette catégorie (utilise exactement ces libellés dans le champ "theme") :
-- "Style & Genre" — genre, sous-genre, ère musicale, influences
-- "Instrumentation" — instruments, arrangement, présence vocale
-- "Énergie & Émotion" — tempo, intensité, humeur, dynamique
-- "Structure & Durée" — structure du morceau, durée, intro/outro
-- "Usage & Contexte" — usage final (bande-son, méditation, danse, générique…)`;
-    default:
-      return `Attribue un thème court et descriptif en français à chaque question (ex: "Style", "Contexte", "Technique").`;
-  }
-}
 
 function getQQOQCPAxes(categoryId: string): string {
   switch (categoryId) {
@@ -163,6 +129,8 @@ a) APPROFONDIR quelque chose de VAGUE/GÉNÉRIQUE déjà mentionné
    → Ex : "ambiance sombre" → "Quelle nuance d'ambiance sombre ?" + suggestions : Oppressant, Mélancolique, Mystérieux, Inquiétant
 b) COMBLER un MANQUE ESSENTIEL détecté dans l'analyse QQOQCP
    → Question ciblée + suggestions adaptées au contexte précis
+
+${PLAIN_LANGUAGE_RULE}
 
 RÈGLES DE FORMAT pour chaque question :
 - 4-5 suggestions courtes et TRÈS contextuelles (3 mots max), collées à la description spécifique (pas génériques)

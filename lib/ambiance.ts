@@ -16,7 +16,12 @@
 //
 // Everything in this file that reaches the user says "Voxstel". The system
 // instructions below are internal and are never rendered.
-import { getThemeHints } from "@/lib/question-themes";
+import {
+  DEPTH_BY_AMBIGUITY_RULE,
+  getSubjectCoverage,
+  getThemeHints,
+  PLAIN_LANGUAGE_RULE,
+} from "@/lib/question-themes";
 import type { AmbianceFlow, Category } from "@/types";
 
 /** Whether the category's output keeps two fields instead of one merged prompt. */
@@ -179,14 +184,14 @@ export function buildAmbianceRefineInstruction(
 
   const blockGuidance = blocks.length
     ? `Ce prompt est découpé en blocs nommés. Traite CHAQUE bloc ci-dessous comme un axe d'affinage distinct et pose une question ciblée par bloc qui mérite un arbitrage :
-${blocks.map((b) => `- [${b.tag}] — valeur actuelle : ${b.body || "(vide)"}`).join("\n")}
+${blocks.map((b) => `- [${b.tag}] — valeur actuelle (INTERNE, à traduire, ne jamais citer telle quelle) : ${b.body || "(vide)"}`).join("\n")}
 
-Chaque question doit nommer la valeur actuelle du bloc et proposer des variantes LÉGÈRES autour d'elle. Exemple de la forme attendue : « garder l'influence East Coast 90s, ou une variante plus [proche] ? ». Les suggestions restent dans le voisinage immédiat de la valeur actuelle.`
+La valeur actuelle de chaque bloc est écrite en langage technique : elle t'est donnée UNIQUEMENT pour que tu saches de quoi parle le bloc. Ne la cite jamais dans la question. Traduis son esprit en mots du quotidien, puis propose des variantes LÉGÈRES autour, elles aussi en langage simple. Exemple de la forme attendue : d'un bloc lumière « magenta and cyan neon glow, high contrast », tu poses « Des néons roses/bleus bien flashy, ou une lumière plus douce ? » — jamais « garder le contraste écrasé magenta-cyan ? ».`
     : `Ce prompt n'a pas de blocs nommés. Découpe-le toi-même en axes cohérents (${
         category === "music"
-          ? "genre, instrumentation, voix, mix, tempo"
-          : "style, lumière, couleurs, cadrage, matière"
-      }) et pose une question ciblée par axe qui mérite un arbitrage.`;
+          ? "genre, instruments, voix, énergie, tempo"
+          : "ambiance générale, lumière, couleurs, cadrage, rendu"
+      }) et pose une question ciblée par axe qui mérite un arbitrage, en langage simple.`;
 
   return `Voici un prompt ${w.ambiance === "le style" ? "de style" : "d'ambiance"} ${category}. L'utilisateur l'a choisi délibérément : il en veut les grandes lignes. Interroge-le pour vérifier que c'est bien ce qu'il veut et affine-le.
 
@@ -199,8 +204,12 @@ RÈGLES ABSOLUES :
       ? "le thème, l'histoire ou les paroles"
       : "le sujet, le personnage ou ce qui est représenté"
   } — cette couche est traitée séparément, plus tard.
-- N'explique jamais à l'utilisateur comment un prompt est construit et n'emploie aucun vocabulaire de prompt engineering dans les questions. Parle du résultat, pas de la technique.
+- N'explique jamais à l'utilisateur comment un prompt est construit. Parle du résultat, pas de la technique.
 - Ne mentionne jamais la technologie sous-jacente. Le produit s'appelle Voxstel.
+
+${PLAIN_LANGUAGE_RULE}
+
+${DEPTH_BY_AMBIGUITY_RULE}
 
 Prompt ${w.ambiance === "le style" ? "de style" : "d'ambiance"} à affiner :
 """
@@ -231,17 +240,25 @@ Ton rôle porte EXCLUSIVEMENT sur ${w.subject} : ${
       ? "le thème du morceau, son déroulé et ses paroles"
       : category === "text"
         ? "le métier, le secteur et le parcours auxquels adapter la structure"
-        : "ce qui est représenté dans la scène (personnage, objet, action, pose, précision technique)"
+        : "ce qui est représenté dans la scène (personnage, objet, action, pose)"
   }.
+
+━━━ DIMENSIONS À COUVRIR ━━━
+${getSubjectCoverage(category)}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${DEPTH_BY_AMBIGUITY_RULE}
 
 RÈGLES ABSOLUES :
 - Ne pose AUCUNE question qui rouvrirait ${w.ambiance} (${
     category === "music"
-      ? "genre, instrumentation, voix, mix, tempo"
-      : "style, lumière, couleurs, grain, esthétique"
-  }). Ces choix sont faits.
-- N'explique jamais comment un prompt est construit et n'emploie aucun vocabulaire de prompt engineering. Parle du résultat, pas de la technique.
-- Ne mentionne jamais la technologie sous-jacente. Le produit s'appelle Voxstel.`;
+      ? "genre, instruments, voix, mix, tempo"
+      : "style, lumière, couleurs, rendu, esthétique"
+  }). Ces choix sont faits. En revanche, la façon dont le sujet s'INTÈGRE à cette ambiance (comment la lumière de la scène tombe sur lui, s'il est mouillé par la pluie…) fait partie du sujet et se questionne.
+- N'explique jamais comment un prompt est construit. Parle du résultat, pas de la technique.
+- Ne mentionne jamais la technologie sous-jacente. Le produit s'appelle Voxstel.
+
+${PLAIN_LANGUAGE_RULE}`;
 }
 
 /** How the seeded round is framed: a first pass, or a loop-back. */
@@ -270,7 +287,7 @@ export function buildSeededQuestionSystem(ctx: SeededQuestionContext): string {
 
   const countRule =
     ctx.previousQACount === 0
-      ? `C'est le premier tour. Pose une question par axe qui mérite réellement un arbitrage — jamais moins de 2, pas de plafond haut.`
+      ? `C'est le premier tour. Couvre toutes les dimensions listées plus haut qui restent indéterminées — une entrée vague en appelle beaucoup, pas peu. Pas de plafond, et un plancher élevé quand tout reste à préciser : ne t'arrête jamais à 2-3 questions si des dimensions clés sont encore floues.`
       : `Des questions ont déjà été posées et répondues. Ne repose jamais une variante d'une question déjà traitée. S'il ne reste aucune ambiguïté réelle, retourne un tableau VIDE — 0 question est un résultat valide et souhaitable ici.`;
 
   return `Tu es un expert en prompt engineering pour l'IA "${ctx.toolName}".
