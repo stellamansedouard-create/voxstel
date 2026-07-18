@@ -59,8 +59,9 @@ Free vs paid:
   API) and, inside the refine-and-subject flow, the *intermediate* ambiance
   refine (`/api/ambiance/apply`) that only feeds the paid subject.
 - **Paid** — every delivered generation: a refined ambiance that is the end
-  product (refine-ambiance flow, only when the user actually changed something),
-  and every subject.
+  product (refine-ambiance flow, as soon as it reaches the final delivery step,
+  whether or not the result differs from the page's raw prompt), and every
+  subject.
 
 ## The ambiance lock
 

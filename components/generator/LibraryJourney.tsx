@@ -169,15 +169,9 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
       return;
     }
 
-    // refine-ambiance: the refined ambiance is the delivered product.
-    // No answers means the prompt is untouched — the same free raw copy the
-    // page already offers, so it is shown as-is, gate-free and uncharged.
-    if (entries.length === 0) {
-      store.setStep("result");
-      return;
-    }
-
-    // Answers present: this is a paid delivery through the engine.
+    // refine-ambiance: the refined ambiance IS the delivered product, so it is
+    // a paid delivery — 1 credit as soon as the flow reaches this final step,
+    // whether or not the result differs from the page's raw prompt.
     store.setLoading(true);
     store.setError(null);
     try {
