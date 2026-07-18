@@ -66,7 +66,9 @@ export type GeneratorStep =
   /** Subject entry — the ambiance is locked from here on. */
   | "subject"
   /** Subject questions; may never reopen an ambiance choice. */
-  | "subject-questions";
+  | "subject-questions"
+  /** Shown when a delivery is blocked at 0 credits. */
+  | "paywall";
 
 /** Which of the three library-page entry points the user took. */
 export type AmbianceFlow =
