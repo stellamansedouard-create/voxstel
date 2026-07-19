@@ -74,6 +74,25 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
       if (!ambiance || !store.tool) return;
       store.setLoading(true);
       store.setError(null);
+
+      // Wall off a 0-credit user BEFORE the question engine spends a call. This
+      // is a UX pre-gate only; the server-side delivery gates still enforce.
+      // Fail open on any non-401 read error so a transient blip can't block a
+      // paying user — the delivery gate will still catch a real 0 balance.
+      try {
+        const balRes = await fetch("/api/credits/balance");
+        if (balRes.status === 401) return bounceToLogin();
+        if (balRes.ok) {
+          const bal = (await balRes.json()) as {
+            credits: number;
+            unlimited: boolean;
+          };
+          if (!bal.unlimited && bal.credits < 1) return showPaywall();
+        }
+      } catch {
+        // network hiccup -> fall through, server gate still protects delivery
+      }
+
       try {
         const res = await fetch("/api/refine-precision", {
           method: "POST",

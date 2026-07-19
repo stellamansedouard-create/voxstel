@@ -53,6 +53,16 @@ insert refunds the credit.
 Billing unit = one **delivered** prompt, never one question round. A refining
 run may ask 8 questions before delivering: still exactly 1 credit.
 
+**Entry pre-gate.** `LibraryJourney` checks the balance (read-only
+`GET /api/credits/balance`) before the first question round, so a 0-credit user
+sees the paywall on entry instead of after the question engine has spent a call.
+This is a UX/cost guard specific to the library journey — it does **not** touch
+the shared `/api/refine-precision` route or the classic generator (which runs on
+the legacy quota, not credits). It is not the enforcement point: the server-side
+delivery gates (`/api/deliver`, `/api/ambiance/apply`) remain the real wall, and
+the pre-gate fails open on a read error so a transient blip can't block a paying
+user.
+
 Free vs paid:
 
 - **Free** — copying a page's raw prompt (`CopyablePrompt`, pure clipboard, no
