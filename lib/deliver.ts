@@ -84,14 +84,23 @@ export interface DeliverGeneratedPromptResult {
  *   3. On success, charge 1 credit + write one prompts_history row as a single
  *      logical unit (see chargeAndRecord).
  */
+/**
+ * Shared pre-gate for EVERY paid generation entry point — the library journey
+ * (deliverGeneratedPrompt) and the classic /generate/* generator
+ * (app/api/generate-prompt). Reads the balance and refuses BEFORE any model
+ * call when a metered user is out of credits. Read-only — decrements nothing.
+ * Throws InsufficientCreditsError (routes map it to HTTP 402 -> paywall).
+ */
+export async function assertCanGenerate(userId: string): Promise<void> {
+  const { credits, unlimited } = await getBalance(userId);
+  if (!unlimited && credits < 1) throw new InsufficientCreditsError();
+}
+
 export async function deliverGeneratedPrompt(
   input: DeliverGeneratedPromptInput
 ): Promise<DeliverGeneratedPromptResult> {
   // 1. Gate first — never burn an engine call for a user who cannot be charged.
-  const { credits, unlimited } = await getBalance(input.userId);
-  if (!unlimited && credits < 1) {
-    throw new InsufficientCreditsError();
-  }
+  await assertCanGenerate(input.userId);
 
   // 2. Generate (no charge yet — a failed model call must cost nothing).
   let output: LayeredOutput | null = null;
@@ -140,21 +149,23 @@ export async function deliverGeneratedPrompt(
   return { layer: input.layer, output, ambiance, balance };
 }
 
-interface ChargeAndRecordParams {
+export interface ChargeAndRecordParams {
   userId: string;
-  layer: "ambiance" | "subject";
   category: Category;
   tool: AITool;
-  sourcePageSlug: string | null;
-  questionsAnswers: QAEntry[];
   promptEn: string;
   promptFr: string | null;
+  /** Library journey only — omitted by the classic generator (single prompt). */
+  layer?: "ambiance" | "subject";
+  sourcePageSlug?: string | null;
+  questionsAnswers?: QAEntry[];
 }
 
 /**
- * Consumes 1 credit AND writes the prompts_history row as one logical unit:
- * either both land or neither does. deductCredit() (Prompt 1) is reused as-is —
- * it atomically decrements and appends to credit_transactions. If the history
+ * The single charge-and-record unit, shared by BOTH generators. Consumes 1
+ * credit AND writes the prompts_history row as one logical unit: either both
+ * land or neither does. deductCredit() (Prompt 1) is reused as-is — it
+ * atomically decrements and appends to credit_transactions. If the history
  * insert then fails, the credit is refunded via grantCredits(), so there is
  * never a decremented credit without a matching history row, nor the reverse.
  *
@@ -162,15 +173,28 @@ interface ChargeAndRecordParams {
  * returns null); there is nothing to refund for them, so compensation is
  * skipped when balance is null.
  *
+ * The library journey passes layer/source_page/qa (persisted in
+ * questions_answers); the classic generator passes none, so questions_answers
+ * stays NULL exactly as its previous raw insert left it.
+ *
  * Returns the new balance (number), or null for unlimited users.
  */
-async function chargeAndRecord(p: ChargeAndRecordParams): Promise<number | null> {
+export async function chargeAndRecord(
+  p: ChargeAndRecordParams
+): Promise<number | null> {
   const balance = await deductCredit(p.userId, "generation", {
-    layer: p.layer,
     category: p.category,
     tool: p.tool,
-    source_page: p.sourcePageSlug,
+    layer: p.layer ?? null,
+    source_page: p.sourcePageSlug ?? null,
   });
+
+  // Library deliveries carry journey attribution; the classic generator has
+  // none, so its questions_answers is NULL (unchanged from the old insert).
+  const hasJourneyMeta =
+    p.layer !== undefined ||
+    (p.sourcePageSlug ?? null) !== null ||
+    (p.questionsAnswers?.length ?? 0) > 0;
 
   const { error } = await createServerSupabase()
     .from("prompts_history")
@@ -182,11 +206,13 @@ async function chargeAndRecord(p: ChargeAndRecordParams): Promise<number | null>
       prompt_fr: p.promptFr,
       // No dedicated layer/source_page columns — carry both in the JSON, using
       // the shape questions_answers already uses elsewhere.
-      questions_answers: {
-        layer: p.layer,
-        source_page: p.sourcePageSlug,
-        qa: p.questionsAnswers,
-      },
+      questions_answers: hasJourneyMeta
+        ? {
+            layer: p.layer ?? null,
+            source_page: p.sourcePageSlug ?? null,
+            qa: p.questionsAnswers ?? [],
+          }
+        : null,
     });
 
   if (error) {

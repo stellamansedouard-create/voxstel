@@ -4,9 +4,9 @@ import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
-import { checkQuota, incrementQuota } from "@/lib/quota";
-import { createServerSupabase } from "@/lib/supabase";
-import type { AITool, GeneratedPrompt, ImageAspect } from "@/types";
+import { assertCanGenerate, chargeAndRecord } from "@/lib/deliver";
+import { InsufficientCreditsError } from "@/lib/credits";
+import type { AITool, Category, GeneratedPrompt, ImageAspect } from "@/types";
 
 interface TrackingPayload {
   utm_source?: string;
@@ -37,10 +37,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
-    const quotaStatus = await checkQuota(user.id, user.email ?? undefined);
-    if (!quotaStatus || !quotaStatus.allowed) {
-      return NextResponse.json({ error: "quota_exceeded" }, { status: 429 });
-    }
+    // Credits pre-check — same gate as the library journey (lib/deliver.ts):
+    // read the balance BEFORE any Anthropic call. 0 credits (non-unlimited)
+    // throws InsufficientCreditsError -> mapped to 402 in the catch below.
+    // The classic generator now runs on credits, not the legacy monthly quota.
+    await assertCanGenerate(user.id);
 
     const model = useSonnet ? MODELS.sonnet : MODELS.haiku;
     const toolMeta = getToolById(category, tool);
@@ -117,24 +118,18 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       throw new Error("Failed to parse prompt JSON");
     }
 
-    // Quota increment — fire-and-forget, only for plans with a monthly limit
-    if (quotaStatus.limit !== null) {
-      void incrementQuota(user.id, quotaStatus.quotaUsed).catch((e) =>
-        console.error("[quota]", e)
-      );
-    }
-
-    // Prompt history — awaited to catch schema/table errors in Vercel logs
-    {
-      const { error: histErr } = await createServerSupabase()
-        .from("prompts_history")
-        .insert({ user_id: user.id, category, tool, prompt_en: result.en, prompt_fr: result.fr });
-      if (histErr) {
-        console.error("[prompts_history] INSERT failed — message:", histErr.message, "| code:", histErr.code, "| details:", histErr.details, "| hint:", histErr.hint);
-      } else {
-        console.log("[prompts_history] INSERT ok — user:", user.id, "category:", category);
-      }
-    }
+    // Charge 1 credit + write prompts_history as one logical unit — the same
+    // chargeAndRecord() the library journey uses (lib/deliver.ts). No layer /
+    // source_page here (single blank-field prompt), so questions_answers stays
+    // NULL, exactly as the previous raw insert left it. A failed history write
+    // refunds the credit inside chargeAndRecord.
+    await chargeAndRecord({
+      userId: user.id,
+      category: category as Category,
+      tool,
+      promptEn: result.en,
+      promptFr: result.fr ?? null,
+    });
 
     // Analytics — fire-and-forget
     void trackEvent({
@@ -150,6 +145,12 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
 
     return NextResponse.json(result);
   } catch (error) {
+    // 0 credits — from the pre-check, or lost to a concurrent generation at
+    // charge time. Same 402 signal the library journey returns, so the front
+    // shows the same paywall.
+    if (error instanceof InsufficientCreditsError) {
+      return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
     console.error("generate-prompt error:", error);
     return NextResponse.json(
       { error: "Erreur lors de la génération du prompt" },
