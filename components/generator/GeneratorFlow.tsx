@@ -108,10 +108,33 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     [store]
   );
 
+  // Entry pre-gate, mirroring the library journey: at 0 credits, wall off
+  // BEFORE the question engine (/api/analyze-description) spends an Anthropic
+  // call. Read-only. Fails open on a read error so a transient blip can't block
+  // a paying user — the server-side gate on /api/generate-prompt still enforces.
+  const outOfCredits = useCallback(async (): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/credits/balance");
+      if (res.ok) {
+        const bal = (await res.json()) as { credits: number; unlimited: boolean };
+        return !bal.unlimited && bal.credits < 1;
+      }
+    } catch {
+      // network hiccup -> fall through, server gate still protects generation
+    }
+    return false;
+  }, []);
+
   const handleDescriptionSubmit = useCallback(async () => {
     if (!store.description.trim() || !store.tool) return;
     store.setLoading(true);
     store.setError(null);
+
+    if (await outOfCredits()) {
+      setPaywalled(true);
+      store.setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/analyze-description", {
@@ -307,6 +330,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
 
   // Called on mount when returning from login — uses pending values directly to avoid stale closure
   async function autoAnalyzeAndAdvance(pending: { useCase?: string | null; tool: AITool; description: string; usageContext: string }) {
+    if (await outOfCredits()) {
+      setPaywalled(true);
+      store.setLoading(false);
+      return;
+    }
     try {
       const res = await fetch("/api/analyze-description", {
         method: "POST",
