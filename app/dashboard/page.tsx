@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PromptHistoryList from "@/components/dashboard/PromptHistoryList";
 import DeleteAccountButton from "@/components/dashboard/DeleteAccountButton";
@@ -9,25 +8,11 @@ import AnalyticsCharts from "@/components/dashboard/AnalyticsCharts";
 import type { PromptHistoryItem } from "@/components/dashboard/PromptHistoryList";
 import { getCurrentUser, ensureUserRow } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
-import { PRICING } from "@/lib/pricing";
+import { getBalance } from "@/lib/credits";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dashboard — Voxstel",
-};
-
-const PLAN_LABELS: Record<string, string> = {
-  free: "Free",
-  pro: "Pro",
-  unlimited: "Illimité",
-  promax: "Pro Max",
-};
-
-const PLAN_BADGE: Record<string, string> = {
-  free: "bg-card-hover text-muted border-border",
-  pro: "bg-blue-50 text-blue-700 border-blue-200",
-  unlimited: "bg-accent/10 text-accent border-accent/30",
-  promax: "bg-accent/10 text-accent border-accent/30",
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -60,52 +45,34 @@ export default async function DashboardPage() {
   ).toISOString();
 
   // Toutes les requêtes en parallèle
-  const [
-    { data: userData },
-    { data: allEvents },
-    { data: recentEvents },
-    { data: promptsRaw },
-  ] = await Promise.all([
-    supabase
-      .from("users")
-      .select("plan, quota_used, quota_reset_date")
-      .eq("id", user.id)
-      .single(),
-    supabase
-      .from("analytics_events")
-      .select("prompt_category, created_at")
-      .eq("user_id", user.id)
-      .eq("event_type", "prompt_generated"),
-    supabase
-      .from("analytics_events")
-      .select("prompt_category, created_at")
-      .eq("user_id", user.id)
-      .eq("event_type", "prompt_generated")
-      .gte("created_at", thirtyDaysAgo)
-      .order("created_at", { ascending: true }),
-    supabase
-      .from("prompts_history")
-      .select("id, category, tool, prompt_en, prompt_fr, created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10),
-  ]);
+  const [balance, { data: allEvents }, { data: recentEvents }, { data: promptsRaw }] =
+    await Promise.all([
+      getBalance(user.id),
+      supabase
+        .from("analytics_events")
+        .select("prompt_category, created_at")
+        .eq("user_id", user.id)
+        .eq("event_type", "prompt_generated"),
+      supabase
+        .from("analytics_events")
+        .select("prompt_category, created_at")
+        .eq("user_id", user.id)
+        .eq("event_type", "prompt_generated")
+        .gte("created_at", thirtyDaysAgo)
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("prompts_history")
+        .select("id, category, tool, prompt_en, prompt_fr, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10),
+    ]);
 
-  // ── Plan & quota ────────────────────────────────────────────────
-  const plan = (userData?.plan ?? "free") as keyof typeof PRICING;
-  const quotaUsed = userData?.quota_used ?? 0;
-  const quotaReset = userData?.quota_reset_date
-    ? new Date(userData.quota_reset_date).toLocaleDateString("fr-FR", {
-        day: "numeric",
-        month: "long",
-      })
-    : null;
-  const planInfo = PRICING[plan];
-  const quotaLimit = planInfo?.monthlyLimit ?? 5;
-  const isUnlimited = quotaLimit === null;
-  const quotaPercent = isUnlimited
-    ? 0
-    : Math.min(100, (quotaUsed / (quotaLimit ?? 1)) * 100);
+  // ── Crédits ─────────────────────────────────────────────────────
+  // Balance from lib/credits.getBalance(): `unlimited` is gated on the 19€/mo
+  // subscription PRICE, not on subscription_status alone. Credits do NOT reset
+  // monthly — there is no reset date to show.
+  const { credits, unlimited } = balance;
 
   // ── KPIs ────────────────────────────────────────────────────────
   const events = allEvents ?? [];
@@ -161,9 +128,14 @@ export default async function DashboardPage() {
 
   const prompts: PromptHistoryItem[] = promptsRaw ?? [];
 
+  const memberSince = signupDate.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <>
-      <Header />
       <main className="min-h-screen bg-background pt-24 pb-20 px-4">
         <div className="max-w-4xl mx-auto space-y-12">
 
@@ -179,16 +151,8 @@ export default async function DashboardPage() {
           <section>
             <SectionTitle>Utilisation</SectionTitle>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <KpiCard
-                label="Total généré"
-                value={total}
-                sub="prompts"
-              />
-              <KpiCard
-                label="Ce mois"
-                value={thisMonth}
-                sub="prompts"
-              />
+              <KpiCard label="Total généré" value={total} sub="prompts" />
+              <KpiCard label="Ce mois" value={thisMonth} sub="prompts" />
               <KpiCard
                 label="Catégorie favorite"
                 value={
@@ -202,92 +166,73 @@ export default async function DashboardPage() {
                     : undefined
                 }
               />
-              <KpiCard
-                label="Moyenne / jour"
-                value={avgPerDay}
-                sub="par jour"
-              />
+              <KpiCard label="Moyenne / jour" value={avgPerDay} sub="par jour" />
             </div>
           </section>
 
-          {/* ── Abonnement ────────────────────────────────────── */}
+          {/* ── Crédits ───────────────────────────────────────── */}
           <section>
-            <SectionTitle>Abonnement</SectionTitle>
+            <SectionTitle>Crédits</SectionTitle>
             <div className="grid sm:grid-cols-2 gap-4">
 
-              {/* Plan */}
+              {/* Solde */}
               <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">
-                  Plan actuel
+                  Solde
                 </p>
-                <div className="mb-4">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold border ${PLAN_BADGE[plan] ?? PLAN_BADGE.free}`}
-                  >
-                    {PLAN_LABELS[plan] ?? plan}
-                  </span>
-                </div>
+                {unlimited ? (
+                  <div>
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold border bg-accent/10 text-accent border-accent/30">
+                      Illimité
+                    </span>
+                    <p className="text-sm text-muted mt-3">
+                      Générations illimitées — aucun crédit décompté.
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex items-end gap-1.5 mb-1">
+                      <span className="text-3xl font-bold text-foreground tabular-nums">
+                        {credits}
+                      </span>
+                      <span className="text-muted pb-1">
+                        crédit{credits !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted">
+                      1 crédit = 1 prompt généré par le moteur. Les crédits
+                      n&apos;expirent pas.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Offre */}
+              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">
+                  Votre offre
+                </p>
+                <p className="text-base font-semibold text-foreground mb-1">
+                  {unlimited ? "Abonnement Illimité — 19 €/mois" : "Crédits à l'acte"}
+                </p>
                 <p className="text-xs text-muted mb-4">
-                  Membre depuis{" "}
-                  {signupDate.toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  Membre depuis {memberSince}
                   <span className="text-muted/60 ml-1">
                     ({daysSinceSignup} jour{daysSinceSignup > 1 ? "s" : ""})
                   </span>
                 </p>
                 <div className="flex items-center gap-4 flex-wrap">
-                  <Link
-                    href="/pricing"
-                    className="text-sm text-accent font-medium hover:underline inline-flex items-center gap-1"
-                  >
-                    Voir les offres <span aria-hidden>→</span>
-                  </Link>
-                  {plan !== "free" && <ManageSubscriptionButton />}
+                  {unlimited ? (
+                    <ManageSubscriptionButton />
+                  ) : (
+                    <Link
+                      href="/pricing"
+                      className="text-sm text-accent font-medium hover:underline inline-flex items-center gap-1"
+                    >
+                      Acheter des crédits <span aria-hidden>→</span>
+                    </Link>
+                  )}
                 </div>
-              </div>
-
-              {/* Quota */}
-              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">
-                  Quota ce mois
-                </p>
-                {isUnlimited ? (
-                  <div>
-                    <p className="text-2xl font-bold text-foreground mb-1">
-                      Illimité
-                    </p>
-                    <p className="text-sm text-muted">
-                      {quotaUsed} génération{quotaUsed !== 1 ? "s" : ""} ce mois
-                    </p>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="flex items-end gap-1.5 mb-3">
-                      <span className="text-2xl font-bold text-foreground tabular-nums">
-                        {quotaUsed}
-                      </span>
-                      <span className="text-muted pb-0.5">/ {quotaLimit}</span>
-                    </div>
-                    <div className="w-full h-2 bg-card-hover rounded-full overflow-hidden mb-2">
-                      <div
-                        className="h-full bg-accent rounded-full transition-all duration-500"
-                        style={{ width: `${quotaPercent}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted">
-                      {(quotaLimit ?? 0) - quotaUsed} restant
-                      {(quotaLimit ?? 0) - quotaUsed !== 1 ? "s" : ""}
-                      {quotaReset && (
-                        <span className="ml-1">
-                          — réinit. le {quotaReset}
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
           </section>
@@ -316,8 +261,10 @@ export default async function DashboardPage() {
 
           {/* ── Gestion de compte ───────────────────────────────── */}
           <section className="pt-8 border-t border-border">
-            <h2 className="text-base font-bold text-foreground mb-4">Gestion de compte</h2>
-            <DeleteAccountButton isPaidPlan={plan !== "free"} />
+            <h2 className="text-base font-bold text-foreground mb-4">
+              Gestion de compte
+            </h2>
+            <DeleteAccountButton isPaidPlan={unlimited} />
           </section>
 
         </div>
