@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Lock, RefreshCcw, MapPin, ShieldCheck } from "lucide-react";
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getCurrentUser } from "@/lib/auth";
 
@@ -50,7 +49,6 @@ export default async function HomePage() {
   const isLoggedIn = !!user;
   return (
     <>
-      <Header />
       <main className="bg-background overflow-x-hidden">
 
         {/* ─────────────────────────────────────────────────────────────

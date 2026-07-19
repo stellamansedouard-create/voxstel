@@ -1,4 +1,3 @@
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import type { Metadata } from "next";
 
@@ -9,7 +8,6 @@ export const metadata: Metadata = {
 export default function PolitiqueConfidentialitePage() {
   return (
     <>
-      <Header />
       <main className="min-h-screen bg-background pt-24 pb-20 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-2xl font-bold text-foreground mb-1">
