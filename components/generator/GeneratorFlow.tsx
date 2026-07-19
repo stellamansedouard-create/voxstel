@@ -56,14 +56,6 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       return;
     }
 
-    // Reached the generator without a handoff: any journey left in the store is
-    // from a previous run and must not resurface here.
-    if (useGeneratorStore.getState().ambiance) {
-      store.reset();
-      store.setCategory(category);
-      return;
-    }
-
     // After login redirect: replay analyze-description automatically with saved values
     const pendingRaw = localStorage.getItem("vx_pending_description");
     if (pendingRaw) {
@@ -93,9 +85,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         localStorage.removeItem("vx_pending_description");
       }
     }
-    if (store.step === "category" || store.category !== category) {
-      store.setCategory(category);
-    }
+    // Any other entry into /generate/[category] — direct nav, a category switch,
+    // or returning after a completed run — starts from a CLEAN form. The Zustand
+    // store persists across client-side navigations, so without this
+    // UNCONDITIONAL reset on mount a finished run (its result, a leftover library
+    // journey, prior answers) would resurface instead of an empty form. This is
+    // the single source of the reset: it must not depend on a nav link calling
+    // reset(), or any new entry point to /generate/* reintroduces the bug.
+    store.reset();
+    store.setCategory(category);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSelectUseCase = useCallback(
