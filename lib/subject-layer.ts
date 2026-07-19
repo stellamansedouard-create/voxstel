@@ -1,9 +1,10 @@
-// Layer 2 — the subject. THE seam for Prompt 4.
+// Layer 2 — the subject. Pure generation, no gating.
 //
-// deliverSubjectLayer() is the single delivery point for the subject layer.
-// Prompt 4 adds `deductCredit` + the 0-credit paywall at the marker below and
-// nowhere else, so it stays a tiny diff. For now delivery is free and ungated
-// so the whole journey is testable end to end without spending anything.
+// generateSubjectPrompt() only turns the frozen ambiance + subject into the
+// final prompt. Balance check, credit decrement and history are owned by the
+// single delivery seam deliverGeneratedPrompt() in lib/deliver.ts, which is the
+// only thing allowed to call this. Keeping generation gate-free means the seam
+// can run it, then charge exactly once on success.
 //
 // How the ambiance stays frozen, per category:
 //
@@ -26,8 +27,7 @@ import type {
   MusicLayeredOutput,
 } from "@/types";
 
-export interface DeliverSubjectLayerParams {
-  userId: string;
+export interface GenerateSubjectPromptParams {
   category: Category;
   tool: AITool;
   /** Must be locked — the subject step may read it but never reopen it. */
@@ -40,21 +40,15 @@ export interface DeliverSubjectLayerParams {
 }
 
 /**
- * Delivers the subject layer merged with the frozen ambiance.
- * This is the ONE place layer 2 is handed to the user.
+ * Generates the subject layer merged with the frozen ambiance. Pure: no balance
+ * check, no decrement, no history — the delivery seam owns all of that.
  */
-export async function deliverSubjectLayer(
-  params: DeliverSubjectLayerParams
+export async function generateSubjectPrompt(
+  params: GenerateSubjectPromptParams
 ): Promise<LayeredOutput> {
-  // TODO(prompt-4): consume 1 credit + paywall here.
-  //   const balance = await getBalance(params.userId);
-  //   if (!balance.unlimited && balance.credits < 1) throw new PaywallError();
-  //   await deductCredit(params.userId, "generation", { category: params.category });
-  // Deliberately ungated for now — the journey must produce its output for free.
-
   if (!params.ambiance.locked) {
     throw new Error(
-      "deliverSubjectLayer called with an unlocked ambiance — the ambiance must be frozen before the subject step."
+      "generateSubjectPrompt called with an unlocked ambiance — the ambiance must be frozen before the subject step."
     );
   }
 
@@ -65,7 +59,7 @@ export async function deliverSubjectLayer(
 
 /** Suno: STYLE is the frozen ambiance verbatim; only LYRICS is generated. */
 async function deliverMusicLayers(
-  params: DeliverSubjectLayerParams
+  params: GenerateSubjectPromptParams
 ): Promise<MusicLayeredOutput> {
   const { tool, ambiance, subject, subjectAnswers, useSonnet } = params;
   const toolMeta = getToolById("music", tool);
@@ -121,7 +115,7 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown :
 
 /** image / video / text: the subject is woven into the frozen ambiance. */
 async function deliverMergedPrompt(
-  params: DeliverSubjectLayerParams
+  params: GenerateSubjectPromptParams
 ): Promise<MergedLayeredOutput> {
   const { category, tool, ambiance, subject, subjectAnswers, useSonnet } = params;
   const toolMeta = getToolById(category, tool);

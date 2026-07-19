@@ -34,17 +34,44 @@ blank-field flow is untouched.
 | Library pages (seed data — the real catalogue does not exist yet) | `lib/library.ts` |
 | The 3 buttons | `components/library/AmbianceActions.tsx` |
 | Page → generator handoff (sessionStorage) | `lib/ambiance-handoff.ts` |
-| Layer 1 — ambiance (free) | `lib/ambiance-layer.ts` |
-| Layer 2 — subject (**the Prompt 4 seam**) | `lib/subject-layer.ts` |
+| Ambiance generation (refine) | `lib/ambiance-layer.ts` |
+| Subject generation (pure) | `lib/subject-layer.ts` |
+| **The delivery seam — balance check, credit, history** | `lib/deliver.ts` |
 | Flow orchestration | `components/generator/LibraryJourney.tsx` |
 
-## Prompt 4 seam
+## The delivery seam (Prompt 4)
 
-`deliverSubjectLayer()` in `lib/subject-layer.ts` is the single delivery point
-for layer 2, called from exactly one place (`app/api/subject/deliver/route.ts`).
-The `TODO(prompt-4)` marker at the top of the function is where `deductCredit` +
-the 0-credit paywall go. Nothing is gated or counted today — the journey
-delivers for free so it can be tested without spending a credit.
+`deliverGeneratedPrompt()` in `lib/deliver.ts` is the single gated entry point
+for BOTH engine outputs the journey delivers — the refined ambiance and the
+subject — called from exactly one route (`app/api/deliver/route.ts`). In order
+it: (1) checks the balance before any engine call, throwing
+`InsufficientCreditsError` (→ HTTP 402 → paywall) at 0 credits; (2) generates;
+(3) on success charges 1 credit via `deductCredit()` (Prompt 1, reused as-is)
+**and** writes one `prompts_history` row, as one logical unit — a failed history
+insert refunds the credit.
+
+Billing unit = one **delivered** prompt, never one question round. A refining
+run may ask 8 questions before delivering: still exactly 1 credit.
+
+**Entry pre-gate.** `LibraryJourney` checks the balance (read-only
+`GET /api/credits/balance`) before the first question round, so a 0-credit user
+sees the paywall on entry instead of after the question engine has spent a call.
+This is a UX/cost guard specific to the library journey — it does **not** touch
+the shared `/api/refine-precision` route or the classic generator (which runs on
+the legacy quota, not credits). It is not the enforcement point: the server-side
+delivery gates (`/api/deliver`, `/api/ambiance/apply`) remain the real wall, and
+the pre-gate fails open on a read error so a transient blip can't block a paying
+user.
+
+Free vs paid:
+
+- **Free** — copying a page's raw prompt (`CopyablePrompt`, pure clipboard, no
+  API) and, inside the refine-and-subject flow, the *intermediate* ambiance
+  refine (`/api/ambiance/apply`) that only feeds the paid subject.
+- **Paid** — every delivered generation: a refined ambiance that is the end
+  product (refine-ambiance flow, as soon as it reaches the final delivery step,
+  whether or not the result differs from the page's raw prompt), and every
+  subject.
 
 ## The ambiance lock
 
@@ -54,5 +81,5 @@ The subject step may read the ambiance but must never reopen it.
   verbatim and never sent to the model. Only LYRICS is generated. The lock is
   structural.
 - **image / video / text** — one prompt, so merging needs a model call. The
-  ambiance goes in as frozen read-only context, and `deliverSubjectLayer()`
+  ambiance goes in as frozen read-only context, and `generateSubjectPrompt()`
   throws if handed an unlocked ambiance.

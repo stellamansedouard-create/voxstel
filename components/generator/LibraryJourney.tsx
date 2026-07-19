@@ -18,8 +18,9 @@ import DirectQuestions from "./DirectQuestions";
 import LockedAmbiance from "./LockedAmbiance";
 import SubjectInput from "./SubjectInput";
 import LayeredResult from "./LayeredResult";
+import Paywall from "./Paywall";
 import Spinner from "@/components/ui/Spinner";
-import type { Category, DirectQuestion, LayeredOutput } from "@/types";
+import type { Category, DirectQuestion, GeneratorStep, LayeredOutput } from "@/types";
 
 interface LibraryJourneyProps {
   category: Category;
@@ -41,8 +42,17 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
   // Q&A of every round, sent with the delivery so the journey is measurable.
   const [qaLog, setQaLog] = useState<QAEntry[]>([]);
   const askedRef = useRef(false);
+  // Step to return to when the user backs out of the paywall.
+  const [paywallReturn, setPaywallReturn] = useState<GeneratorStep>("subject");
 
   const ambiance = store.ambiance;
+
+  /** A delivery hit 0 credits: no engine call ran, nothing was charged. */
+  function showPaywall() {
+    setPaywallReturn(store.step);
+    store.setLoading(false);
+    store.setStep("paywall");
+  }
 
   /** Restores the handoff and bounces to login without losing the journey. */
   const bounceToLogin = useCallback(() => {
@@ -64,6 +74,25 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
       if (!ambiance || !store.tool) return;
       store.setLoading(true);
       store.setError(null);
+
+      // Wall off a 0-credit user BEFORE the question engine spends a call. This
+      // is a UX pre-gate only; the server-side delivery gates still enforce.
+      // Fail open on any non-401 read error so a transient blip can't block a
+      // paying user — the delivery gate will still catch a real 0 balance.
+      try {
+        const balRes = await fetch("/api/credits/balance");
+        if (balRes.status === 401) return bounceToLogin();
+        if (balRes.ok) {
+          const bal = (await balRes.json()) as {
+            credits: number;
+            unlimited: boolean;
+          };
+          if (!bal.unlimited && bal.credits < 1) return showPaywall();
+        }
+      } catch {
+        // network hiccup -> fall through, server gate still protects delivery
+      }
+
       try {
         const res = await fetch("/api/refine-precision", {
           method: "POST",
@@ -118,38 +147,74 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
       entries.push({ question: q.label, theme: q.theme ?? "", answer, layer });
     }
     setQaLog((log) => [...log, ...entries]);
-    return byLabel;
+    return { byLabel, entries };
   }
 
-  /** Layer 1 — free. Applies the answers, then stops or moves to the subject. */
+  /** Applies the ambiance answers. Free when it feeds the subject; paid when the
+   *  refined ambiance is itself the delivered product (refine-ambiance flow). */
   async function submitAmbiance() {
     if (!ambiance || !store.tool) return;
+    const { byLabel, entries } = collectAnswers("ambiance");
+
+    // refine-and-subject: this refine is an INTERMEDIATE step, not a delivery.
+    // It stays free and ungated — the single charge happens on the subject.
+    if (store.ambianceFlow === "refine-and-subject") {
+      store.setLoading(true);
+      store.setError(null);
+      try {
+        const res = await fetch("/api/ambiance/apply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category,
+            tool: store.tool,
+            ambiancePrompt: ambiance.prompt,
+            answers: byLabel,
+          }),
+        });
+        if (res.status === 401) return bounceToLogin();
+        if (res.status === 402) return showPaywall();
+        if (!res.ok) throw new Error("apply failed");
+
+        const { ambiance: refined } = (await res.json()) as { ambiance: string };
+        store.setAmbiancePrompt(refined);
+        store.lockAmbiance();
+        store.setStep("subject");
+      } catch {
+        store.setError("Erreur lors de l'affinage. Veuillez réessayer.");
+      } finally {
+        store.setLoading(false);
+      }
+      return;
+    }
+
+    // refine-ambiance: the refined ambiance IS the delivered product, so it is
+    // a paid delivery — 1 credit as soon as the flow reaches this final step,
+    // whether or not the result differs from the page's raw prompt.
     store.setLoading(true);
     store.setError(null);
     try {
-      const answers = collectAnswers("ambiance");
-      const res = await fetch("/api/ambiance/apply", {
+      const res = await fetch("/api/deliver", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          layer: "ambiance",
           category,
           tool: store.tool,
           ambiancePrompt: ambiance.prompt,
-          answers,
+          answers: byLabel,
+          sourcePageSlug: ambiance.sourcePageSlug ?? null,
+          questionsAnswers: entries,
+          _tracking: getStoredUTM(),
         }),
       });
       if (res.status === 401) return bounceToLogin();
-      if (!res.ok) throw new Error("apply failed");
+      if (res.status === 402) return showPaywall();
+      if (!res.ok) throw new Error("deliver failed");
 
-      const { ambiance: refined } = (await res.json()) as { ambiance: string };
-      store.setAmbiancePrompt(refined);
-
-      if (store.ambianceFlow === "refine-and-subject") {
-        store.lockAmbiance();
-        store.setStep("subject");
-      } else {
-        store.setStep("result");
-      }
+      const data = (await res.json()) as { ambiance: string | null };
+      store.setAmbiancePrompt(data.ambiance ?? ambiance.prompt);
+      store.setStep("result");
     } catch {
       store.setError("Erreur lors de l'affinage. Veuillez réessayer.");
     } finally {
@@ -165,24 +230,26 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
   }
 
   async function submitSubjectAnswers() {
-    await deliver(collectAnswers("subject"));
+    await deliver(collectAnswers("subject").byLabel);
   }
 
-  /** Layer 2 — hits the single delivery point. Ungated until Prompt 4. */
+  /** Layer 2 — the single gated delivery point. Charges 1 credit on success. */
   async function deliver(subjectAnswers: Record<string, string>) {
     if (!ambiance || !store.tool) return;
     store.setLoading(true);
     store.setError(null);
     try {
-      const res = await fetch("/api/subject/deliver", {
+      const res = await fetch("/api/deliver", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          layer: "subject",
           category,
           tool: store.tool,
           ambiance: { ...ambiance, locked: true },
           subject: store.subject,
           subjectAnswers,
+          sourcePageSlug: ambiance.sourcePageSlug ?? null,
           questionsAnswers: [
             ...qaLog,
             ...Object.entries(subjectAnswers).map(([question, answer]) => ({
@@ -202,9 +269,11 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
         }),
       });
       if (res.status === 401) return bounceToLogin();
+      if (res.status === 402) return showPaywall();
       if (!res.ok) throw new Error("deliver failed");
 
-      store.setLayeredOutput((await res.json()) as LayeredOutput);
+      const data = (await res.json()) as { output: LayeredOutput | null };
+      if (data.output) store.setLayeredOutput(data.output);
     } catch {
       store.setError("Erreur lors de la génération. Veuillez réessayer.");
     } finally {
@@ -290,6 +359,10 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
             Générer mon prompt →
           </button>
         </>
+      )}
+
+      {!store.isLoading && store.step === "paywall" && (
+        <Paywall onBack={() => store.setStep(paywallReturn)} />
       )}
 
       {!store.isLoading && store.step === "result" && (
