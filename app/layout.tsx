@@ -5,6 +5,7 @@ import { UTMTracker } from "@/components/UTMTracker";
 import CookieBanner from "@/components/CookieBanner";
 import { PixelEventHandler } from "@/components/PixelEventHandler";
 import { GoogleAdsTagLoader } from "@/components/GoogleAdsTagLoader";
+import Header from "@/components/layout/Header";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -79,6 +80,11 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="bg-background text-foreground min-h-screen">
+        {/* Global fixed header — rendered ONCE here so it's present on every
+            route (generator, library, prompt pages included). Pages must not
+            render <Header/> themselves. Pages reserve space with their own top
+            padding (the header is position:fixed, h-16). */}
+        <Header />
         <Suspense fallback={null}>
           <GoogleAdsTagLoader />
         </Suspense>

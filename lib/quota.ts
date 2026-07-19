@@ -1,3 +1,9 @@
+// TODO(dead-code): checkQuota/incrementQuota implement the legacy monthly-quota
+// gate. Since the classic generator (app/api/generate-prompt) moved to credits,
+// NOTHING calls these anymore — this whole file is orphaned. Kept for now to
+// avoid an unseen breakage; safe to delete once confirmed no route imports it.
+// Superseded by lib/credits.ts (getBalance/deductCredit) + lib/deliver.ts
+// (assertCanGenerate/chargeAndRecord).
 import { createServerSupabase } from "@/lib/supabase";
 import { ensureUserRow } from "@/lib/auth";
 import { PRICING } from "@/lib/pricing";

@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
 import { consumeHandoff } from "@/lib/ambiance-handoff";
 import LibraryJourney from "@/components/generator/LibraryJourney";
+import Paywall from "@/components/generator/Paywall";
 import ToolSelector from "@/components/generator/ToolSelector";
 import UseCaseSelector from "@/components/generator/UseCaseSelector";
 import FreeTextInput from "@/components/generator/FreeTextInput";
@@ -37,6 +38,9 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const pathname = usePathname();
   const categoryMeta = getCategoryById(category);
   const didInitRef = useRef(false);
+  // Set when /api/generate-prompt returns 402 (0 credits). The store state
+  // (step + answers) is untouched, so backing out restores the run in place.
+  const [paywalled, setPaywalled] = useState(false);
 
   useEffect(() => {
     // Runs once per mount. StrictMode invokes effects twice and the handoff is
@@ -49,14 +53,6 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     const handoff = consumeHandoff();
     if (handoff && handoff.category === category) {
       store.startFromLibrary(handoff);
-      return;
-    }
-
-    // Reached the generator without a handoff: any journey left in the store is
-    // from a previous run and must not resurface here.
-    if (useGeneratorStore.getState().ambiance) {
-      store.reset();
-      store.setCategory(category);
       return;
     }
 
@@ -89,9 +85,15 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         localStorage.removeItem("vx_pending_description");
       }
     }
-    if (store.step === "category" || store.category !== category) {
-      store.setCategory(category);
-    }
+    // Any other entry into /generate/[category] — direct nav, a category switch,
+    // or returning after a completed run — starts from a CLEAN form. The Zustand
+    // store persists across client-side navigations, so without this
+    // UNCONDITIONAL reset on mount a finished run (its result, a leftover library
+    // journey, prior answers) would resurface instead of an empty form. This is
+    // the single source of the reset: it must not depend on a nav link calling
+    // reset(), or any new entry point to /generate/* reintroduces the bug.
+    store.reset();
+    store.setCategory(category);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSelectUseCase = useCallback(
@@ -104,10 +106,33 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     [store]
   );
 
+  // Entry pre-gate, mirroring the library journey: at 0 credits, wall off
+  // BEFORE the question engine (/api/analyze-description) spends an Anthropic
+  // call. Read-only. Fails open on a read error so a transient blip can't block
+  // a paying user — the server-side gate on /api/generate-prompt still enforces.
+  const outOfCredits = useCallback(async (): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/credits/balance");
+      if (res.ok) {
+        const bal = (await res.json()) as { credits: number; unlimited: boolean };
+        return !bal.unlimited && bal.credits < 1;
+      }
+    } catch {
+      // network hiccup -> fall through, server gate still protects generation
+    }
+    return false;
+  }, []);
+
   const handleDescriptionSubmit = useCallback(async () => {
     if (!store.description.trim() || !store.tool) return;
     store.setLoading(true);
     store.setError(null);
+
+    if (await outOfCredits()) {
+      setPaywalled(true);
+      store.setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/analyze-description", {
@@ -291,12 +316,23 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
       return;
     }
+    // 0 credits — same 402 the library journey returns. Show the paywall
+    // instead of a generic error; the in-progress run is preserved.
+    if (res.status === 402) {
+      setPaywalled(true);
+      return;
+    }
     if (!res.ok) throw new Error("generation failed");
     store.setGeneratedPrompt(await res.json());
   }
 
   // Called on mount when returning from login — uses pending values directly to avoid stale closure
   async function autoAnalyzeAndAdvance(pending: { useCase?: string | null; tool: AITool; description: string; usageContext: string }) {
+    if (await outOfCredits()) {
+      setPaywalled(true);
+      store.setLoading(false);
+      return;
+    }
     try {
       const res = await fetch("/api/analyze-description", {
         method: "POST",
@@ -336,6 +372,18 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   }
 
   if (!categoryMeta) return null;
+
+  // 0 credits: the paywall replaces the flow, the run is kept in the store so
+  // backing out lands the user right back where they were.
+  if (paywalled) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-2xl mx-auto px-4 py-20">
+          <Paywall onBack={() => setPaywalled(false)} />
+        </div>
+      </div>
+    );
+  }
 
   // Library-seeded run: the ambiance/subject journey replaces the step flow.
   if (store.ambiance) {

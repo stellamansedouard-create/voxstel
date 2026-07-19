@@ -1,3 +1,11 @@
+// TODO(dead-legacy): the monthly-quota pricing model (free/pro/unlimited/promax)
+// is superseded by the credits system (lib/credits.ts + lib/stripe.ts). After
+// the credits migration, PRICING has ONE remaining live consumer: the Stripe
+// webhook (app/api/stripe/webhook/route.ts) uses PRICING[plan].price/currency as
+// a FALLBACK for the GA4 purchase amount when Stripe's own amount is absent. It
+// is otherwise dead (the pricing page and dashboard no longer read it). Remove
+// this file once the webhook fallback is dropped; keep the `PricingPlan` type
+// (it lives in @/types, not here) which is still used elsewhere.
 import type { PricingInfo, PricingPlan } from "@/types";
 
 export const PRICING: Record<PricingPlan, PricingInfo> = {
