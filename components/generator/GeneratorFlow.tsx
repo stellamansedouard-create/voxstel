@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
 import { consumeHandoff } from "@/lib/ambiance-handoff";
 import LibraryJourney from "@/components/generator/LibraryJourney";
+import Paywall from "@/components/generator/Paywall";
 import ToolSelector from "@/components/generator/ToolSelector";
 import UseCaseSelector from "@/components/generator/UseCaseSelector";
 import FreeTextInput from "@/components/generator/FreeTextInput";
@@ -37,6 +38,9 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   const pathname = usePathname();
   const categoryMeta = getCategoryById(category);
   const didInitRef = useRef(false);
+  // Set when /api/generate-prompt returns 402 (0 credits). The store state
+  // (step + answers) is untouched, so backing out restores the run in place.
+  const [paywalled, setPaywalled] = useState(false);
 
   useEffect(() => {
     // Runs once per mount. StrictMode invokes effects twice and the handoff is
@@ -291,6 +295,12 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
       return;
     }
+    // 0 credits — same 402 the library journey returns. Show the paywall
+    // instead of a generic error; the in-progress run is preserved.
+    if (res.status === 402) {
+      setPaywalled(true);
+      return;
+    }
     if (!res.ok) throw new Error("generation failed");
     store.setGeneratedPrompt(await res.json());
   }
@@ -336,6 +346,18 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
   }
 
   if (!categoryMeta) return null;
+
+  // 0 credits: the paywall replaces the flow, the run is kept in the store so
+  // backing out lands the user right back where they were.
+  if (paywalled) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-2xl mx-auto px-4 py-20">
+          <Paywall onBack={() => setPaywalled(false)} />
+        </div>
+      </div>
+    );
+  }
 
   // Library-seeded run: the ambiance/subject journey replaces the step flow.
   if (store.ambiance) {
