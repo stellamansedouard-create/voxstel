@@ -106,6 +106,70 @@ export default async function HomePage() {
         </section>
 
         {/* ─────────────────────────────────────────────────────────────
+            MÉCANIQUE — Comment ça marche (3 étapes)
+
+            Placée juste après le hero : la promesse est faite, il faut
+            montrer le mécanisme concret avant que les blocs de persuasion
+            qui suivent puissent porter.
+        ───────────────────────────────────────────────────────────── */}
+        <section className="py-24 px-4" style={{ backgroundColor: "#F8F6F0" }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-5 block">
+                Comment ça marche
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-5 text-balance leading-tight">
+                Trois étapes, zéro page blanche
+              </h2>
+              <p className="text-lg text-muted leading-relaxed text-balance max-w-2xl mx-auto">
+                Tu ne pars jamais de rien. L&apos;ambiance est déjà écrite, gratuite,
+                prête à copier — à toi de dire ce qu&apos;il te faut en plus.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                {
+                  title: "Choisis une page bibliothèque",
+                  body: "Musique, image, texte ou vidéo — chaque page a déjà un prompt d'ambiance riche, gratuit, sans inscription.",
+                },
+                {
+                  title: "Copie-le tel quel, ou affine-le",
+                  body: "L'ambiance suffit souvent. Si tu veux l'ajuster à ton goût, quelques questions simples suffisent.",
+                },
+                {
+                  title: "Ajoute ton sujet précis",
+                  body: "Ton personnage, tes paroles, ton produit — la partie unique à toi, construite avec Voxstel.",
+                },
+              ].map((step, i) => (
+                <div
+                  key={step.title}
+                  className="relative bg-white rounded-2xl p-7 pt-8 overflow-hidden"
+                  style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}
+                >
+                  {/* Liseré doré — la signature de marque de la carte */}
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 h-1"
+                    style={{ backgroundColor: "#C8910A" }}
+                  />
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center mb-5 text-sm font-bold"
+                    style={{ backgroundColor: "#F8F6F0", color: "#C8910A" }}
+                  >
+                    {i + 1}
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground mb-2.5 leading-snug">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-muted leading-relaxed">{step.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─────────────────────────────────────────────────────────────
             FOMO — Pourquoi pas seul
         ───────────────────────────────────────────────────────────── */}
         <section
