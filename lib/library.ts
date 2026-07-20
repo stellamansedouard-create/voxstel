@@ -1763,6 +1763,28 @@ anamorphic look, subtle lens flare, foreground bokeh from rain droplets
 [Texture & render]
 Photoreal, fine film grain, 35mm analog texture, ultra-detailed, 8K
 render, atmospheric depth`,
+    ambiancePromptFr: `[Scène & univers]
+Ruelle cyberpunk détrempée de pluie, la nuit, mégapole futuriste dense,
+enseignes néon monumentales, vapeur montant des bouches d'aération,
+asphalte mouillé et réfléchissant
+
+[Lumière]
+Éclairage low-key et atmosphérique, lueur néon magenta et cyan en key
+light, ombres bleu-vert profondes, brume volumétrique qui accroche la
+lumière, léger rim light d'un lampadaire lointain, fort contraste
+
+[Couleur & étalonnage]
+Étalonnage cinéma teal-and-magenta, noirs écrasés, hautes lumières néon
+saturées, léger bloom sur les sources lumineuses
+
+[Composition & objectif]
+Cadrage large et cinématographique, angle de caméra bas, faible
+profondeur de champ, rendu anamorphique 35 mm, léger flare, bokeh de
+gouttes de pluie au premier plan
+
+[Texture & rendu]
+Photoréaliste, grain fin, texture argentique 35 mm, ultra-détaillé,
+rendu 8K, profondeur atmosphérique`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -1802,6 +1824,28 @@ tight framing on face and shoulders, eye-level angle, rule-of-thirds
 [Texture & render]
 Photoreal skin texture, natural imperfections kept, fine grain, medium-
 format clarity, editorial magazine finish`,
+    ambiancePromptFr: `[Scène & ambiance]
+Portrait éditorial intime, atmosphérique et cinématographique, ambiance
+émotionnelle silencieuse, cadrage narratif sur un sujet unique
+
+[Lumière]
+Key light douce et directionnelle venant d'une grande fenêtre, dégradé
+progressif vers l'ombre, léger rim light chaud détachant le sujet du
+fond, triangle de Rembrandt sur la joue
+
+[Couleur & étalonnage]
+Étalonnage filmique feutré, tons terreux désaturés, ombres légèrement
+bleu-vert, carnations préservées et chaudes, hautes lumières peu
+contrastées
+
+[Composition & objectif]
+Rendu d'objectif à portrait 85 mm, faible profondeur de champ, bokeh
+d'arrière-plan crémeux, cadrage serré sur le visage et les épaules,
+angle à hauteur d'œil, règle des tiers
+
+[Texture & rendu]
+Texture de peau photoréaliste, imperfections naturelles conservées,
+grain fin, netteté de moyen format, finition magazine éditorial`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Créer mon portrait (mon sujet)", flow: "keep-ambiance" },
@@ -1841,6 +1885,28 @@ with breathing room, seamless background, sharp focus edge to edge
 [Texture & render]
 Ultra-sharp, high detail on material and texture, photoreal, catalog-
 ready, 8K commercial finish`,
+    ambiancePromptFr: `[Scène & installation]
+Photographie de produit professionnelle et épurée, installation studio
+minimaliste, un seul produit héros sur une surface lisse, rendu
+commercial haut de gamme
+
+[Lumière]
+Grande softbox douce en key light, dégradé progressif, léger reflet sous
+le produit, hautes lumières spéculaires maîtrisées, aucune ombre dure,
+fill lumineux et homogène
+
+[Couleur & étalonnage]
+Balance des blancs neutre et propre, couleurs fidèles, grande plage
+dynamique, blancs nets, contraste modéré
+
+[Composition & objectif]
+Angle trois-quarts à hauteur d'œil, netteté d'un macro 100 mm, produit
+centré avec de l'air autour, fond sans raccord, netteté d'un bord à
+l'autre
+
+[Texture & rendu]
+Ultra-net, haut niveau de détail sur la matière et la texture,
+photoréaliste, prêt pour le catalogue, finition commerciale 8K`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon produit dans ce décor", flow: "keep-ambiance" },
@@ -1879,6 +1945,25 @@ negative space, balanced and readable at small sizes
 [Texture & render]
 Smooth flat vector-like render, subtle paper texture, clean edges,
 picture-book finish, crisp and colorful`,
+    ambiancePromptFr: `[Style & univers]
+Illustration jeunesse 2D mignonne, style cartoon doux, chaleureux et
+amical, esthétique de livre illustré, bienveillant et espiègle
+
+[Trait & formes]
+Contours arrondis et nets, formes simples et franches, grands yeux
+expressifs, proportions de personnage douces, aucune arête vive
+
+[Couleur & lumière]
+Palette pastel douce, éclairage plat et chaud, ombres d'ambiance
+délicates, cosy et lumineux, couleurs complémentaires harmonieuses
+
+[Composition]
+Sujet amical centré, fond simple et dégagé, beaucoup d'espace négatif,
+équilibré et lisible en petit format
+
+[Texture & rendu]
+Rendu lisse façon vectoriel plat, légère texture de papier, bords nets,
+finition livre illustré, net et coloré`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer mon personnage", flow: "keep-ambiance" },
@@ -1920,6 +2005,29 @@ wide-angle distortion
 [Texture & render]
 Photoreal painterly hybrid, fine atmospheric mist, ultra-detailed
 stonework and foliage, 8K render, cinematic depth of field`,
+    ambiancePromptFr: `[Scène & univers]
+Paysage de fantasy médiévale épique, forteresse de pierre monumentale au
+bord d'une falaise, forêt dense et brumeuse en contrebas, chaîne de
+montagnes au loin, sensation d'échelle ancienne
+
+[Lumière]
+Ciel couvert et dramatique, lumière argentée diffuse perçant les nuages
+d'orage, faibles god rays, lumière ambiante froide avec des accents
+chauds de torches aux fenêtres de la forteresse
+
+[Couleur & étalonnage]
+Palette cinématographique désaturée, gris froids et verts profonds,
+accents d'or feutrés, étalonnage fantasy atmosphérique
+
+[Composition & objectif]
+Plan d'ensemble large et épique, ligne d'horizon basse, forte profondeur
+du premier plan à l'arrière-plan, perspective atmosphérique subtile,
+légère distorsion grand-angle
+
+[Texture & rendu]
+Hybride photoréaliste et pictural, brume atmosphérique fine, pierre et
+feuillages ultra-détaillés, rendu 8K, profondeur de champ
+cinématographique`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -1954,6 +2062,20 @@ Full-body or three-quarter framing emphasizing silhouette and wardrobe detail, s
 
 [Texture & render]
 Crisp fabric texture (silk sheen, leather grain, tailored structure), sharp focus on wardrobe detail, subtle skin retouching that preserves natural texture rather than over-smoothing.`,
+    ambiancePromptFr: `[Scène & univers]
+Série mode haut de gamme dans un contexte de magazine — mannequin en tenue complète de créateur, coiffure et maquillage travaillés, pose dynamique suggérant le mouvement ou un récit, décor studio ou lieu marquant (toit urbain, décor minimaliste ou paysage spectaculaire).
+
+[Lumière]
+Éclairage de flash studio dur et directionnel sculptant les ombres sur le tissu et le visage, ou une source unique et dramatique pour une tension éditoriale ; parfois un gel coloré pour une ambiance mode affirmée.
+
+[Couleur & étalonnage]
+Étalonnage franc et saturé fidèle à l'esthétique des magazines de mode, ou étalonnage désaturé très contrasté pour un rendu haute couture austère ; carnations respectées tandis que les couleurs du fond et de la tenue sont poussées.
+
+[Composition & objectif]
+Cadrage en pied ou trois-quarts mettant en valeur la silhouette et le détail de la tenue, rendu d'un objectif équivalent 85-135 mm pour une compression flatteuse, composition dynamique décentrée selon les codes éditoriaux.
+
+[Texture & rendu]
+Texture de tissu nette (brillance de la soie, grain du cuir, structure du tailleur), netteté sur les détails de la tenue, retouche de peau discrète préservant la texture naturelle plutôt que de la lisser.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -1987,6 +2109,20 @@ Overhead flat-lay or 45-degree angle shot, shallow depth of field with a macro-c
 
 [Texture & render]
 Sharp, glistening texture detail on sauces, steam or condensation rendered where relevant for freshness cues, crumb and garnish detail crisp and appetizing.`,
+    ambiancePromptFr: `[Scène & univers]
+Dispositif de photographie culinaire professionnelle — un plat dressé comme sujet héros, stylisé avec des accessoires complémentaires (serviette en lin, surface en bois brut, garniture minimale), contexte évoquant un restaurant ou un livre de cuisine haut de gamme.
+
+[Lumière]
+Lumière douce et directionnelle façon fenêtre venant d'un côté, créant ombre et lumière sur la texture des aliments, diffusée pour éviter les reflets spéculaires durs sur les surfaces brillantes.
+
+[Couleur & étalonnage]
+Étalonnage chaud et appétissant valorisant les tons naturels des aliments (bruns riches, rouges profonds, verts frais), léger gain de contraste pour faire ressortir les textures sans effet artificiel.
+
+[Composition & objectif]
+Vue de dessus en flat lay ou prise à 45 degrés, faible profondeur de champ avec un objectif à capacité macro (équivalent 100 mm) isolant le point focal du plat tandis que le fond se fond doucement.
+
+[Texture & rendu]
+Détail de texture net et brillant sur les sauces, vapeur ou condensation rendues quand elles signalent la fraîcheur, mie et garniture nettes et appétissantes.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2020,6 +2156,20 @@ Wide-angle lens (16-24mm equivalent) with corrected vertical lines to avoid dist
 
 [Texture & render]
 Crisp detail on architectural materials (wood grain, stone, glass reflections), clean and sharp throughout the frame with no distracting clutter.`,
+    ambiancePromptFr: `[Scène & univers]
+Photographie immobilière ou architecturale professionnelle d'un espace intérieur ou extérieur, composition mettant en avant les lignes nettes, la circulation dans l'espace et les meilleurs atouts du bien (lumière naturelle, plan ouvert, détail architectural).
+
+[Lumière]
+Éclairage équilibré et régulier mêlant la lumière du jour disponible à un fill discret, pour éviter les fenêtres brûlées comme les ombres intérieures trop denses — un rendu naturel et fidèle.
+
+[Couleur & étalonnage]
+Étalonnage neutre et fidèle avec une balance des blancs juste, léger gain de chaleur pour rendre les intérieurs accueillants, clarté froide pour les extérieurs d'architecture moderne.
+
+[Composition & objectif]
+Grand-angle (équivalent 16-24 mm) avec verticales redressées pour éviter la distorsion, composition suivant les lignes de fuite et la symétrie pour restituer l'échelle de l'espace.
+
+[Texture & rendu]
+Détail net sur les matériaux architecturaux (veinage du bois, pierre, reflets du verre), image propre et nette sur toute la surface, sans désordre distrayant.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2053,6 +2203,20 @@ Mix of candid wide shots (24-35mm equivalent) for scene context and intimate clo
 
 [Texture & render]
 Soft, slightly dreamy rendering with gentle grain, fine detail preserved in fabric (lace, veil) and floral elements without looking harsh or overly digital.`,
+    ambiancePromptFr: `[Scène & univers]
+Photographie de mariage en style documentaire, captant des moments d'émotion sincères — cérémonie, portraits ou scènes de réception sur le vif — sur fond de lieu romantique (jardin, chapelle ou salle de réception élégante).
+
+[Lumière]
+Lumière naturelle douce et flatteuse (heure dorée de préférence pour les portraits en extérieur) ou éclairage d'ambiance élégant du lieu pour les moments en intérieur, en privilégiant toujours des carnations flatteuses et un dégradé d'ombre doux.
+
+[Couleur & étalonnage]
+Étalonnage chaud et romantique, hautes lumières douces et contraste modéré, courbe tonale d'inspiration argentique évoquant une élégance intemporelle plutôt qu'une netteté clinique.
+
+[Composition & objectif]
+Alternance de plans larges sur le vif (équivalent 24-35 mm) pour le contexte et de portraits rapprochés et intimes (équivalent 85 mm) pour le détail émotionnel, cadrage naturel et non posé.
+
+[Texture & rendu]
+Rendu doux et légèrement onirique avec un grain délicat, détail fin préservé dans les tissus (dentelle, voile) et les éléments floraux, sans dureté ni excès de numérique.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2086,6 +2250,20 @@ Ultra-wide-angle lens (14-20mm equivalent), rule-of-thirds horizon placement, st
 
 [Texture & render]
 Sharp detail across the full depth of field (foreground rocks and foliage through distant mountains), crisp atmospheric clarity or intentional soft haze for mood.`,
+    ambiancePromptFr: `[Scène & univers]
+Paysage naturel au grand-angle, vaste et panoramique — montagnes, littoral, forêt ou vallée ouverte — composition soulignant l'échelle et la grandeur de la nature, souvent avec un premier plan marqué pour la profondeur.
+
+[Lumière]
+Lumière naturelle d'heure dorée ou d'heure bleue créant un éclairage directionnel spectaculaire sur le relief, ombres allongées et rim light chaud sur les sommets et les crêtes.
+
+[Couleur & étalonnage]
+Étalonnage riche et naturel avec un ciel dramatisé (bleus profonds, oranges chauds) équilibré par des couleurs de terrain fidèles, sans sursaturation.
+
+[Composition & objectif]
+Très grand-angle (équivalent 14-20 mm), horizon placé selon la règle des tiers, forte stratification premier plan / arrière-plan pour l'échelle et l'immersion.
+
+[Texture & rendu]
+Netteté sur toute la profondeur de champ (des rochers et feuillages du premier plan aux montagnes lointaines), clarté atmosphérique franche ou brume douce assumée selon l'ambiance.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2119,6 +2297,20 @@ Telephoto lens (200-400mm equivalent) for wildlife or 85mm for pets, shallow dep
 
 [Texture & render]
 Extremely sharp detail on fur, feathers, or eyes — the defining feature of a strong animal portrait — with soft, creamy background blur.`,
+    ambiancePromptFr: `[Scène & univers]
+Portrait animalier rapproché, faune sauvage ou animal de compagnie, mettant en avant le caractère et l'expression de l'animal, fond d'habitat naturel ou doucement flouté apportant du contexte sans distraire.
+
+[Lumière]
+Lumière naturelle douce et directionnelle révélant la texture du pelage ou du plumage et accrochant un reflet naturel dans les yeux, en évitant le flash dur qui aplatit le détail.
+
+[Couleur & étalonnage]
+Étalonnage naturel et fidèle avec une chaleur discrète, tons de pelage ou de plumage rendus avec justesse et richesse plutôt que stylisés à l'excès.
+
+[Composition & objectif]
+Téléobjectif (équivalent 200-400 mm) pour la faune sauvage ou 85 mm pour les animaux domestiques, faible profondeur de champ isolant l'animal du fond, cadrage à hauteur d'œil pour l'intimité.
+
+[Texture & rendu]
+Détail extrêmement net sur le pelage, les plumes ou les yeux — ce qui fait la force d'un portrait animalier — avec un flou d'arrière-plan doux et crémeux.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2152,6 +2344,20 @@ Flat, front-facing presentation of the design at full detail, proportioned for t
 
 [Texture & render]
 Crisp, clean line quality with consistent line weight, no unintended texture or shading artifact that would confuse the stencil transfer process.`,
+    ambiancePromptFr: `[Scène & univers]
+Planche de flash tattoo épurée présentée sur fond neutre (mockup couleur peau ou blanc uni), style allant du fine line minimaliste au trait traditionnel appuyé selon la direction voulue.
+
+[Lumière]
+Éclairage studio homogène et sans ombre, garantissant que chaque trait et chaque détail du dessin soit parfaitement lisible, sans ambiguïté pour le tatoueur.
+
+[Couleur & étalonnage]
+Trait en noir et blanc par défaut (standard pour un stencil de tatouage), ou palette de couleurs limitée et assumée si un style de tatouage en couleur est demandé.
+
+[Composition & objectif]
+Présentation à plat et de face du dessin en pleine définition, proportionnée à l'emplacement corporel visé (avant-bras, pièce dans le dos, petit motif d'accent).
+
+[Texture & rendu]
+Qualité de trait nette et propre, épaisseur de trait constante, aucune texture ni artefact d'ombrage involontaire qui viendrait perturber le transfert du stencil.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2185,6 +2391,20 @@ Centered, balanced composition with strong negative space, scalable geometric st
 
 [Texture & render]
 Crisp vector-style clean edges, no unnecessary gradient or texture noise that would break at small sizes or in single-color print.`,
+    ambiancePromptFr: `[Scène & univers]
+Concept de logo de marque épuré présenté sur fond neutre ou aux couleurs de la marque, style allant du wordmark minimaliste au symbole iconique, adapté au secteur et au ton de la marque.
+
+[Lumière]
+Éclairage de présentation studio plat et homogène, sans ombre portée, garantissant que le logo reste lisible à toutes les échelles.
+
+[Couleur & étalonnage]
+Palette de couleurs limitée et assumée (2-3 couleurs maximum) choisie pour la reconnaissance de marque et la reproductibilité en print comme en digital, avec une version monochrome implicite pour la polyvalence.
+
+[Composition & objectif]
+Composition centrée et équilibrée avec un fort espace négatif, structure géométrique scalable restant lisible de la carte de visite au panneau d'affichage.
+
+[Texture & rendu]
+Bords nets façon vectoriel, aucun dégradé ni bruit de texture superflu qui casserait en petit format ou en impression une couleur.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2218,6 +2438,20 @@ Dynamic anime-style framing with exaggerated perspective or dramatic close-up an
 
 [Texture & render]
 Clean cel-shaded flat color rendering with crisp linework, characteristic large expressive eyes and stylized proportions.`,
+    ambiancePromptFr: `[Scène & univers]
+Personnage ou scène illustrés dans un style anime/manga japonais authentique, pose dynamique ou composition expressive typique des key visuals d'anime ou des planches de manga.
+
+[Lumière]
+Éclairage cel-shading avec des blocs de lumière et d'ombre aux bords francs, caractéristiques du rendu anime, avec par moments un rim light dramatique pour l'accent émotionnel.
+
+[Couleur & étalonnage]
+Palette vive et saturée typique de la production anime, ou niveaux de gris feutrés façon manga avec des trames de screentone selon le rendu souhaité.
+
+[Composition & objectif]
+Cadrage dynamique façon anime avec perspective exagérée ou gros plans en contre-plongée, lignes de vitesse ou effets de mouvement là où l'action est suggérée.
+
+[Texture & rendu]
+Rendu en aplats cel-shading avec un trait net, grands yeux expressifs et proportions stylisées caractéristiques.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2251,6 +2485,20 @@ Traditional academic composition with balanced framing, subject often centered o
 
 [Texture & render]
 Visible brushstroke texture and impasto detail, canvas grain subtly present, painterly softness at edges rather than photographic sharpness.`,
+    ambiancePromptFr: `[Scène & univers]
+Composition de peinture à l'huile classique dans la tradition du portrait ou de la nature morte des maîtres anciens, sujet rendu avec un réalisme pictural et les conventions de composition académiques.
+
+[Lumière]
+Éclairage dramatique inspiré du clair-obscur, fort contraste entre lumière et ombre, source directionnelle douce typique des dispositifs d'atelier classiques.
+
+[Couleur & étalonnage]
+Palette classique riche et chaude, terres d'ombre profondes, terres de Sienne brûlées et ors feutrés, effet de glacis subtil rappelant la technique de l'huile en couches.
+
+[Composition & objectif]
+Composition académique traditionnelle au cadrage équilibré, sujet souvent centré ou suivant les conventions du portrait classique, profondeur picturale par perspective atmosphérique.
+
+[Texture & rendu]
+Texture de coup de pinceau visible et détail en empâtement, grain de la toile discrètement présent, douceur picturale sur les bords plutôt qu'une netteté photographique.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2284,6 +2532,20 @@ Loose, organic composition with intentional negative space (unpainted paper visi
 
 [Texture & render]
 Visible paper texture (cold-press grain), soft color bleeding and granulation effects characteristic of real watercolor pigment behavior.`,
+    ambiancePromptFr: `[Scène & univers]
+Illustration à l'aquarelle au rendu doux et fluide — botanique, paysage ou portrait — restituant la translucidité et les diffusions organiques caractéristiques du médium.
+
+[Lumière]
+Lumière douce et diffuse suggérée par des lavis délicats plutôt que par un ombrage directionnel marqué, qualité de lumière naturelle du début à la fin.
+
+[Couleur & étalonnage]
+Superposition de couleurs délicates et transparentes avec des diffusions de pigment visibles sur les bords, palette feutrée ou pastel avec quelques accents de couleur francs sur les points focaux.
+
+[Composition & objectif]
+Composition libre et organique avec un espace négatif assumé (papier laissé nu), bords doux qui s'estompent plutôt que des contours francs.
+
+[Texture & rendu]
+Texture de papier visible (grain torchon), diffusions et effets de granulation caractéristiques du comportement réel du pigment aquarelle.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2317,6 +2579,20 @@ Wide establishing-shot composition emphasizing scale and technological grandeur,
 
 [Texture & render]
 Highly detailed hard-surface texturing (weathered metal, exposed circuitry, reflective glass), photorealistic rendering with fine mechanical detail.`,
+    ambiancePromptFr: `[Scène & univers]
+Concept art de science-fiction cinématographique — vaisseau spatial, environnement futuriste ou technologie avancée — conçu avec un détail fonctionnel plausible suggérant un univers habité et réellement conçu.
+
+[Lumière]
+Éclairage cinématographique dramatique avec de forts éléments volumétriques (faisceaux de lumière, brume atmosphérique), hautes lumières très contrastées sur les surfaces métalliques et vitrées.
+
+[Couleur & étalonnage]
+Étalonnage froid et futuriste (bleus, bleus-verts, blancs froids) contrasté par des accents lumineux chauds (lueur de réacteur, néon), étalonnage cinéma typique du concept art de film.
+
+[Composition & objectif]
+Composition en plan d'ensemble large soulignant l'échelle et la démesure technologique, angle de caméra dynamique évoquant une photo de plateau.
+
+[Texture & rendu]
+Texturing hard-surface très détaillé (métal patiné, circuits apparents, verre réfléchissant), rendu photoréaliste avec un détail mécanique fin.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2350,6 +2626,20 @@ Off-kilter or claustrophobic framing (Dutch angles, tight corridors), negative s
 
 [Texture & render]
 Grimy, weathered surface texture (decay, rust, damp), grain and slight noise for a raw, unpolished horror-film quality.`,
+    ambiancePromptFr: `[Scène & univers]
+Atmosphère d'horreur sombre et dérangeante — lieu abandonné, silhouette menaçante ou environnement inquiétant — composition pensée pour installer la tension et le malaise psychologique.
+
+[Lumière]
+Éclairage low-key avec des ombres profondes dominant le cadre, une source unique dure ou vacillante créant un contraste cru et dérangeant.
+
+[Couleur & étalonnage]
+Palette froide et désaturée avec des verts maladifs ou des noirs profonds, quelques accents rouge sang pour le choc, ombres fortement écrasées.
+
+[Composition & objectif]
+Cadrage déséquilibré ou claustrophobe (angles hollandais, couloirs étroits), espace négatif utilisé pour suggérer une menace tapie hors champ.
+
+[Texture & rendu]
+Texture de surface crasseuse et abîmée (décomposition, rouille, humidité), grain et léger bruit pour une qualité brute de film d'horreur.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2383,6 +2673,20 @@ Strong use of negative space and geometric balance, subject placed with intentio
 
 [Texture & render]
 Clean, smooth rendering with minimal texture detail, sharp focus on the singular subject with nothing competing for attention.`,
+    ambiancePromptFr: `[Scène & univers]
+Composition minimaliste réduite à l'essentiel — un sujet unique dans un espace négatif généreux, simplicité visuelle nette et assumée.
+
+[Lumière]
+Éclairage doux, homogène et sans ombre, ou une seule source directionnelle propre, en évitant l'encombrement visuel des ombres complexes.
+
+[Couleur & étalonnage]
+Palette de couleurs restreinte, souvent monochrome ou bichrome, grande clarté sans bruit chromatique inutile.
+
+[Composition & objectif]
+Usage marqué de l'espace négatif et de l'équilibre géométrique, sujet placé avec une précision assumée, souvent décentrée, selon les principes du design minimaliste.
+
+[Texture & rendu]
+Rendu lisse et propre avec un détail de texture minimal, netteté sur le sujet unique et rien d'autre pour attirer l'attention.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2416,6 +2720,20 @@ Classic 35mm or medium-format framing conventions, occasionally slightly imperfe
 
 [Texture & render]
 Visible authentic film grain structure, subtle light leaks or vignetting at frame edges, soft optical characteristics of vintage lens glass.`,
+    ambiancePromptFr: `[Scène & univers]
+Photographie dans le style de l'argentique — n'importe quel sujet rendu avec les caractéristiques optiques et chimiques propres à la prise de vue sur pellicule, évoquant un ressenti nostalgique et non numérique.
+
+[Lumière]
+Lumière naturelle et légèrement imparfaite, typique de la photographie de l'ère argentique, avec un écrêtage doux des hautes lumières plutôt que la plage dynamique clinique des capteurs numériques.
+
+[Couleur & étalonnage]
+Étalonnage chaud et légèrement passé avec les dérives colorimétriques caractéristiques de la pellicule (hautes lumières chaudes, ombres feutrées), légère halation autour des zones claires.
+
+[Composition & objectif]
+Cadrage classique en 35 mm ou moyen format, composition parfois légèrement imparfaite évoquant une prise de vue argentique sur le vif et non posée.
+
+[Texture & rendu]
+Structure de grain argentique authentique et visible, discrètes fuites de lumière ou vignetage sur les bords du cadre, caractéristiques optiques douces d'un verre d'objectif vintage.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2449,6 +2767,20 @@ True-to-life urban color palette with slightly boosted contrast, or a muted, doc
 
 [Texture & render]
 Slightly gritty, unpolished realism — visible texture in pavement, brick, and weathered surfaces — nothing overly smoothed or artificially clean.`,
+    ambiancePromptFr: `[Scène & univers]
+Photographie de rue sur le vif captant un moment urbain authentique — un passant, une interaction fugace, une tranche de vie citadine non posée — composition bâtie sur la spontanéité plutôt que sur la mise en scène.
+
+[Lumière]
+Lumière naturelle disponible en ville, ombre dure de plein midi pour un contraste graphique ou diffusion douce de ciel couvert pour une plage tonale homogène, parfois complétée par un néon ou une vitrine éclairée au crépuscule.
+
+[Couleur & étalonnage]
+Palette urbaine fidèle avec un contraste légèrement rehaussé, ou désaturation feutrée façon documentaire selon l'ambiance — le choix chromatique reste toujours secondaire par rapport au moment capté.
+
+[Composition & objectif]
+Équivalent 35 mm ou 50 mm pour une perspective humaine naturelle, composition décentrée ou en strates utilisant les cadres urbains (portes, reflets, foule) pour ajouter de la profondeur.
+
+[Texture & rendu]
+Réalisme légèrement rugueux et non léché — texture visible du bitume, de la brique et des surfaces patinées — rien de trop lissé ni artificiellement propre.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2482,6 +2814,20 @@ Ultra-wide lens (14-24mm equivalent) for sky-dominant framing, long-exposure-sty
 
 [Texture & render]
 Crisp, high-clarity star detail against a smooth, noise-controlled dark sky, subtle atmospheric glow around brighter celestial objects.`,
+    ambiancePromptFr: `[Scène & univers]
+Scène d'astrophotographie — ciel nocturne constellé, arche de la Voie lactée ou vue de nébuleuse en espace profond — souvent associée à un élément de premier plan ancré au sol (silhouette de montagne, arbre isolé) pour l'échelle.
+
+[Lumière]
+Lumière ambiante minimale dominée par la lumière des étoiles et la lueur céleste, faible halo à l'horizon dû à une pollution lumineuse lointaine si un paysage figure au premier plan, sinon véritable noirceur de l'espace profond.
+
+[Couleur & étalonnage]
+Tons de ciel bleu-noir profond avec des variations de couleur d'étoile visibles (du blanc-bleu à l'orange chaud), nébuleuse et cœur galactique rendus dans des violets et des bleus-verts riches le cas échéant.
+
+[Composition & objectif]
+Très grand-angle (équivalent 14-24 mm) pour un cadrage dominé par le ciel, netteté d'étoiles façon pose longue avec des sources ponctuelles parfaitement piquées plutôt que des filés, sauf demande explicite.
+
+[Texture & rendu]
+Détail d'étoiles net et très défini sur un ciel sombre et lisse, sans bruit, avec un léger halo atmosphérique autour des objets célestes les plus brillants.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2515,6 +2861,20 @@ Wide-angle lens (16mm equivalent) to counteract water's magnification effect, co
 
 [Texture & render]
 Soft, slightly hazy background from suspended particulates, sharp detail retained on the main subject, natural water movement suggested through subtle blur on loose elements (hair, fins, marine flora).`,
+    ambiancePromptFr: `[Scène & univers]
+Photographie sous-marine captant la vie marine, un récif corallien ou la silhouette d'un plongeur, composition façonnée par la qualité diffuse et l'apesanteur propres au milieu sous-marin.
+
+[Lumière]
+Lumière naturelle filtrée et teintée de bleu venant de la surface, adoucie et diffusée par l'eau, parfois complétée par un premier plan éclairé au flash pour la justesse des couleurs sur les sujets proches.
+
+[Couleur & étalonnage]
+Étalonnage ambiant bleu-vert profond avec une correction plus chaude appliquée au sujet de premier plan pour compenser l'absorption naturelle des couleurs par l'eau en profondeur.
+
+[Composition & objectif]
+Grand-angle (équivalent 16 mm) pour compenser l'effet de grossissement de l'eau, composition utilisant les god rays filtrant depuis la surface pour la profondeur atmosphérique.
+
+[Texture & rendu]
+Arrière-plan doux et légèrement voilé par les particules en suspension, détail net conservé sur le sujet principal, mouvement de l'eau suggéré par un léger flou sur les éléments libres (cheveux, nageoires, flore marine).`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2548,6 +2908,20 @@ True macro lens equivalent (1:1 magnification), extremely shallow depth of field
 
 [Texture & render]
 Extraordinarily sharp, high-resolution surface detail (pollen grains, water droplet refraction, insect exoskeleton texture), background rendered as a smooth color wash.`,
+    ambiancePromptFr: `[Scène & univers]
+Macrophotographie en très gros plan révélant un détail invisible à l'œil nu — insecte, fleur, goutte d'eau ou surface texturée — sujet occupant tout le cadre à échelle grossie.
+
+[Lumière]
+Éclairage doux, diffus et maîtrisé (façon ring light ou softbox) éliminant les ombres dures à très courte distance, parfois en contre-jour pour révéler la translucidité des pétales ou des ailes.
+
+[Couleur & étalonnage]
+Rendu des couleurs vif et fidèle avec un micro-contraste rehaussé pour faire ressortir le détail de surface, couleurs gardées naturelles plutôt qu'artificiellement poussées.
+
+[Composition & objectif]
+Équivalent d'un vrai objectif macro (rapport 1:1), profondeur de champ extrêmement faible isolant un plan de netteté précis tandis que le reste fond en bokeh.
+
+[Texture & rendu]
+Détail de surface extraordinairement net et défini (grains de pollen, réfraction dans une goutte d'eau, texture d'exosquelette), arrière-plan rendu comme un lavis de couleur lisse.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2581,6 +2955,20 @@ Composition relying on shape, line, and tonal contrast rather than color cues to
 
 [Texture & render]
 Crisp micro-contrast bringing out fine texture (skin, fabric, stone) that color might otherwise distract from, deep blacks with retained shadow detail rather than crushed noise.`,
+    ambiancePromptFr: `[Scène & univers]
+N'importe quel sujet traité en noir et blanc affirmé, où c'est le contraste tonal — et non la couleur — qui porte l'impact visuel, composition bâtie sur les rapports graphiques entre clair et sombre.
+
+[Lumière]
+Éclairage directionnel marqué, délibérément choisi pour maximiser la séparation tonale, zones d'ombre profondes opposées à des hautes lumières vives et écrêtées pour un effet graphique dramatique.
+
+[Couleur & étalonnage]
+Conversion monochrome intégrale avec une large plage tonale du noir pur au blanc éclatant, courbe volontairement très contrastée plutôt qu'un gris plat et sans relief.
+
+[Composition & objectif]
+Composition s'appuyant sur la forme, la ligne et le contraste tonal plutôt que sur les repères colorés pour guider le regard, cadrage géométrique et graphique affirmé.
+
+[Texture & rendu]
+Micro-contraste net révélant les textures fines (peau, tissu, pierre) que la couleur pourrait masquer, noirs profonds conservant du détail dans les ombres plutôt qu'écrasés en bruit.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2614,6 +3002,20 @@ Bold, centered composition with graphic outline (thick black contour lines), oft
 
 [Texture & render]
 Flat, screen-print-style rendering with visible halftone dot texture in shaded areas, crisp hard edges with no photographic gradient blending.`,
+    ambiancePromptFr: `[Scène & univers]
+Illustration pop art affirmée dans la tradition des mouvements graphiques des années 1960 — un sujet rendu avec une simplicité graphique en aplats et un impact visuel iconique, souvent centré sur la culture de consommation ou le portrait.
+
+[Lumière]
+Éclairage graphique et plat avec un dégradé minimal — lumière et ombre rendues en blocs de couleur distincts plutôt qu'en transitions photographiques douces.
+
+[Couleur & étalonnage]
+Couleurs primaires et secondaires vives et très saturées (rouges, jaunes, bleus) en aplats assumés, fort contraste chromatique entre les formes adjacentes.
+
+[Composition & objectif]
+Composition centrée et affirmée avec un contour graphique (traits noirs épais), intégrant souvent des trames de points façon halftone ou des éléments de cases répétées.
+
+[Texture & rendu]
+Rendu en aplats façon sérigraphie avec une trame de points visible dans les zones ombrées, bords francs et nets sans dégradé photographique.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2647,6 +3049,20 @@ Detailed wide or medium shot showcasing intricate mechanical elements, compositi
 
 [Texture & render]
 Highly detailed metallic texture (polished brass, aged copper, leather straps, riveted iron), visible steam wisps and fine mechanical engraving detail.`,
+    ambiancePromptFr: `[Scène & univers]
+Scène steampunk mêlant esthétique victorienne et technologie mécanique fantasmée à base de laiton et de vapeur — un personnage, un véhicule ou un environnement bâti d'engrenages, de tuyaux et de soupapes de pression complexes.
+
+[Lumière]
+Éclairage chaud aux tons ambrés évoquant l'éclairage au gaz et la lumière du feu, ombres dramatiques projetées par les structures mécaniques, quelques accents de vapeur ou de braises rougeoyantes.
+
+[Couleur & étalonnage]
+Palette riche en sépia et en laiton (bruns chauds, cuivre patiné, or terni) avec des ombres charbon profondes, étalonnage général aux tons vintage.
+
+[Composition & objectif]
+Plan large ou moyen très détaillé mettant en valeur les éléments mécaniques complexes, composition laissant à la machinerie l'espace nécessaire pour être lisible.
+
+[Texture & rendu]
+Texture métallique très détaillée (laiton poli, cuivre vieilli, sangles de cuir, fer riveté), volutes de vapeur visibles et gravure mécanique fine.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2680,6 +3096,20 @@ Intimate, cozy framing with natural elements (wildflowers, wicker baskets, worn 
 
 [Texture & render]
 Tactile, handmade texture quality — woven fabric, aged wood grain, delicate flower petals — rendered with a gentle, slightly soft-focus warmth rather than clinical sharpness.`,
+    ambiancePromptFr: `[Scène & univers]
+Scène pastorale cottagecore — chaumière de campagne, prairie constellée de fleurs ou moment domestique fait main et chaleureux — évoquant un mode de vie rural lent et romancé.
+
+[Lumière]
+Lumière naturelle douce et chaude filtrant à travers les arbres ou une fenêtre de chaumière, lueur d'heure dorée, tout en douceur et en diffusion plutôt qu'en drame ou en dureté.
+
+[Couleur & étalonnage]
+Palette pastel chaude et feutrée (verts doux, roses poudrés, crème), qualité tonale légèrement passée et nostalgique rappelant un livre illustré peint à la main.
+
+[Composition & objectif]
+Cadrage intime et cosy avec des éléments naturels (fleurs sauvages, paniers en osier, bois patiné) remplissant le premier plan, netteté qui décroît doucement vers les bords.
+
+[Texture & rendu]
+Qualité de texture tactile et artisanale — tissu tissé, veinage du bois vieilli, pétales délicats — rendue avec une chaleur douce et légèrement floue plutôt qu'une netteté clinique.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2713,6 +3143,20 @@ Centered, isolated specimen composition on a plain cream or white background, of
 
 [Texture & render]
 Fine, precise linework and delicate color layering reminiscent of watercolor or engraved botanical plates, crisp detail on leaf venation and petal translucency.`,
+    ambiancePromptFr: `[Scène & univers]
+Illustration botanique dans la tradition naturaliste scientifique — une seule plante, fleur ou feuille rendue avec une exactitude anatomique précise, isolée sur fond neutre comme dans les flores classiques.
+
+[Lumière]
+Éclairage studio homogène et sans ombre garantissant que chaque détail structurel du spécimen (nervures, superposition des pétales, texture de la tige) soit clairement visible, sans ombre distrayante.
+
+[Couleur & étalonnage]
+Rendu chromatique naturaliste et botaniquement exact, fidèle à l'espèce représentée, sans exagération artistique — l'exactitude prime sur la stylisation.
+
+[Composition & objectif]
+Spécimen isolé et centré sur fond crème ou blanc uni, incluant souvent des détails annotés en médaillon (coupe transversale, graine, racine) dans le style des planches scientifiques classiques.
+
+[Texture & rendu]
+Trait fin et précis et superposition délicate des couleurs rappelant l'aquarelle ou la planche botanique gravée, détail net sur la nervation des feuilles et la translucidité des pétales.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
@@ -2746,6 +3190,20 @@ Head-and-shoulders or waist-up framing, shot on an 85mm equivalent for natural, 
 
 [Texture & render]
 Crisp, clean skin rendering with natural texture retained (not over-smoothed), sharp focus on the eyes, softly blurred background to keep full attention on the subject.`,
+    ambiancePromptFr: `[Scène & univers]
+Portrait professionnel épuré conçu spécifiquement pour un profil d'entreprise ou LinkedIn — sujet en tenue professionnelle, fond neutre ou fond de bureau doucement flouté, immédiatement lisible comme une photo de profil professionnelle et non comme un portrait artistique.
+
+[Lumière]
+Éclairage studio doux, homogène et flatteur (grande softbox ou lumière de fenêtre diffusée) éliminant les ombres dures, pour un rendu propre, avenant et inspirant confiance.
+
+[Couleur & étalonnage]
+Étalonnage neutre et fidèle avec des carnations justes et saines, aucun parti pris chromatique stylisé — la clarté et le professionnalisme priment sur l'ambiance artistique.
+
+[Composition & objectif]
+Cadrage tête et épaules ou à mi-buste, rendu d'un équivalent 85 mm pour des proportions de visage naturelles et sans distorsion, sujet centré ou légèrement décentré selon les conventions de la photo de profil.
+
+[Texture & rendu]
+Rendu de peau net et propre avec la texture naturelle préservée (sans lissage excessif), netteté sur les yeux, arrière-plan doucement flouté pour concentrer toute l'attention sur le sujet.`,
     buttons: [
       { label: "Affiner l'ambiance", flow: "refine-ambiance" },
       { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
