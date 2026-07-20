@@ -3433,7 +3433,832 @@ or light-trail accents, polished commercial finish`,
     fomoMicrocopy:
       "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
     renderAsset: null,
+  },  {
+    slug: "prompt-video-mariage-cinematique",
+    title: "Vidéo de mariage cinématique",
+    tagline: "Un film de mariage à l'esthétique de long-métrage.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo mariage cinématique — style à copier (Sora)",
+    seoDescription:
+      "Un prompt de style pour un film de mariage cinématique : ralentis, lumière dorée, étalonnage filmique, 24fps. À copier sans inscription.",
+    targetKeywords: ["prompt sora mariage", "prompt vidéo mariage ia"],
+    ambiancePrompt: `[Visual style]
+Cinematic wedding film style with a romantic, storytelling visual language — sweeping establishing shots of the venue, intimate close-ups of emotional moments, composition treated like a feature film rather than event documentation.
+
+[Cinematography]
+Smooth gimbal-stabilized camera movement gliding through key moments (ceremony, first look, reception), mix of wide establishing shots and tight emotional close-ups, occasional slow-motion for key gestures (ring exchange, first kiss).
+
+[Lighting & time]
+Golden hour and blue hour natural light prioritized for outdoor moments, soft ambient venue lighting for indoor scenes, lighting always flattering and warm rather than harsh or clinical.
+
+[Color grade]
+Warm, romantic film-inspired color grade with soft highlight rolloff and rich but natural skin tones, gentle contrast curve evoking classic cinema rather than a flat, digital look.
+
+[Lens & finish]
+Shallow depth of field with creamy background bokeh isolating key subjects, subtle film grain overlay, gentle vignette drawing the eye to the emotional center of each frame.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
   },
+  {
+    slug: "prompt-video-visite-immobiliere-walkthrough",
+    title: "Visite immobilière (walkthrough)",
+    tagline: "Une visite fluide qui donne envie de pousser la porte.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo visite immobilière — style walkthrough à copier",
+    seoDescription:
+      "Un prompt de style pour une visite immobilière filmée : plan-séquence fluide, grand angle, lumière naturelle, rendu commercial. À copier sans inscription.",
+    targetKeywords: ["prompt sora immobilier", "prompt vidéo visite immobilière ia"],
+    ambiancePrompt: `[Visual style]
+Real estate walkthrough of an actual existing property, shot to feel like a smooth, guided in-person visit — clean, professional, and spatially clear rather than artistically stylized.
+
+[Cinematography]
+Steady, continuous forward-moving camera flow through each room in a logical sequence (entry to living spaces to bedrooms), consistent pacing that lets the viewer register each space without rushing.
+
+[Lighting & time]
+Bright, even natural daylight through windows supplemented by interior lighting to avoid dark corners, shot during daytime for maximum natural light and true-to-life room appearance.
+
+[Color grade]
+Neutral, true-to-life color grade with accurate white balance, slight warmth boost to feel inviting without misrepresenting the actual space's colors or finishes.
+
+[Lens & finish]
+Wide-angle lens with corrected perspective (no fisheye distortion) to accurately convey room proportions, consistently sharp focus throughout — no artistic blur that would obscure real spatial details.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-recette-de-cuisine",
+    title: "Vidéo recette de cuisine",
+    tagline: "Une recette filmée qui donne envie de cuisiner tout de suite.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo recette de cuisine — style à copier",
+    seoDescription:
+      "Un prompt de style pour une vidéo recette : plans macro en plongée, gestes nets, lumière rasante, rythme découpé. À copier sans inscription.",
+    targetKeywords: ["prompt sora cuisine", "prompt vidéo recette ia"],
+    ambiancePrompt: `[Visual style]
+Appetizing recipe video style following the cooking process step by step, clean kitchen setting with the food and hands as the visual focus throughout.
+
+[Cinematography]
+Mix of overhead shots for chopping/mixing actions and closer angled shots for pan/oven moments, smooth cuts between preparation steps, a satisfying final reveal shot of the plated dish.
+
+[Lighting & time]
+Bright, soft, even lighting mimicking a well-lit kitchen with natural window light, no harsh shadows that would obscure ingredient or texture detail.
+
+[Color grade]
+Warm, appetizing color grade emphasizing rich food tones (fresh greens, deep reds, golden browns), slightly boosted saturation on the food itself while keeping surroundings neutral.
+
+[Lens & finish]
+Shallow depth of field isolating the food/hands from a softly blurred kitchen background, macro-capable close-ups for texture detail (sizzling, steam, sauce consistency).`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-lookbook-mode",
+    title: "Lookbook mode",
+    tagline: "Une vidéo mode qui met en scène chaque tenue avec style.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo lookbook mode — style à copier",
+    seoDescription:
+      "Un prompt de style pour un lookbook mode : mouvements lents, transitions sur les tenues, lumière studio, rendu éditorial. À copier sans inscription.",
+    targetKeywords: ["prompt sora mode", "prompt vidéo lookbook ia"],
+    ambiancePrompt: `[Visual style]
+Fashion lookbook video showcasing a clothing collection or outfit through movement and styling, editorial energy blending fashion-film aesthetics with clear product visibility.
+
+[Cinematography]
+Dynamic tracking shots following the model's movement and turns, mix of full-body shots showing the complete outfit and detail shots on fabric/accessories, confident, deliberate pacing between looks.
+
+[Lighting & time]
+Bold, directional studio lighting sculpting the garment's silhouette, or bright natural outdoor light for a more editorial-location feel depending on desired mood.
+
+[Color grade]
+Bold, fashion-editorial color grade with rich, true-to-garment colors, contrast pushed for visual punch appropriate to a fashion film rather than a flat product shot.
+
+[Lens & finish]
+85-135mm equivalent for flattering compression on full-body shots, crisp fabric texture detail on close-ups, subtle motion blur on fast movement for dynamic energy.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-vlog-voyage",
+    title: "Vlog voyage",
+    tagline: "Un vlog immersif qui donne l'impression de voyager avec toi.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo vlog voyage — style à copier",
+    seoDescription:
+      "Un prompt de style pour un vlog voyage immersif : caméra portée, plans d'ambiance, lumière naturelle, montage rythmé. À copier sans inscription.",
+    targetKeywords: ["prompt sora voyage", "prompt vidéo vlog ia"],
+    ambiancePrompt: `[Visual style]
+Personal travel vlog style blending handheld intimacy with striking destination visuals, energetic and authentic rather than polished tourism-ad footage.
+
+[Cinematography]
+Mix of handheld walking shots following the traveler's point of view, wide establishing shots of the destination, and quick dynamic cuts between locations to maintain energetic pacing.
+
+[Lighting & time]
+Natural available light throughout, varying by time of day to match the authentic travel narrative (bright midday exploration, golden hour scenic shots, ambient evening city light).
+
+[Color grade]
+Vibrant, slightly saturated travel-vlog color grade emphasizing the destination's distinctive colors (turquoise water, warm terracotta streets), energetic without looking artificial.
+
+[Lens & finish]
+Wide-angle lens for immersive environmental context, occasional stabilized handheld movement for authentic energy, natural depth of field rather than heavily blurred backgrounds.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-recap-evenement-highlight-reel",
+    title: "Récap événement (highlight reel)",
+    tagline: "Les meilleurs moments de l'événement, condensés en une vidéo qui donne envie d'y avoir été.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo récap d'événement — highlight reel à copier",
+    seoDescription:
+      "Un prompt de style pour un récap d'événement : montage énergique, plans de foule et de détail, montée en intensité. À copier sans inscription.",
+    targetKeywords: ["prompt sora événement", "prompt vidéo aftermovie ia"],
+    ambiancePrompt: `[Visual style]
+General-purpose event highlight reel (corporate event, conference, party, celebration) condensing the day's best moments into an energetic, feel-good montage — distinct from a sports-specific action edit.
+
+[Cinematography]
+Fast-paced montage editing rhythm cutting between key event moments (arrival, key speakers/moments, crowd reactions, closing), wide crowd shots balanced with candid close-up reaction shots.
+
+[Lighting & time]
+Available event lighting throughout (natural daylight for outdoor events, ambient venue lighting for indoor), consistent exposure across cuts despite varying source lighting.
+
+[Color grade]
+Warm, energetic color grade with boosted vibrancy to convey excitement and atmosphere, consistent color treatment across mixed lighting sources for a cohesive edit.
+
+[Lens & finish]
+Mix of wide environmental shots and telephoto candid close-ups, quick cuts synced to an implied musical rhythm, no heavy stylization that would distract from the real event moments.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-tutoriel-explicatif",
+    title: "Vidéo tutoriel / explicatif",
+    tagline: "Une explication claire, étape par étape, facile à suivre.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo tutoriel explicatif — style à copier",
+    seoDescription:
+      "Un prompt de style pour un tutoriel clair : cadrage stable sur le geste, lumière neutre, rythme posé, lisibilité avant tout. À copier sans inscription.",
+    targetKeywords: ["prompt sora tutoriel", "prompt vidéo explicative ia"],
+    ambiancePrompt: `[Visual style]
+Clear, instructional explainer video style prioritizing comprehension over visual flair — clean framing, consistent visual language, each step visually distinct from the next.
+
+[Cinematography]
+Steady, locked-off or slow, deliberate camera movement keeping the subject/action clearly visible, close-up shots on hands/details for steps requiring precision, consistent camera position between comparable steps.
+
+[Lighting & time]
+Bright, even, shadow-free lighting ensuring every detail of the demonstrated process is clearly visible, no dramatic lighting that would obscure important detail.
+
+[Color grade]
+Clean, neutral color grade with accurate true-to-life colors, no stylistic grading that could misrepresent materials, tools, or results being demonstrated.
+
+[Lens & finish]
+Standard focal length avoiding distortion, deep enough depth of field to keep the full action area in focus, sharp throughout with no artistic blur.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-avant-apres-transformation",
+    title: "Avant/après transformation",
+    tagline: "Un contraste saisissant entre le point de départ et le résultat.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo avant/après — style transformation à copier",
+    seoDescription:
+      "Un prompt de style pour un avant/après : cadrage identique des deux côtés, transition nette, lumière constante. À copier sans inscription.",
+    targetKeywords: ["prompt sora avant après", "prompt vidéo transformation ia"],
+    ambiancePrompt: `[Visual style]
+Before/after transformation video built around a clear visual contrast — the same subject, location, or angle shown in two distinct states, structured to maximize the impact of the change.
+
+[Cinematography]
+Matched camera angle and framing between "before" and "after" shots for direct visual comparison, a clean transition (wipe, match cut, or split-screen) marking the shift between states.
+
+[Lighting & time]
+Consistent lighting setup replicated between before and after shots so the transformation itself — not a lighting change — reads as the visual difference.
+
+[Color grade]
+Consistent color grade applied equally to both states to ensure the contrast comes from the actual transformation, not from grading manipulation.
+
+[Lens & finish]
+Identical lens and framing used for both before and after shots to ensure a fair, credible comparison, sharp focus throughout to clearly show transformation detail.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-unboxing",
+    title: "Vidéo unboxing",
+    tagline: "Le suspense du déballage, capturé sous le meilleur angle.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo unboxing — style à copier",
+    seoDescription:
+      "Un prompt de style pour un unboxing : plans rapprochés sur les mains, lumière douce, textures du packaging, suspense. À copier sans inscription.",
+    targetKeywords: ["prompt sora unboxing", "prompt vidéo déballage ia"],
+    ambiancePrompt: `[Visual style]
+Product unboxing video building anticipation through the reveal process — clean, product-focused framing that keeps attention on the packaging and item being revealed.
+
+[Cinematography]
+Overhead or angled close-up shot on the box/packaging throughout the unboxing sequence, steady camera holding focus on hands and product, a clear hero shot of the fully revealed product at the end.
+
+[Lighting & time]
+Bright, even studio-style lighting eliminating shadow on the packaging and product, consistent exposure throughout to keep focus on the reveal rather than lighting changes.
+
+[Color grade]
+Clean, true-to-product color grade ensuring packaging and item colors are represented accurately, slight brightness boost for a premium, polished feel.
+
+[Lens & finish]
+Macro-capable close-up lens for texture and branding detail on packaging, shallow depth of field on the final product reveal shot to make it the clear visual hero.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-personnage-anime",
+    title: "Personnage animé",
+    tagline: "Un personnage animé expressif, prêt à raconter une histoire.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo personnage animé — style à copier",
+    seoDescription:
+      "Un prompt de style pour un personnage animé expressif : cel shading, animation fluide, cadrage narratif. À copier sans inscription.",
+    targetKeywords: ["prompt sora animation", "prompt vidéo personnage animé ia"],
+    ambiancePrompt: `[Visual style]
+Animated character sequence with expressive, stylized character design and movement, visual language consistent with modern animated short-film production.
+
+[Cinematography]
+Character-focused framing emphasizing expression and gesture, camera movement supporting the character's action (following a walk, framing a reaction close-up), staging that reads clearly even at a glance.
+
+[Lighting & time]
+Stylized animated lighting supporting mood and time of day within the scene, directional light sources shaping the character with clear highlight and shadow read.
+
+[Color grade]
+Vibrant, deliberate color palette supporting the character's personality and the scene's mood, consistent color language across the sequence for visual cohesion.
+
+[Lens & finish]
+Clean, crisp animated rendering with smooth motion, consistent character proportions and style throughout, no photographic artifacts (grain, lens flare) unless stylistically intended.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-clip-musical",
+    title: "Clip musical",
+    tagline: "Un clip visuellement fort qui sert l'émotion du morceau.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo clip musical — style à copier",
+    seoDescription:
+      "Un prompt de style pour un clip musical : montage sur le rythme, éclairage coloré, mouvements de caméra marqués. À copier sans inscription.",
+    targetKeywords: ["prompt sora clip", "prompt clip musical ia"],
+    ambiancePrompt: `[Visual style]
+Music video visual style built to match and amplify the emotional energy of a specific song, bold and stylized rather than literal or documentary in approach.
+
+[Cinematography]
+Dynamic, rhythm-driven camera movement and cutting pace matching the song's tempo and energy, mix of performance shots and narrative/conceptual visual sequences depending on the song's story.
+
+[Lighting & time]
+Bold, mood-driven lighting design (strong color washes, dramatic contrast, or intimate low-key setups) chosen to match the emotional register of the song rather than naturalistic accuracy.
+
+[Color grade]
+Stylized, high-impact color grade with a distinct visual identity (saturated and bold, or desaturated and moody) chosen to reinforce the song's emotional tone.
+
+[Lens & finish]
+Creative lens choices (wide dramatic angles, extreme close-ups) supporting visual storytelling, intentional stylistic elements (grain, flare, motion blur) used deliberately for impact.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-highlight-sportif",
+    title: "Highlight sportif",
+    tagline: "L'intensité du sport, capturée dans ses meilleurs instants.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo highlight sportif — style à copier",
+    seoDescription:
+      "Un prompt de style pour un highlight sportif : ralentis sur l'action, téléobjectif, contraste marqué, montage nerveux. À copier sans inscription.",
+    targetKeywords: ["prompt sora sport", "prompt vidéo highlight sportif ia"],
+    ambiancePrompt: `[Visual style]
+Sports highlight reel focused specifically on athletic action and competitive intensity — fast-paced, energetic editing built around key plays, distinct from a general event recap.
+
+[Cinematography]
+Dynamic tracking shots following the action, quick cuts between key plays/moments, occasional slow-motion on decisive highlight moments (goal, catch, finish line) for dramatic emphasis.
+
+[Lighting & time]
+Available stadium/venue lighting (bright daylight for outdoor sport, strong artificial lighting for indoor/night events), high-contrast lighting typical of broadcast sports coverage.
+
+[Color grade]
+Punchy, high-contrast broadcast-style color grade with saturated team colors and crisp whites, energetic grading typical of professional sports highlight packages.
+
+[Lens & finish]
+Telephoto lens for tight action shots from a distance, fast shutter-style crisp motion capture (no motion blur on key action), sharp throughout to keep fast-moving subjects legible.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-formation-corporate",
+    title: "Vidéo formation corporate",
+    tagline: "Une formation professionnelle claire et engageante.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo formation corporate — style à copier",
+    seoDescription:
+      "Un prompt de style pour une vidéo de formation : cadrage sobre, lumière neutre, rythme clair, rendu professionnel. À copier sans inscription.",
+    targetKeywords: ["prompt sora formation", "prompt vidéo corporate ia"],
+    ambiancePrompt: `[Visual style]
+Corporate training video style balancing professional credibility with visual engagement — clean, well-lit environments (office, presenter setup) that support learning without distraction.
+
+[Cinematography]
+Steady presenter-focused shots (medium close-up for talking segments) combined with supporting cutaway shots illustrating the training content, consistent, calm pacing appropriate for learning retention.
+
+[Lighting & time]
+Bright, even professional lighting on the presenter (three-point lighting style) ensuring clarity and approachability, consistent lighting throughout to avoid visual distraction across segments.
+
+[Color grade]
+Clean, neutral corporate color grade with accurate, professional-looking skin tones and brand-consistent color accents where relevant, no heavy stylization.
+
+[Lens & finish]
+Standard 50-85mm equivalent for natural, flattering presenter framing, consistent sharp focus throughout, minimal depth-of-field blur to keep supporting visual aids legible.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-demo-application-mobile",
+    title: "Démo application mobile",
+    tagline: "Une démo fluide qui montre l'app en action, sans jargon.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo démo d'application mobile — style à copier",
+    seoDescription:
+      "Un prompt de style pour une démo d'app : écran net, gestes lisibles, rythme fluide, finition produit moderne. À copier sans inscription.",
+    targetKeywords: ["prompt sora démo app", "prompt vidéo application ia"],
+    ambiancePrompt: `[Visual style]
+Clean mobile app demo video style focused entirely on the app interface in use, minimal distraction from the screen content, professional product-marketing energy.
+
+[Cinematography]
+Screen-focused framing (device in hand or clean screen capture style) following a natural user flow through the app's key features, smooth transitions between screens/features.
+
+[Lighting & time]
+Bright, even lighting if a physical device is shown in hand, ensuring the screen remains clearly legible and glare-free throughout.
+
+[Color grade]
+Clean, accurate color grade preserving the app's true interface colors and branding, no color manipulation that would misrepresent the actual product.
+
+[Lens & finish]
+Sharp, clear focus on the screen at all times, subtle hand or device movement for a natural, human feel rather than a static, clinical screen recording.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-visualisation-architecturale",
+    title: "Visualisation architecturale",
+    tagline: "Un projet architectural pris vie avant même d'être construit.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo visualisation architecturale — style à copier",
+    seoDescription:
+      "Un prompt de style pour un rendu architectural animé : travelling lent, lumière d'étude, matériaux réalistes, échelle lisible. À copier sans inscription.",
+    targetKeywords: ["prompt sora architecture", "prompt rendu architectural ia"],
+    ambiancePrompt: `[Visual style]
+Architectural visualization presenting a design concept — built or unbuilt — through a polished, rendered fly-through style, artistic and conceptual rather than documenting an existing real property.
+
+[Cinematography]
+Sweeping, cinematic camera movement flying through and around the architectural concept (exterior approach, interior spaces, key design details), deliberate pacing designed to showcase design intent.
+
+[Lighting & time]
+Idealized architectural lighting — often golden hour exterior light or perfectly balanced interior daylight simulation — chosen to present the design in its best possible conceptual light.
+
+[Color grade]
+Polished, high-end architectural-render color grade with clean whites and true material colors, subtle warmth for an aspirational, premium presentation feel.
+
+[Lens & finish]
+Wide architectural lens with corrected perspective for design clarity, crisp material rendering (glass, concrete, wood) throughout, no distracting artifacts — presentation-quality finish.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-scene-fantasy-science-fiction",
+    title: "Scène fantasy / science-fiction",
+    tagline: "Une scène immersive dans un univers imaginaire crédible.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo scène fantasy et science-fiction — à copier",
+    seoDescription:
+      "Un prompt de style pour une scène d'univers imaginaire : échelle épique, éclairage volumétrique, étalonnage cinéma. À copier sans inscription.",
+    targetKeywords: ["prompt sora fantasy", "prompt vidéo science fiction ia"],
+    ambiancePrompt: `[Visual style]
+Cinematic fantasy or science-fiction scene set in a fully realized imaginary world — epic environment (magical realm or futuristic setting), visual grandeur typical of blockbuster genre filmmaking.
+
+[Cinematography]
+Sweeping establishing shots revealing the scale of the world, dynamic camera movement following character action, dramatic low or high angles emphasizing power, danger, or wonder depending on the scene's tone.
+
+[Lighting & time]
+Dramatic, atmospheric lighting appropriate to the genre — mystical glow and volumetric light shafts for fantasy, cold artificial and neon accent lighting for sci-fi — strong directional light sources shaping mood.
+
+[Color grade]
+Genre-appropriate cinematic color grade — warm, saturated tones for fantasy magic and nature, cool blues and teals contrasted with warm highlights for science-fiction technology.
+
+[Lens & finish]
+Wide cinematic lens for establishing scale, tighter dramatic framing for character moments, atmospheric effects (haze, particles, lens flare) used deliberately to enhance immersion.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-reconstitution-historique",
+    title: "Reconstitution historique",
+    tagline: "Une scène d'époque fidèle et immersive.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo reconstitution historique — style à copier",
+    seoDescription:
+      "Un prompt de style pour une scène d'époque : lumière naturelle motivée, costumes et décors crédibles, étalonnage sobre. À copier sans inscription.",
+    targetKeywords: ["prompt sora historique", "prompt vidéo reconstitution ia"],
+    ambiancePrompt: `[Visual style]
+Historical reenactment scene set in a specific, clearly defined time period, visual accuracy and period authenticity prioritized in costume, setting, and staging.
+
+[Cinematography]
+Deliberate, measured camera movement appropriate to the period being depicted, wide shots establishing the historical setting, closer shots capturing period-accurate detail (costume, objects, architecture).
+
+[Lighting & time]
+Natural or practical-source lighting consistent with the depicted era (candlelight/firelight warmth for pre-electric periods, appropriate period-accurate light sources), avoiding anachronistic lighting quality.
+
+[Color grade]
+Muted, historically-toned color grade reflecting the period's visual character (desaturated earth tones for older eras, appropriate period color palette), avoiding an overly modern, digital look.
+
+[Lens & finish]
+Classic cinematic framing avoiding modern lens artifacts, subtle grain for a period-film texture, sharp but not clinically digital rendering of costume and set detail.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-documentaire-nature",
+    title: "Documentaire nature",
+    tagline: "La nature filmée avec le souffle d'un vrai documentaire.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo documentaire nature — style à copier",
+    seoDescription:
+      "Un prompt de style pour un documentaire nature : téléobjectif, patience du cadrage, lumière d'aube, rendu 4K. À copier sans inscription.",
+    targetKeywords: ["prompt sora documentaire", "prompt vidéo nature ia"],
+    ambiancePrompt: `[Visual style]
+Nature documentary style capturing wildlife or natural environments with patient, observational visual storytelling reminiscent of premium wildlife documentary production.
+
+[Cinematography]
+Long, patient observational shots allowing natural behavior to unfold, mix of wide environmental establishing shots and intimate close-ups on wildlife detail, minimal intrusive camera movement.
+
+[Lighting & time]
+Natural available light throughout, golden hour preferred for dramatic wildlife silhouettes and warm tones, lighting always authentic to the natural environment being documented.
+
+[Color grade]
+Rich, natural color grade emphasizing the environment's authentic colors (lush greens, deep blues, earthy browns), enhanced but not artificial vibrancy.
+
+[Lens & finish]
+Telephoto lens for wildlife detail without disturbing the subject, wide-angle for environmental scale shots, natural depth of field mimicking a real documentary camera's optical characteristics.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-time-lapse",
+    title: "Time-lapse",
+    tagline: "Le temps qui s'accélère, pour révéler un mouvement invisible à l'œil nu.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo time-lapse — style à copier",
+    seoDescription:
+      "Un prompt de style pour un time-lapse : caméra fixe ou slider lent, transition de lumière, mouvement révélé. À copier sans inscription.",
+    targetKeywords: ["prompt sora time lapse", "prompt vidéo timelapse ia"],
+    ambiancePrompt: `[Visual style]
+Time-lapse sequence compressing an extended real-world process (sky movement, construction, plant growth, city activity) into a fast, visually striking condensed motion sequence.
+
+[Cinematography]
+Fixed or very slowly moving camera position maintaining a consistent frame throughout the compressed time period, composition designed to clearly show the change or movement occurring over time.
+
+[Lighting & time]
+Lighting change is often the visual subject itself (day-to-night transition, shifting cloud light), otherwise consistent framing across whatever light changes naturally occur during the captured period.
+
+[Color grade]
+Smooth, consistent color grade across the full time-lapse sequence avoiding jarring color shifts between frames, natural tonal transitions as lighting changes throughout the sequence.
+
+[Lens & finish]
+Wide-angle lens typical of time-lapse work for maximum scene coverage, consistently sharp focus throughout, smooth frame-rate blending for fluid compressed motion.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-style-stop-motion",
+    title: "Style stop-motion",
+    tagline: "Le charme fait main de l'animation image par image.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo stop-motion — style à copier",
+    seoDescription:
+      "Un prompt de style pour une animation stop-motion : cadence image par image, textures artisanales, lumière stable. À copier sans inscription.",
+    targetKeywords: ["prompt sora stop motion", "prompt animation stop motion ia"],
+    ambiancePrompt: `[Visual style]
+Stop-motion animation style with the characteristic slightly imperfect, handcrafted charm of frame-by-frame physical animation — tactile materials and deliberate, tangible movement.
+
+[Cinematography]
+Static or deliberately simple camera framing typical of practical stop-motion production, staging that clearly showcases the handcrafted set and character movement without complex camera choreography.
+
+[Lighting & time]
+Warm, practical-style lighting typical of a physical stop-motion set (soft directional key light, visible practical shadows), consistent lighting across the sequence to maintain the tactile illusion.
+
+[Color grade]
+Warm, slightly muted color palette typical of handcrafted animation, gentle color grading that preserves the tactile, physical-material quality of the visuals.
+
+[Lens & finish]
+Slight softness and micro-imperfections characteristic of the stop-motion medium (subtle frame judder, tactile material texture visible in close-ups), avoiding an overly smooth, digital-clean finish.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-anniversaire-celebration",
+    title: "Vidéo anniversaire / célébration",
+    tagline: "Une vidéo joyeuse qui capture l'énergie de la fête.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo anniversaire et célébration — style à copier",
+    seoDescription:
+      "Un prompt de style pour une vidéo de fête : plans spontanés, lumière chaude, énergie joyeuse, montage vif. À copier sans inscription.",
+    targetKeywords: ["prompt sora anniversaire", "prompt vidéo fête ia"],
+    ambiancePrompt: `[Visual style]
+Warm, joyful celebration video style (birthday, milestone, party) capturing genuine emotion and festive energy, personal and candid rather than formally staged.
+
+[Cinematography]
+Mix of candid handheld moments capturing spontaneous reactions and smoother shots of key moments (cake, toasts, gift opening), energetic pacing matching the celebratory mood.
+
+[Lighting & time]
+Warm ambient party lighting (string lights, candles, colorful decor lighting) embraced as part of the festive atmosphere rather than corrected to neutral.
+
+[Color grade]
+Warm, vibrant, feel-good color grade with boosted warmth and slight saturation lift, evoking the joy and warmth of the celebration.
+
+[Lens & finish]
+Natural focal length capturing genuine candid moments, soft background blur on close emotional reactions, no heavy stylization that would distract from the authentic celebration energy.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-animaux-de-compagnie",
+    title: "Vidéo animaux de compagnie",
+    tagline: "Toute la personnalité de ton animal, capturée à l'écran.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo animaux de compagnie — style à copier",
+    seoDescription:
+      "Un prompt de style pour filmer un animal : hauteur d'yeux, ralentis courts, lumière douce, détail du pelage. À copier sans inscription.",
+    targetKeywords: ["prompt sora animaux", "prompt vidéo animal de compagnie ia"],
+    ambiancePrompt: `[Visual style]
+Warm, playful pet video style capturing the animal's personality and natural behavior, intimate and affectionate framing rather than clinical or distant.
+
+[Cinematography]
+Low, eye-level camera angle matching the pet's perspective for intimacy, mix of playful action shots (running, playing) and quieter close-up personality moments, natural, unforced pacing.
+
+[Lighting & time]
+Bright, soft natural light (ideally near a window or outdoors) highlighting fur texture and expression, avoiding harsh direct light that would cause the pet to squint or create harsh shadow.
+
+[Color grade]
+Warm, natural color grade with true-to-life fur tones, gentle warmth boost for a cozy, affectionate feel without looking artificial.
+
+[Lens & finish]
+Natural to slightly telephoto focal length allowing candid distance without disturbing the pet, shallow depth of field isolating the animal from a softly blurred background.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-fitness-entrainement",
+    title: "Vidéo fitness / entraînement",
+    tagline: "Une vidéo d'entraînement dynamique qui donne envie de bouger.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo fitness et entraînement — style à copier",
+    seoDescription:
+      "Un prompt de style pour une vidéo d'entraînement : mouvements lisibles, lumière contrastée, rythme dynamique. À copier sans inscription.",
+    targetKeywords: ["prompt sora fitness", "prompt vidéo entraînement ia"],
+    ambiancePrompt: `[Visual style]
+High-energy fitness/workout video style showcasing exercise movement with clarity and motivational intensity, clean gym or training environment as the setting.
+
+[Cinematography]
+Dynamic tracking and angle changes following the movement clearly (side angle for form clarity, front angle for energy), quick energetic cuts between exercises matching workout intensity.
+
+[Lighting & time]
+Bright, energetic lighting (natural daylight through gym windows or strong even artificial gym lighting) ensuring movement and form remain clearly visible throughout.
+
+[Color grade]
+Punchy, high-energy color grade with boosted contrast and slight cool undertone typical of fitness content, vibrant enough to convey energy without looking unnatural.
+
+[Lens & finish]
+Standard to wide-angle lens capturing full body movement clearly, sharp focus throughout to keep exercise form legible, minimal blur except for intentional motion emphasis on fast movements.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-style-jt-news-broadcast",
+    title: "Style JT / news broadcast",
+    tagline: "Le sérieux et le rythme d'un vrai plateau d'information.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo style JT — plateau news à copier",
+    seoDescription:
+      "Un prompt de style pour un plateau d'information : cadrage buste, lumière tri-points, décor sobre, rendu broadcast. À copier sans inscription.",
+    targetKeywords: ["prompt sora jt", "prompt vidéo journal télévisé ia"],
+    ambiancePrompt: `[Visual style]
+General news broadcast style with a professional anchor desk setup, credible and authoritative visual language typical of a television news program covering varied daily topics.
+
+[Cinematography]
+Steady, professional camera framing on the anchor (medium shot at the desk), occasional cut-ins to graphics or lower-third information overlays, minimal camera movement maintaining broadcast stability.
+
+[Lighting & time]
+Bright, even, professional broadcast-studio lighting on the anchor and desk, consistent flat lighting typical of a news studio ensuring clarity and credibility.
+
+[Color grade]
+Clean, neutral broadcast color grade with accurate skin tones and crisp studio colors, consistent with standard television news production values.
+
+[Lens & finish]
+Standard broadcast framing (medium shot, eye-level), sharp focus throughout on the anchor and any graphic overlays, no stylistic blur or grain — clarity and professionalism prioritized.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-meteo-style-presentateur",
+    title: "Météo (style présentateur)",
+    tagline: "Un bulletin météo dynamique, présenté avec conviction.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo bulletin météo — style présentateur à copier",
+    seoDescription:
+      "Un prompt de style pour un bulletin météo : présentateur devant fond incrusté, lumière homogène, gestuelle claire. À copier sans inscription.",
+    targetKeywords: ["prompt sora météo", "prompt vidéo bulletin météo ia"],
+    ambiancePrompt: `[Visual style]
+Weather forecast broadcast style with a presenter gesturing toward a weather map or green-screen display, energetic and clear visual language distinct from a general news anchor desk format.
+
+[Cinematography]
+Medium to wide shot showing the presenter's full gesturing range toward the map/screen area, camera positioned to keep both presenter and graphic display clearly visible and balanced in frame.
+
+[Lighting & time]
+Bright, even studio lighting on the presenter matching standard weather-segment broadcast lighting, careful balance to avoid interference with green-screen keying if applicable.
+
+[Color grade]
+Clean, vivid broadcast color grade with clear, saturated map graphic colors (temperature zones, weather icons) and neutral, accurate presenter skin tones.
+
+[Lens & finish]
+Standard broadcast medium-wide framing keeping the presenter's gestures and the map/graphic both legible, sharp focus throughout, no stylistic blur that would obscure the forecast information.`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+
 ];
 
 export function getLibraryPage(slug: string): LibraryPage | undefined {
