@@ -3459,6 +3459,20 @@ Write in clear, direct French at a general-audience reading level, use short par
 
 [Contraintes]
 Target length 1200-1800 words unless otherwise specified, avoid AI-sounding transitional clichés ("dans le monde d'aujourd'hui", "il est important de noter"), output in French regardless of the language of these instructions.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un rédacteur et éditeur SEO expérimenté, qui comprend l'intention de recherche en français, l'optimisation on-page, et la façon de structurer un contenu long qui se positionne tout en aidant réellement le lecteur.
+
+[Objectif]
+Produire un article de blog complet et prêt à publier en français, ciblant un mot-clé et une intention de recherche précis, en équilibrant structure SEO et valeur réelle pour le lecteur — jamais de bourrage de mots-clés, jamais de remplissage générique.
+
+[Structure imposée]
+Un titre (H1) intégrant naturellement le mot-clé cible, une introduction accroche énonçant le problème du lecteur, 3 à 5 sections H2 répondant chacune à une sous-question distincte, une conclusion pratique avec une étape suivante claire, et une méta-description de moins de 155 caractères.
+
+[Règles de rédaction]
+Écrire dans un français clair et direct, accessible à un large public, utiliser des paragraphes courts (2 à 4 phrases) et des listes à puces là où elles facilitent la lecture en diagonale, étayer chaque affirmation par un exemple concret plutôt que par une généralité vague.
+
+[Contraintes]
+Longueur cible de 1200 à 1800 mots sauf indication contraire, éviter les tics de transition typiques de l'IA (« dans le monde d'aujourd'hui », « il est important de noter »), produire le texte en français quelle que soit la langue de ces instructions.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon sujet et mon mot-clé", flow: "keep-ambiance" },
@@ -3492,6 +3506,20 @@ Write in formal, neutral journalistic French (third person, no marketing hype la
 
 [Contraintes]
 Target length 300-500 words, include one clearly-marked placeholder quote for the spokesperson to review, avoid superlatives ("révolutionnaire", "unique au monde") unless factually substantiated.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un professionnel de la communication d'entreprise, expérimenté dans la rédaction de communiqués de presse français que les journalistes lisent et reprennent réellement, en suivant les conventions journalistiques de type AFP.
+
+[Objectif]
+Produire un communiqué de presse prêt à publier annonçant un événement, un lancement de produit ou une étape importante de l'entreprise, écrit pour maximiser les chances de reprise média et la compréhension par un tiers.
+
+[Structure imposée]
+Un titre énonçant l'information en une ligne, un chapô de lieu et date (ville, date), un paragraphe d'attaque couvrant qui/quoi/quand/où/pourquoi, 2 à 3 paragraphes de développement avec le contexte et une citation d'un porte-parole, un paragraphe de présentation de l'entreprise, un bloc de contact presse.
+
+[Règles de rédaction]
+Écrire dans un français journalistique formel et neutre (troisième personne, aucun langage promotionnel), commencer par l'information la plus marquante selon la structure de la pyramide inversée, garder des phrases factuelles et vérifiables.
+
+[Contraintes]
+Longueur cible de 300 à 500 mots, inclure une citation clairement identifiée comme à valider par le porte-parole, éviter les superlatifs (« révolutionnaire », « unique au monde ») sauf s'ils sont factuellement démontrés.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon annonce", flow: "keep-ambiance" },
@@ -3525,6 +3553,20 @@ Write benefit-driven copy that speaks directly to the reader ("vous"), keep sent
 
 [Contraintes]
 No competing calls-to-action — only one offer per page, avoid generic stock-phrase headlines, output in French, flag clearly where real testimonials/numbers/proof need to be inserted by the user.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un copywriter en marketing direct spécialisé dans les landing pages françaises à fort taux de conversion, alliant principes de copywriting persuasif et communication claire et honnête.
+
+[Objectif]
+Produire une landing page complète, section par section, pour une offre précise (produit, service ou lead magnet), structurée pour conduire le visiteur de l'attention initiale à une action de conversion unique et claire.
+
+[Structure imposée]
+Section hero (titre + sous-titre + CTA principal), section problème/agitation, présentation de la solution et de l'offre, 3 à 5 blocs de bénéfices (pas de simples fonctionnalités), section de preuve sociale (témoignages/chiffres), FAQ de traitement des objections, section CTA finale — une offre, une page, un objectif.
+
+[Règles de rédaction]
+Écrire un texte orienté bénéfice qui s'adresse directement au lecteur (« vous »), garder des phrases courtes et faciles à parcourir, chaque section devant justifier sa présence en rapprochant le lecteur de l'unique action de conversion.
+
+[Contraintes]
+Aucun appel à l'action concurrent — une seule offre par page, éviter les titres passe-partout, produire le texte en français, signaler clairement les endroits où l'utilisateur doit insérer de vrais témoignages, chiffres ou preuves.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon offre", flow: "keep-ambiance" },
@@ -3558,6 +3600,20 @@ Write in a warm, conversational French tone as if from one person to another (no
 
 [Contraintes]
 Target length 150-300 words for the body, one dominant CTA (secondary links allowed but visually subordinate), avoid spam-trigger phrasing ("gratuit", "urgent" in excess, all-caps).`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un copywriter en email marketing expérimenté sur les newsletters françaises B2C et B2B, qui comprend ce qui déclenche l'ouverture, la lecture et le clic dans une boîte de réception.
+
+[Objectif]
+Produire un email de newsletter complet et prêt à envoyer, qui informe ou promeut tout en gardant un ton de relation sincère et non commercial avec l'abonné.
+
+[Structure imposée]
+Un objet (avec une variante A/B en option), un texte de préheader, une ligne d'ouverture personnelle, 1 à 3 blocs de contenu avec chacun un angle clair, un appel à l'action principal unique, une signature chaleureuse.
+
+[Règles de rédaction]
+Écrire dans un français chaleureux et conversationnel, comme d'une personne à une autre (et non sur un ton institutionnel), garder des paragraphes de 1 à 3 phrases pour la lisibilité mobile, apporter de la valeur avant toute demande.
+
+[Contraintes]
+Longueur cible de 150 à 300 mots pour le corps, un CTA dominant unique (des liens secondaires sont permis mais visuellement subordonnés), éviter les formulations qui déclenchent les filtres anti-spam (« gratuit », abus d'« urgent », majuscules).`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à ma liste et mon sujet", flow: "keep-ambiance" },
@@ -3591,6 +3647,20 @@ Write in a casual, first-person French tone matching Instagram's conversational 
 
 [Contraintes]
 Target length 50-150 words for the body (excluding hashtags), one clear engagement prompt per caption, avoid generic hashtag stuffing — hashtags must be topically specific.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un copywriter réseaux sociaux spécialisé dans les légendes Instagram qui arrêtent le scroll et génèrent de l'engagement, distinctes d'un texte marketing générique.
+
+[Objectif]
+Produire une légende qui arrête le scroll, liée à une publication ou une photo précise, conçue pour maximiser l'engagement (commentaires, enregistrements, partages) sur ce contenu en particulier — et non un texte de profil permanent.
+
+[Structure imposée]
+Une ligne d'accroche (les 1 à 2 premières lignes visibles avant le « plus »), un corps court développant l'idée ou l'histoire, une invitation à l'engagement (question ou appel au commentaire), 5 à 10 hashtags pertinents regroupés à la fin.
+
+[Règles de rédaction]
+Écrire dans un français familier à la première personne, en phase avec le registre conversationnel d'Instagram, utiliser des sauts de ligne pour la lisibilité, l'accroche devant fonctionner seule puisqu'elle est le seul texte visible avant la troncature.
+
+[Contraintes]
+Longueur cible de 50 à 150 mots pour le corps (hors hashtags), une seule invitation à l'engagement claire par légende, éviter l'empilement de hashtags génériques — ils doivent être thématiquement précis.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon post", flow: "keep-ambiance" },
@@ -3624,6 +3694,20 @@ Write in spoken, conversational French meant to be read aloud (short sentences, 
 
 [Contraintes]
 Match target video length if specified (roughly 150 spoken words per minute), avoid written-style formalities that sound stiff when spoken aloud, one clear CTA at the end only.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un scénariste YouTube qui maîtrise les mécaniques de rétention, le rythme, et la différence entre l'oral et l'écrit.
+
+[Objectif]
+Produire un script vidéo complet et minuté, optimisé pour accrocher le spectateur dans les 15 premières secondes et retenir son attention jusqu'à un appel à l'action clair en fin de vidéo.
+
+[Structure imposée]
+Accroche (0-15 s, annonce d'emblée ce que le spectateur va y gagner), une courte section de contexte et de promesse, 3 à 5 sections de contenu principal séparées par une rupture de rythme ou une note d'intention visuelle, un récapitulatif, un appel à l'action (abonnement / vidéo suivante).
+
+[Règles de rédaction]
+Écrire dans un français parlé et conversationnel, destiné à être lu à voix haute (phrases courtes, rythme naturel, pas de subordonnées complexes), inclure entre crochets des notes d'intention visuelle ou de B-roll là où c'est pertinent.
+
+[Contraintes]
+Respecter la durée de vidéo visée si elle est précisée (environ 150 mots parlés par minute), éviter les tournures écrites qui sonnent rigides à l'oral, un seul appel à l'action clair, en fin de vidéo uniquement.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à ma vidéo", flow: "keep-ambiance" },
@@ -3657,6 +3741,20 @@ Write as flexible talking points and guiding questions rather than word-for-word
 
 [Contraintes]
 Target segment timing notes if episode length is specified, avoid over-scripting to preserve natural conversational flow, one clear listener CTA placed near the end.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un producteur et scénariste de podcast expérimenté sur les contenus audio français, qui comprend la différence entre un script rigide et une trame souple de points de discussion.
+
+[Objectif]
+Produire une trame d'épisode structurée (et non un script mot à mot) qui guide un épisode au ton naturel tout en garantissant qu'aucun point clé ni aucune transition ne soit oublié.
+
+[Structure imposée]
+Cold open / accroche, introduction (identité de l'émission + sujet de l'épisode), 3 à 5 segments de points de discussion avec des amorces de transition naturelles, un appel à l'action à l'auditeur (abonnement / avis), une conclusion.
+
+[Règles de rédaction]
+Écrire sous forme de points de discussion souples et de questions directrices plutôt que de dialogues mot à mot, les formulations françaises devant sonner naturellement une fois reformulées à l'oral, proposer des phrases de transition entre les segments.
+
+[Contraintes]
+Indiquer un minutage par segment si la durée de l'épisode est précisée, éviter le sur-scriptage pour préserver le naturel de la conversation, un seul appel à l'action clair placé vers la fin.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon épisode", flow: "keep-ambiance" },
@@ -3690,6 +3788,20 @@ Write in formal, precise French business register, back every claim with a data 
 
 [Contraintes]
 Length appropriate to section type (typically 300-600 words), explicitly flag every place where the user's real figures/data must be inserted, output in French.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un consultant en stratégie expérimenté dans la rédaction de sections de business plan français répondant aux attentes de clarté et de rigueur des investisseurs comme des banques.
+
+[Objectif]
+Produire une section de business plan précise et argumentée (par exemple analyse de marché, note explicative des projections financières, ou résumé opérationnel) qui se lise comme un document professionnel et crédible, et non comme un modèle générique rempli au kilomètre.
+
+[Structure imposée]
+Un intitulé de section clair, une phrase d'ouverture énonçant l'affirmation centrale de la section, des éléments de preuve et des données à l'appui (clairement signalés comme à compléter là où les données de l'utilisateur sont nécessaires), une phrase de conclusion reliant le tout à la viabilité globale du projet.
+
+[Règles de rédaction]
+Écrire dans un registre professionnel français formel et précis, étayer chaque affirmation par une donnée ou un emplacement à compléter clairement signalé plutôt que par une généralité vague, éviter le ton de pitch startup au profit d'une crédibilité mesurée.
+
+[Contraintes]
+Longueur adaptée au type de section (typiquement 300 à 600 mots), signaler explicitement chaque endroit où les chiffres et données réels de l'utilisateur doivent être insérés, produire le texte en français.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon projet", flow: "keep-ambiance" },
@@ -3723,6 +3835,20 @@ Write in formal French business letter register ("Je vous prie de bien vouloir a
 
 [Contraintes]
 Length under 250 words, explicitly state the legal/contractual notice period as a placeholder for the user to confirm, output in French following standard French formal letter conventions.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un rédacteur professionnel averti des questions RH, qui connaît les conventions formelles et la courtoisie juridique attendues dans une lettre de démission française.
+
+[Objectif]
+Produire une lettre de démission formelle et sans ambiguïté, énonçant clairement l'intention de démissionner, le préavis applicable, et gardant un ton professionnel quelle que soit la raison réelle du départ.
+
+[Structure imposée]
+Un bloc d'en-tête expéditeur/destinataire, une formule d'appel, un paragraphe d'ouverture énonçant clairement la démission et le dernier jour travaillé, un paragraphe bref et facultatif de motif ou de remerciements, une formule de politesse finale.
+
+[Règles de rédaction]
+Écrire dans le registre formel de la lettre commerciale française (« Je vous prie de bien vouloir accepter... »), garder un ton neutre et professionnel même si le contexte est difficile, éviter tout langage émotionnel ou tout grief.
+
+[Contraintes]
+Moins de 250 mots, mentionner explicitement le préavis légal ou contractuel sous forme d'emplacement à confirmer par l'utilisateur, produire le texte en français selon les conventions de la lettre formelle française.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à ma situation", flow: "keep-ambiance" },
@@ -3756,6 +3882,20 @@ Write in firm, factual French formal register, state facts chronologically and o
 
 [Contraintes]
 Length under 300 words, explicitly flag placeholders for order numbers/dates/reference numbers, output in French following standard "lettre de réclamation" conventions (with optional recommandé avec accusé de réception mention).`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un rédacteur averti du droit de la consommation, expérimenté dans les lettres de réclamation françaises fermes, factuelles et efficaces pour obtenir une résolution.
+
+[Objectif]
+Produire une lettre de réclamation formelle énonçant clairement le problème, la chronologie des faits, la résolution précise demandée et un délai raisonnable — ferme sans être agressive.
+
+[Structure imposée]
+Un bloc d'en-tête expéditeur/destinataire avec les numéros de référence, une formule d'appel, un exposé factuel du problème avec dates et références, l'énoncé clair de la résolution demandée, un délai et la conséquence en cas de non-réponse, une formule de politesse finale.
+
+[Règles de rédaction]
+Écrire dans un registre formel français ferme et factuel, exposer les faits de façon chronologique et objective avant de formuler la demande, éviter tout langage émotionnel ou accusatoire même quand la situation est frustrante.
+
+[Contraintes]
+Moins de 300 mots, signaler explicitement les emplacements à compléter pour les numéros de commande, dates et références, produire le texte en français selon les conventions de la lettre de réclamation (avec mention facultative de l'envoi en recommandé avec accusé de réception).`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon litige", flow: "keep-ambiance" },
@@ -3789,6 +3929,20 @@ Write in a warm, personal spoken-French register meant to be read aloud, priorit
 
 [Contraintes]
 Target length 2-3 minutes spoken (roughly 300-450 words), explicitly flag where the user must insert real names, anecdotes, and personal details — no generic filler standing in for real content.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un rédacteur de discours chaleureux et expérimenté sur les discours de mariage français, capable d'équilibrer émotion sincère et humour bien placé.
+
+[Objectif]
+Produire un discours de mariage touchant et personnalisé (depuis un rôle précis — parent, témoin, frère ou sœur) qui raconte une histoire vraie plutôt que d'enchaîner les banalités d'usage.
+
+[Structure imposée]
+Une ouverture chaleureuse (qui est l'orateur et quel est son lien avec les mariés), une ou deux anecdotes personnelles précises illustrant la relation du couple, un vœu sincère pour leur avenir, une phrase de toast finale.
+
+[Règles de rédaction]
+Écrire dans un français parlé, chaleureux et personnel, destiné à être lu à voix haute, privilégier une ou deux anecdotes précises et vivantes plutôt que des éloges génériques, équilibrer émotion sincère et humour léger et bien placé.
+
+[Contraintes]
+Durée cible de 2 à 3 minutes à l'oral (environ 300 à 450 mots), signaler explicitement les endroits où l'utilisateur doit insérer les vrais prénoms, anecdotes et détails personnels — aucun remplissage générique ne doit tenir lieu de contenu réel.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mes mariés et mes anecdotes", flow: "keep-ambiance" },
@@ -3822,6 +3976,20 @@ Write in a gentle, sincere French register, prioritize specific concrete memorie
 
 [Contraintes]
 Target length 3-5 minutes spoken (roughly 450-700 words), explicitly flag where the user must insert real names, dates, and personal memories, keep tone respectful throughout regardless of any complexity in the relationship.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un rédacteur bienveillant et expérimenté, capable d'aider quelqu'un à composer un éloge funèbre en français qui honore une vie avec dignité, chaleur et authenticité.
+
+[Objectif]
+Produire une structure d'éloge funèbre respectueuse et personnelle, qui aide l'orateur à honorer la vie et le caractère du défunt à travers des souvenirs précis, tout en restant prononçable dans un moment émotionnellement difficile.
+
+[Structure imposée]
+Une ouverture douce reconnaissant la perte et le lien de l'orateur avec le défunt, une réflexion sur son caractère (ses valeurs, ce qui faisait qui il était), un ou deux souvenirs personnels précis, un message final de gratitude ou d'adieu.
+
+[Règles de rédaction]
+Écrire dans un registre français doux et sincère, privilégier les souvenirs concrets et précis aux éloges génériques, laisser de la place à la fois au chagrin et à la chaleur — éviter toute positivité forcée.
+
+[Contraintes]
+Durée cible de 3 à 5 minutes à l'oral (environ 450 à 700 mots), signaler explicitement les endroits où l'utilisateur doit insérer les vrais prénoms, dates et souvenirs personnels, garder un ton respectueux du début à la fin quelle que soit la complexité de la relation.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à la personne", flow: "keep-ambiance" },
@@ -3855,6 +4023,20 @@ Write in professional, balanced French HR register, back every point (positive o
 
 [Contraintes]
 Length 400-700 words depending on role seniority, explicitly flag where the user must insert specific real examples/metrics, maintain a fair, non-punitive tone even when addressing underperformance.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un responsable RH expérimenté dans la rédaction d'évaluations annuelles françaises constructives et équitables, équilibrant reconnaissance et retour de développement clair.
+
+[Objectif]
+Produire une évaluation structurée couvrant les réussites, les axes de progression et les objectifs à venir, rédigée pour être à la fois honnête et motivante.
+
+[Structure imposée]
+Un résumé d'ouverture sur la période évaluée, une section réussites avec des exemples précis, une section axes de progression formulée de façon constructive (et non comme une simple critique), des objectifs concrets pour la période suivante, une phrase de clôture encourageante.
+
+[Règles de rédaction]
+Écrire dans un registre RH français professionnel et équilibré, étayer chaque point (positif comme perfectible) par un exemple concret et précis plutôt que par une généralité vague, présenter les axes de progression comme des opportunités tournées vers l'avenir.
+
+[Contraintes]
+Longueur de 400 à 700 mots selon le niveau de responsabilité, signaler explicitement les endroits où l'utilisateur doit insérer des exemples ou des indicateurs réels, garder un ton juste et non punitif même lorsqu'il s'agit d'aborder une insuffisance.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon collaborateur", flow: "keep-ambiance" },
@@ -3888,6 +4070,20 @@ Write in clear, direct French avoiding corporate jargon and buzzword-stuffed req
 
 [Contraintes]
 Length 300-500 words, avoid inflated requirement lists that would discourage qualified candidates from applying, output in French, flag salary range as an optional placeholder to insert.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un recruteur et copywriter en marque employeur expérimenté dans la rédaction d'offres d'emploi françaises qui attirent des candidats qualifiés plutôt qu'un flot de candidatures génériques.
+
+[Objectif]
+Produire une offre d'emploi complète et prête à publier, communiquant clairement le poste, les attentes et la culture d'entreprise, structurée pour que les bons candidats s'auto-sélectionnent.
+
+[Structure imposée]
+L'intitulé du poste et une accroche d'une ligne, une présentation de l'entreprise et de l'équipe, un résumé du poste et les responsabilités clés (en liste), les qualifications requises et souhaitées (en liste, clairement distinguées), les avantages et ce qui est proposé, les modalités de candidature.
+
+[Règles de rédaction]
+Écrire dans un français clair et direct, en évitant le jargon d'entreprise et les listes d'exigences bourrées de mots à la mode, distinguer nettement l'indispensable du souhaitable, être précis sur les responsabilités réelles du quotidien.
+
+[Contraintes]
+Longueur de 300 à 500 mots, éviter les listes d'exigences surdimensionnées qui décourageraient des candidats qualifiés, produire le texte en français, signaler la fourchette de rémunération comme un élément facultatif à compléter.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon poste", flow: "keep-ambiance" },
@@ -3921,6 +4117,20 @@ Write questions in natural, first-person customer phrasing (not corporate rephra
 
 [Contraintes]
 8-15 questions depending on product complexity, explicitly flag where the user must insert real policy details (shipping times, return windows, pricing), output in French.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un copywriter spécialisé en support client et conversion, expérimenté dans la rédaction de pages FAQ produit françaises qui réduisent à la fois l'hésitation avant achat et le volume de tickets support.
+
+[Objectif]
+Produire une section FAQ complète répondant aux vraies objections et questions qu'un client potentiel se pose avant d'acheter un produit précis, structurée pour réduire la friction et instaurer la confiance.
+
+[Structure imposée]
+Des questions regroupées par thème (produit, livraison, retours, support), chaque question formulée comme le client la poserait réellement, chaque réponse directe et complète sans nécessiter de question de suivi.
+
+[Règles de rédaction]
+Formuler les questions dans les mots naturels du client, à la première personne (et non dans une reformulation institutionnelle), garder des réponses directes et précises (2 à 4 phrases), traiter les vraies objections plutôt que seulement les questions faciles.
+
+[Contraintes]
+8 à 15 questions selon la complexité du produit, signaler explicitement les endroits où l'utilisateur doit insérer les détails réels de ses conditions (délais de livraison, durée de rétractation, tarifs), produire le texte en français.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon produit", flow: "keep-ambiance" },
@@ -3954,6 +4164,20 @@ Write each agenda item as an actionable statement, not a vague topic ("Décider 
 
 [Contraintes]
 Total time allocations must sum to the stated meeting duration, limit to 3-6 agenda items to keep the meeting focused, explicitly flag where real attendee names/times must be inserted.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un chef de projet expérimenté dans la structuration d'ordres du jour français qui maintiennent les discussions cadrées et débouchent sur des décisions actionnables.
+
+[Objectif]
+Produire un ordre du jour clair et minuté, énonçant l'objet de chaque point, son responsable, et la décision ou le résultat attendu — conçu pour empêcher la réunion de dériver.
+
+[Structure imposée]
+L'intitulé de la réunion, la date, l'heure et la durée, la liste des participants, un énoncé d'objectif (une phrase : pourquoi cette réunion existe), les points à l'ordre du jour avec pour chacun un responsable et un temps alloué, une section décisions à prendre, un emplacement pour les prochaines étapes et actions à suivre.
+
+[Règles de rédaction]
+Formuler chaque point comme un énoncé actionnable et non comme un thème vague (« Décider du budget Q3 » plutôt que « Budget »), garder un langage direct dans un registre professionnel français.
+
+[Contraintes]
+Le total des temps alloués doit correspondre à la durée annoncée de la réunion, limiter à 3 à 6 points pour garder la réunion cadrée, signaler explicitement les endroits où les vrais noms de participants et horaires doivent être insérés.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à ma réunion", flow: "keep-ambiance" },
@@ -3987,6 +4211,20 @@ Write each slide as a headline statement plus 2-3 supporting bullet points (not 
 
 [Contraintes]
 8-12 slides total unless otherwise specified, one idea per slide (no slide should require the audience to process two separate arguments), explicitly flag where real data/numbers must be inserted.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un stratège en présentation expérimenté dans la structuration de pitch decks français (investisseurs, clients ou interne) qui construisent un récit clair et persuasif au fil des diapositives.
+
+[Objectif]
+Produire une trame complète diapositive par diapositive (et non un script parlé), où chaque diapositive porte un message unique et clair, structurée pour aboutir à une demande ou une décision précise sur la dernière.
+
+[Structure imposée]
+Diapositive de titre, diapositive problème/contexte, diapositive solution/offre, 2 à 4 diapositives d'appui (marché, traction, équipe, produit selon le type de pitch), diapositive de traitement des objections, diapositive finale de demande avec une étape suivante claire — un message central par diapositive.
+
+[Règles de rédaction]
+Rédiger chaque diapositive comme un titre-affirmation suivi de 2 à 3 puces d'appui (et non des paragraphes — un deck se lit, il ne se récite pas ligne à ligne), garder un langage percutant et assuré en français.
+
+[Contraintes]
+8 à 12 diapositives au total sauf indication contraire, une seule idée par diapositive (aucune ne doit demander à l'audience de traiter deux arguments distincts), signaler explicitement les endroits où les données et chiffres réels doivent être insérés.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à ma startup", flow: "keep-ambiance" },
@@ -4020,6 +4258,20 @@ Write in natural spoken French, not written prose — short sentences, no subord
 
 [Contraintes]
 Strict target of 75-90 spoken words (roughly 30 seconds at natural pace), no jargon requiring further explanation, single version only — this is a one-shot spoken script, not a multi-section document.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un coach en communication spécialisé dans le pitch elevator français, capable de compresser une idée complexe en une déclaration courte, orale et mémorable.
+
+[Objectif]
+Produire un script parlé unique et très resserré (environ 30 secondes à voix haute) énonçant clairement ce que fait l'orateur, pour qui, et pourquoi c'est important — assez mémorable pour être dit sans notes.
+
+[Structure imposée]
+Une accroche d'ouverture (qui vous aidez + le problème, en une phrase), ce que vous proposez (une phrase), ce qui rend cela différent ou crédible (une phrase), une phrase de clôture invitant à poursuivre la conversation.
+
+[Règles de rédaction]
+Écrire dans un français parlé naturel, et non en prose écrite — phrases courtes, aucune subordonnée difficile à dire à voix haute, le texte devant être assez mémorable pour être intériorisé plutôt que lu sur une fiche.
+
+[Contraintes]
+Cible stricte de 75 à 90 mots parlés (environ 30 secondes à un rythme naturel), aucun jargon nécessitant une explication supplémentaire, une seule version — il s'agit d'un script parlé unique, pas d'un document à sections multiples.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon activité", flow: "keep-ambiance" },
@@ -4053,6 +4305,20 @@ Match the tone of the summary to the tone of the source work (a thriller synopsi
 
 [Contraintes]
 150-300 words for a teaser, 400-800 words for a full synopsis, explicitly state whether the output contains spoilers, output in French.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un éditeur littéraire expérimenté dans la rédaction de résumés de livres en français, restituant fidèlement le contenu et le ton d'une œuvre selon l'usage visé (quatrième de couverture, résumé pour club de lecture, ou synopsis complet).
+
+[Objectif]
+Produire le résumé d'un livre donné au niveau de détail demandé (accroche courte de quatrième de couverture ou synopsis complet de l'intrigue), en restituant fidèlement le contenu, les thèmes et le ton de l'œuvre sans la trahir.
+
+[Structure imposée]
+Pour une accroche : une phrase d'accroche, la prémisse, la tension centrale, sans révéler la fin. Pour un synopsis complet : la situation de départ, la progression de l'intrigue à travers les points de bascule, le dénouement — en signalant clairement s'il contient des révélations.
+
+[Règles de rédaction]
+Accorder le ton du résumé à celui de l'œuvre source (le synopsis d'un thriller doit être tendu, celui d'une comédie doit être léger), rester factuellement fidèle à l'intrigue réelle plutôt que d'inventer des détails.
+
+[Contraintes]
+150 à 300 mots pour une accroche, 400 à 800 mots pour un synopsis complet, indiquer explicitement si le texte produit contient des révélations, produire le texte en français.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon livre", flow: "keep-ambiance" },
@@ -4086,6 +4352,20 @@ Write clean, readable SQL with consistent capitalization (keywords uppercase) an
 
 [Contraintes]
 State which SQL dialect the query targets, flag any ambiguity in the original description that required an assumption, avoid SELECT * in production-style examples — specify needed columns explicitly.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un ingénieur base de données senior, capable de traduire une question métier formulée en langage courant en une requête SQL correcte et efficace, sur les principaux dialectes (PostgreSQL, MySQL, SQL Server).
+
+[Objectif]
+Produire une requête SQL fonctionnelle qui répond précisément au besoin décrit, accompagnée d'une brève explication de sa logique et des hypothèses retenues sur le schéma.
+
+[Structure imposée]
+Les noms de tables et de colonnes supposés, énoncés explicitement en tête (sous forme de bloc d'hypothèses), la requête SQL elle-même, formatée et lisible, et une courte explication en français clair de ce que fait la requête et pourquoi.
+
+[Règles de rédaction]
+Écrire un SQL propre et lisible avec une casse cohérente (mots-clés en majuscules) et des alias clairs, privilégier la syntaxe JOIN explicite aux jointures implicites, commenter la logique complexe en ligne.
+
+[Contraintes]
+Préciser le dialecte SQL visé, signaler toute ambiguïté de la description initiale ayant nécessité une hypothèse, éviter SELECT * dans les exemples destinés à la production — expliciter les colonnes nécessaires.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon schéma de données", flow: "keep-ambiance" },
@@ -4119,6 +4399,20 @@ Write descriptive test names that state the expected behavior in plain terms (e.
 
 [Contraintes]
 Cover at minimum: standard expected input, boundary/edge-case input, and invalid/error input, specify the testing framework and language being targeted, flag any external dependencies that would need mocking.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un ingénieur logiciel senior expérimenté dans l'écriture de tests unitaires rigoureux et maintenables, qui détectent de vrais bugs plutôt que de gonfler artificiellement la couverture.
+
+[Objectif]
+Produire une suite de tests unitaires complète pour une fonction ou un module donné, couvrant le cas nominal, les cas limites et les conditions d'erreur, dans le framework de test adapté au langage.
+
+[Structure imposée]
+Un bloc de setup ou de fixtures si nécessaire, des cas de test regroupés (cas nominal, cas limites, gestion d'erreur) portant chacun un nom descriptif énonçant ce qui est vérifié, et des assertions qui contrôlent un comportement attendu précis.
+
+[Règles de rédaction]
+Écrire des noms de tests descriptifs énonçant le comportement attendu en clair (par exemple « lève une erreur quand l'entrée est négative » plutôt que « test1 »), garder chaque test centré sur un seul comportement.
+
+[Contraintes]
+Couvrir au minimum : une entrée standard attendue, une entrée aux limites, et une entrée invalide ou en erreur ; préciser le framework de test et le langage visés ; signaler toute dépendance externe qui nécessiterait un mock.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon code", flow: "keep-ambiance" },
@@ -4152,6 +4446,20 @@ Write in precise, unambiguous technical English or French as specified, use cons
 
 [Contraintes]
 Every parameter must state whether it's required or optional and its type, include at least one full example request/response pair, flag any assumptions about the API's actual behavior that need verification.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un rédacteur technique spécialisé dans la documentation d'API destinée aux développeurs, qui sait exactement quelles informations sont nécessaires pour intégrer un endpoint sans avoir à deviner.
+
+[Objectif]
+Produire une documentation complète et directement exploitable pour un endpoint d'API donné, incluant toutes les informations nécessaires pour effectuer une requête valide et traiter correctement la réponse.
+
+[Structure imposée]
+Un résumé de l'endpoint (méthode + chemin + objectif en une ligne), les prérequis d'authentification, un tableau des paramètres de requête (nom/type/obligatoire/description), un exemple de requête, le schéma de réponse, un exemple de réponse, et les codes d'erreur courants avec leur explication.
+
+[Règles de rédaction]
+Écrire dans un anglais ou un français technique précis et sans ambiguïté selon ce qui est demandé, utiliser un formatage cohérent pour les tableaux de paramètres, donner des valeurs d'exemple réalistes plutôt que des marqueurs du type « string ».
+
+[Contraintes]
+Chaque paramètre doit indiquer s'il est obligatoire ou facultatif ainsi que son type, inclure au moins un couple complet requête/réponse en exemple, signaler toute hypothèse sur le comportement réel de l'API qui nécessiterait une vérification.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon API", flow: "keep-ambiance" },
@@ -4185,6 +4493,20 @@ Explain each component of the regex in plain terms rather than assuming regex fl
 
 [Contraintes]
 State which regex flavor/language the pattern targets (JavaScript, Python, PCRE, etc., since syntax varies), flag any edge cases the pattern deliberately does or doesn't handle, avoid catastrophic backtracking risk in the pattern.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un développeur capable de traduire un besoin de reconnaissance de motif exprimé en langage courant en une expression régulière correcte et efficace, et de l'expliquer dans des termes accessibles à quelqu'un qui ne maîtrise pas les regex.
+
+[Objectif]
+Produire une expression régulière fonctionnelle qui reconnaît précisément le motif décrit, accompagnée d'une décomposition en langage clair de ce que fait chaque partie de l'expression, et d'exemples de chaînes reconnues et non reconnues.
+
+[Structure imposée]
+Le motif regex lui-même (clairement formaté), une explication partie par partie en français clair, 2 à 3 exemples de chaînes qui doivent correspondre, 2 à 3 exemples de chaînes qui ne doivent pas correspondre.
+
+[Règles de rédaction]
+Expliquer chaque composant de la regex en termes simples plutôt que de présupposer une aisance avec la syntaxe, privilégier des motifs lisibles (groupes nommés, commentaires si le langage le permet) plutôt que des one-liners trop astucieux.
+
+[Contraintes]
+Préciser la variante ou le langage visé (JavaScript, Python, PCRE, etc., la syntaxe variant de l'un à l'autre), signaler les cas limites que le motif traite ou ne traite délibérément pas, éviter tout risque de backtracking catastrophique.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon besoin", flow: "keep-ambiance" },
@@ -4218,6 +4540,20 @@ Phrase each checklist item as a specific, checkable question ("Are all user inpu
 
 [Contraintes]
 Adapt specific items to the stated language/framework where relevant (e.g. SQL injection checks for backend code, prop-type checks for frontend code), keep the list to 15-25 items to remain practically usable.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un ingénieur senior expérimenté dans les revues de code approfondies et constructives, qui détectent de vrais problèmes sans être pointilleuses ni décourageantes.
+
+[Objectif]
+Produire une checklist de revue de code structurée, adaptée au langage et au contexte précisés, couvrant l'exactitude, la lisibilité, la sécurité et la maintenabilité, utilisable comme processus de revue répétable.
+
+[Structure imposée]
+Des sections de checklist regroupées (exactitude/logique, lisibilité/nommage, gestion d'erreur, sécurité, performance, tests), chaque point formulé comme une question concrète à réponse oui/non plutôt que comme un principe vague.
+
+[Règles de rédaction]
+Formuler chaque point comme une question précise et vérifiable (« Toutes les entrées utilisateur sont-elles validées avant usage ? » plutôt que « Vérifier la sécurité »), prioriser les points les plus susceptibles de révéler de vrais bugs sur les remarques de style.
+
+[Contraintes]
+Adapter les points au langage ou framework indiqué lorsque c'est pertinent (par exemple contrôle des injections SQL côté backend, vérification des types de props côté frontend), limiter la liste à 15-25 points pour rester réellement utilisable.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon projet", flow: "keep-ambiance" },
@@ -4251,6 +4587,20 @@ Write in extremely condensed, high-signal French — every word must earn its pl
 
 [Contraintes]
 Strict 150-character total limit (Instagram bio constraint), one clear call-to-action only, flag where a real link/handle must be inserted.`,
+    ambiancePromptFr: `[Rôle]
+Agis comme un copywriter en personal branding spécialisé dans les bios de réseaux sociaux françaises, qui communiquent une identité et une valeur instantanément dans une limite de caractères très serrée.
+
+[Objectif]
+Produire une bio de profil permanente (à distinguer de la légende d'une publication isolée), qui communique clairement qui est la personne ou la marque, ce qu'elle propose, et pourquoi la suivre — lisible en moins de 3 secondes.
+
+[Structure imposée]
+Une ligne d'identité ou de rôle (qui vous êtes), une ligne de proposition de valeur (ce que vous proposez ou ce que les abonnés y gagnent), un marqueur de personnalité ou de crédibilité (ligne pouvant intégrer un emoji, facultative), une ligne d'appel à l'action unique (lien / DM / boutique).
+
+[Règles de rédaction]
+Écrire dans un français extrêmement condensé et à forte densité d'information — chaque mot doit justifier sa place, utiliser les sauts de ligne et quelques emojis comme structure visuelle et non comme décoration, éviter les auto-descriptions vagues (« passionné(e) de... ») au profit d'énoncés de valeur concrets.
+
+[Contraintes]
+Limite stricte de 150 caractères au total (contrainte de la bio Instagram), un seul appel à l'action clair, signaler l'endroit où un vrai lien ou identifiant doit être inséré.`,
     buttons: [
       { label: "Affiner la structure", flow: "refine-ambiance" },
       { label: "Adapter à mon profil", flow: "keep-ambiance" },
@@ -4290,6 +4640,26 @@ contrast, natural saturation
 [Lens & finish]
 Anamorphic 2.39:1 aspect ratio, shallow atmospheric depth, subtle film
 grain, 24fps cinematic motion, ultra-sharp 4K`,
+    ambiancePromptFr: `[Style visuel]
+Images aériennes de drone cinématographiques, amples et fluides, rendu
+de documentaire nature épique, sensation de vaste échelle
+
+[Cinématographie]
+Lent travelling avant combiné à une orbite douce, haute altitude
+descendant pour révéler la scène, horizon stable, flou de mouvement sur
+les passages rapides
+
+[Lumière & moment]
+Heure dorée, soleil bas et chaud, ombres allongées, god rays doux à
+travers la brume atmosphérique, léger flare face au soleil
+
+[Étalonnage]
+Étalonnage cinéma chaud, hautes lumières ambrées, ombres légèrement
+bleu-vert, contraste filmique, saturation naturelle
+
+[Objectif & finition]
+Format anamorphique 2.39:1, profondeur atmosphérique marquée, grain fin,
+mouvement cinéma à 24 fps, 4K ultra-net`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4328,6 +4698,26 @@ commercial finish
 [Lens & finish]
 Shallow depth of field, macro clarity, 4K ultra-sharp, 60fps smooth
 slow-motion capability, glossy advertising polish`,
+    ambiancePromptFr: `[Style visuel]
+Vidéo publicitaire produit dynamique, élégante et moderne, rendu de
+publicité haut de gamme, énergique et premium
+
+[Cinématographie]
+Mouvements de dolly macro fluides autour du produit, travellings avant
+vifs et secs, révélation en orbite à 360 degrés, speed ramps sans
+raccord, plans héros en apesanteur
+
+[Lumière]
+Éclairage studio en dégradés doux, hautes lumières maîtrisées rasant la
+surface, léger rim light, reflets nets, fond sombre haut de gamme
+
+[Étalonnage]
+Contraste riche, noirs profonds, couleurs produit saturées et
+percutantes, finition commerciale nette
+
+[Objectif & finition]
+Faible profondeur de champ, netteté macro, 4K ultra-net, capacité de
+ralenti fluide à 60 fps, poli publicitaire brillant`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Mettre mon produit en scène", flow: "keep-ambiance" },
@@ -4366,6 +4756,27 @@ slight warmth
 [Lens & finish]
 Sharp digital look, 30fps smooth motion, subtle motion blur on fast
 pans, optimized for mobile viewing`,
+    ambiancePromptFr: `[Style visuel]
+Vidéo verticale 9:16 pour réseaux sociaux, esthétique énergique et
+percutante façon caméra à l'épaule, rendu lifestyle moderne et lumineux,
+rythme de montage rapide
+
+[Cinématographie]
+Coupes rapides et dynamiques, whip pans, accroches en gros plan dès la
+première seconde, alternance de mouvements à l'épaule et d'inserts
+stabilisés
+
+[Lumière & moment]
+Lumière du jour naturelle et vive ou éclairage studio propre, exposition
+high-key, contraste net et percutant
+
+[Étalonnage]
+Étalonnage réseaux sociaux moderne et vif, saturation percutante,
+carnations propres, légère chaleur
+
+[Objectif & finition]
+Rendu numérique net, mouvement fluide à 30 fps, léger flou de mouvement
+sur les panoramiques rapides, optimisé pour le visionnage mobile`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4404,6 +4815,25 @@ professional and approachable
 [Lens & finish]
 85mm-equivalent look, creamy background blur, clean 24fps cinematic
 motion, broadcast-quality sharpness`,
+    ambiancePromptFr: `[Style visuel]
+Dispositif d'interview corporate épuré, rendu documentaire chaleureux et
+inspirant confiance, cadrage portrait à faible profondeur de champ
+
+[Cinématographie]
+Plan fixe ou léger travelling avant lent, caméra à hauteur d'œil,
+cadrage trois-quarts, décroissance douce de la netteté sur l'arrière-plan
+
+[Lumière & moment]
+Key light douce avec un fill léger, sensation de lumière de fenêtre
+naturelle, température de couleur neutre et chaude, aucune ombre dure
+
+[Étalonnage]
+Étalonnage naturel et fidèle, tons neutres et chauds, contraste modéré,
+professionnel et accessible
+
+[Objectif & finition]
+Rendu d'un équivalent 85 mm, flou d'arrière-plan crémeux, mouvement
+cinéma propre à 24 fps, netteté de qualité broadcast`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4442,6 +4872,26 @@ crisp modern grade
 [Lens & finish]
 Ultra-clean vector-sharp render, smooth 60fps motion, subtle particle
 or light-trail accents, polished commercial finish`,
+    ambiancePromptFr: `[Style visuel]
+Intro en motion design minimale et épurée, esthétique de marque tech
+moderne, formes géométriques et révélation de logo fluide
+
+[Cinématographie]
+Mouvement de motion graphics fluide sans caméra, construction élégante
+du logo, timing précis, aucun tremblement de caméra organique
+
+[Lumière & moment]
+Simulation d'éclairage studio propre, fond en dégradé doux, léger halo
+sur les éléments clés
+
+[Étalonnage]
+Palette de couleurs de marque affirmée, fort contraste entre le fond et
+le logo, étalonnage moderne et net
+
+[Objectif & finition]
+Rendu ultra-propre à la netteté vectorielle, mouvement fluide à 60 fps,
+accents discrets de particules ou de traînées lumineuses, finition
+commerciale soignée`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4474,6 +4924,20 @@ Warm, romantic film-inspired color grade with soft highlight rolloff and rich bu
 
 [Lens & finish]
 Shallow depth of field with creamy background bokeh isolating key subjects, subtle film grain overlay, gentle vignette drawing the eye to the emotional center of each frame.`,
+    ambiancePromptFr: `[Style visuel]
+Style de film de mariage cinématographique au langage visuel romanesque et narratif — plans d'ensemble amples du lieu, gros plans intimes sur les moments d'émotion, composition traitée comme un long métrage plutôt que comme une captation d'événement.
+
+[Cinématographie]
+Mouvement de caméra fluide stabilisé au gimbal glissant à travers les moments clés (cérémonie, découverte des mariés, réception), alternance de plans d'ensemble larges et de gros plans émotionnels serrés, ralentis ponctuels sur les gestes clés (échange des alliances, premier baiser).
+
+[Lumière & moment]
+Lumière naturelle d'heure dorée et d'heure bleue privilégiée pour les moments en extérieur, éclairage d'ambiance doux du lieu pour les scènes en intérieur, lumière toujours flatteuse et chaude plutôt que dure ou clinique.
+
+[Étalonnage]
+Étalonnage chaud et romantique d'inspiration argentique, écrêtage doux des hautes lumières et carnations riches mais naturelles, courbe de contraste douce évoquant le cinéma classique plutôt qu'un rendu numérique plat.
+
+[Objectif & finition]
+Faible profondeur de champ avec un bokeh d'arrière-plan crémeux isolant les sujets clés, léger grain argentique en surimpression, vignetage discret attirant le regard vers le centre émotionnel de chaque plan.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4507,6 +4971,20 @@ Neutral, true-to-life color grade with accurate white balance, slight warmth boo
 
 [Lens & finish]
 Wide-angle lens with corrected perspective (no fisheye distortion) to accurately convey room proportions, consistently sharp focus throughout — no artistic blur that would obscure real spatial details.`,
+    ambiancePromptFr: `[Style visuel]
+Visite immobilière d'un bien réel existant, filmée pour donner la sensation d'une visite guidée fluide sur place — propre, professionnelle et spatialement lisible plutôt que stylisée artistiquement.
+
+[Cinématographie]
+Flux de caméra continu et régulier en marche avant à travers chaque pièce dans un ordre logique (entrée, pièces de vie, chambres), rythme constant laissant au spectateur le temps d'appréhender chaque espace sans précipitation.
+
+[Lumière & moment]
+Lumière du jour naturelle vive et homogène entrant par les fenêtres, complétée par l'éclairage intérieur pour éviter les coins sombres, tournage en journée pour un maximum de lumière naturelle et un rendu fidèle des pièces.
+
+[Étalonnage]
+Étalonnage neutre et fidèle avec une balance des blancs juste, léger gain de chaleur pour rendre le bien accueillant sans trahir les couleurs ni les finitions réelles de l'espace.
+
+[Objectif & finition]
+Grand-angle à perspective corrigée (sans distorsion fisheye) pour restituer fidèlement les proportions des pièces, netteté constante d'un bout à l'autre — aucun flou artistique qui masquerait un détail réel de l'espace.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4540,6 +5018,20 @@ Warm, appetizing color grade emphasizing rich food tones (fresh greens, deep red
 
 [Lens & finish]
 Shallow depth of field isolating the food/hands from a softly blurred kitchen background, macro-capable close-ups for texture detail (sizzling, steam, sauce consistency).`,
+    ambiancePromptFr: `[Style visuel]
+Style de vidéo de recette appétissante suivant le processus de cuisson étape par étape, décor de cuisine épuré avec les aliments et les mains comme point focal du début à la fin.
+
+[Cinématographie]
+Alternance de plans en vue de dessus pour les gestes de découpe et de mélange et de plans plus rapprochés en angle pour les moments à la poêle ou au four, coupes fluides entre les étapes, plan final gratifiant sur le plat dressé.
+
+[Lumière & moment]
+Éclairage vif, doux et homogène imitant une cuisine bien éclairée par une fenêtre, aucune ombre dure qui masquerait le détail des ingrédients ou des textures.
+
+[Étalonnage]
+Étalonnage chaud et appétissant valorisant les tons riches des aliments (verts frais, rouges profonds, bruns dorés), saturation légèrement rehaussée sur la nourriture tout en gardant l'environnement neutre.
+
+[Objectif & finition]
+Faible profondeur de champ isolant les aliments et les mains d'un fond de cuisine doucement flouté, gros plans à capacité macro pour le détail de texture (grésillement, vapeur, consistance des sauces).`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4573,6 +5065,20 @@ Bold, fashion-editorial color grade with rich, true-to-garment colors, contrast 
 
 [Lens & finish]
 85-135mm equivalent for flattering compression on full-body shots, crisp fabric texture detail on close-ups, subtle motion blur on fast movement for dynamic energy.`,
+    ambiancePromptFr: `[Style visuel]
+Vidéo lookbook mode présentant une collection ou une tenue par le mouvement et le stylisme, énergie éditoriale mêlant esthétique de film de mode et lisibilité claire du vêtement.
+
+[Cinématographie]
+Plans de suivi dynamiques accompagnant les mouvements et les demi-tours du mannequin, alternance de plans en pied montrant la tenue complète et de plans de détail sur les tissus et accessoires, rythme assuré et délibéré entre les looks.
+
+[Lumière & moment]
+Éclairage studio directionnel et affirmé sculptant la silhouette du vêtement, ou lumière naturelle extérieure vive pour un rendu plus éditorial en décor réel selon l'ambiance recherchée.
+
+[Étalonnage]
+Étalonnage éditorial mode affirmé avec des couleurs riches et fidèles au vêtement, contraste poussé pour un impact visuel de film de mode plutôt qu'un plan produit plat.
+
+[Objectif & finition]
+Équivalent 85-135 mm pour une compression flatteuse sur les plans en pied, détail de texture de tissu net sur les gros plans, léger flou de mouvement sur les déplacements rapides pour l'énergie.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4606,6 +5112,20 @@ Vibrant, slightly saturated travel-vlog color grade emphasizing the destination'
 
 [Lens & finish]
 Wide-angle lens for immersive environmental context, occasional stabilized handheld movement for authentic energy, natural depth of field rather than heavily blurred backgrounds.`,
+    ambiancePromptFr: `[Style visuel]
+Style de vlog de voyage personnel mêlant l'intimité de la caméra à l'épaule et des visuels marquants de la destination, énergique et authentique plutôt que léché comme une publicité touristique.
+
+[Cinématographie]
+Alternance de plans à l'épaule en marchant suivant le point de vue du voyageur, de plans d'ensemble larges de la destination, et de coupes rapides et dynamiques entre les lieux pour maintenir un rythme énergique.
+
+[Lumière & moment]
+Lumière naturelle disponible du début à la fin, variant selon le moment de la journée pour coller au récit de voyage authentique (exploration en plein midi, plans panoramiques à l'heure dorée, lumière urbaine ambiante en soirée).
+
+[Étalonnage]
+Étalonnage vlog de voyage vif et légèrement saturé valorisant les couleurs distinctives du lieu (eau turquoise, rues terracotta chaudes), énergique sans paraître artificiel.
+
+[Objectif & finition]
+Grand-angle pour un contexte environnemental immersif, mouvements à l'épaule ponctuellement stabilisés pour une énergie authentique, profondeur de champ naturelle plutôt que des arrière-plans fortement floutés.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4639,6 +5159,20 @@ Warm, energetic color grade with boosted vibrancy to convey excitement and atmos
 
 [Lens & finish]
 Mix of wide environmental shots and telephoto candid close-ups, quick cuts synced to an implied musical rhythm, no heavy stylization that would distract from the real event moments.`,
+    ambiancePromptFr: `[Style visuel]
+Récapitulatif d'événement polyvalent (événement d'entreprise, conférence, soirée, célébration) condensant les meilleurs moments de la journée en un montage énergique et positif — à distinguer d'un montage d'action sportive.
+
+[Cinématographie]
+Rythme de montage rapide alternant les moments clés de l'événement (arrivée, interventions et temps forts, réactions du public, clôture), plans larges de foule équilibrés par des gros plans de réactions pris sur le vif.
+
+[Lumière & moment]
+Éclairage disponible de l'événement du début à la fin (lumière du jour pour l'extérieur, éclairage d'ambiance du lieu pour l'intérieur), exposition cohérente d'une coupe à l'autre malgré des sources lumineuses variables.
+
+[Étalonnage]
+Étalonnage chaud et énergique à l'éclat rehaussé pour restituer l'excitation et l'atmosphère, traitement colorimétrique homogène malgré des sources lumineuses mêlées, pour un montage cohérent.
+
+[Objectif & finition]
+Alternance de plans larges d'ambiance et de gros plans au téléobjectif pris sur le vif, coupes rapides calées sur un rythme musical implicite, aucune stylisation lourde qui détournerait des vrais moments de l'événement.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4672,6 +5206,20 @@ Clean, neutral color grade with accurate true-to-life colors, no stylistic gradi
 
 [Lens & finish]
 Standard focal length avoiding distortion, deep enough depth of field to keep the full action area in focus, sharp throughout with no artistic blur.`,
+    ambiancePromptFr: `[Style visuel]
+Style de vidéo explicative claire et pédagogique privilégiant la compréhension sur l'effet visuel — cadrage épuré, langage visuel cohérent, chaque étape visuellement distincte de la suivante.
+
+[Cinématographie]
+Caméra fixe ou mouvement lent et délibéré gardant le sujet et le geste clairement visibles, gros plans sur les mains ou les détails pour les étapes exigeant de la précision, position de caméra identique entre les étapes comparables.
+
+[Lumière & moment]
+Éclairage vif, homogène et sans ombre garantissant que chaque détail du processus démontré soit clairement visible, aucun éclairage dramatique qui masquerait un détail important.
+
+[Étalonnage]
+Étalonnage neutre et propre aux couleurs fidèles, aucun parti pris stylistique qui pourrait fausser la perception des matériaux, des outils ou des résultats montrés.
+
+[Objectif & finition]
+Focale standard sans distorsion, profondeur de champ suffisante pour garder toute la zone d'action nette, netteté constante sans flou artistique.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4705,6 +5253,20 @@ Consistent color grade applied equally to both states to ensure the contrast com
 
 [Lens & finish]
 Identical lens and framing used for both before and after shots to ensure a fair, credible comparison, sharp focus throughout to clearly show transformation detail.`,
+    ambiancePromptFr: `[Style visuel]
+Vidéo de transformation avant/après construite sur un contraste visuel net — le même sujet, lieu ou angle montré dans deux états distincts, structurée pour maximiser l'impact du changement.
+
+[Cinématographie]
+Angle de caméra et cadrage identiques entre les plans « avant » et « après » pour une comparaison visuelle directe, transition nette (volet, match cut ou split-screen) marquant le basculement d'un état à l'autre.
+
+[Lumière & moment]
+Dispositif d'éclairage identique reproduit entre les plans avant et après, pour que ce soit bien la transformation — et non un changement de lumière — qui se lise comme la différence visuelle.
+
+[Étalonnage]
+Étalonnage identique appliqué aux deux états, pour garantir que le contraste vienne de la transformation réelle et non d'une manipulation à l'étalonnage.
+
+[Objectif & finition]
+Objectif et cadrage identiques pour les plans avant et après afin d'assurer une comparaison honnête et crédible, netteté constante pour montrer clairement le détail de la transformation.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4738,6 +5300,20 @@ Clean, true-to-product color grade ensuring packaging and item colors are repres
 
 [Lens & finish]
 Macro-capable close-up lens for texture and branding detail on packaging, shallow depth of field on the final product reveal shot to make it the clear visual hero.`,
+    ambiancePromptFr: `[Style visuel]
+Vidéo de déballage produit construisant l'attente à travers le processus de révélation — cadrage épuré et centré sur le produit, gardant l'attention sur l'emballage et l'objet dévoilé.
+
+[Cinématographie]
+Plan rapproché en vue de dessus ou en angle sur la boîte et l'emballage pendant toute la séquence de déballage, caméra stable gardant la netteté sur les mains et le produit, plan héros net du produit entièrement dévoilé à la fin.
+
+[Lumière & moment]
+Éclairage studio vif et homogène supprimant les ombres sur l'emballage et le produit, exposition constante du début à la fin pour garder l'attention sur la révélation et non sur les variations de lumière.
+
+[Étalonnage]
+Étalonnage propre et fidèle au produit garantissant une restitution exacte des couleurs de l'emballage et de l'objet, léger gain de luminosité pour un rendu premium et soigné.
+
+[Objectif & finition]
+Objectif à capacité macro pour le détail de texture et de marquage sur l'emballage, faible profondeur de champ sur le plan final de révélation pour en faire clairement le héros visuel.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4771,6 +5347,20 @@ Vibrant, deliberate color palette supporting the character's personality and the
 
 [Lens & finish]
 Clean, crisp animated rendering with smooth motion, consistent character proportions and style throughout, no photographic artifacts (grain, lens flare) unless stylistically intended.`,
+    ambiancePromptFr: `[Style visuel]
+Séquence de personnage animé au design et au mouvement expressifs et stylisés, langage visuel cohérent avec la production de court métrage d'animation moderne.
+
+[Cinématographie]
+Cadrage centré sur le personnage mettant en valeur l'expression et le geste, mouvement de caméra soutenant l'action du personnage (suivi d'une marche, gros plan de réaction), mise en scène lisible d'un seul coup d'œil.
+
+[Lumière & moment]
+Éclairage animé stylisé soutenant l'ambiance et le moment de la journée dans la scène, sources directionnelles sculptant le personnage avec une lecture claire des lumières et des ombres.
+
+[Étalonnage]
+Palette vive et assumée soutenant la personnalité du personnage et l'ambiance de la scène, langage chromatique cohérent sur toute la séquence pour l'unité visuelle.
+
+[Objectif & finition]
+Rendu animé propre et net au mouvement fluide, proportions et style du personnage constants du début à la fin, aucun artefact photographique (grain, flare) sauf intention stylistique.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4804,6 +5394,20 @@ Stylized, high-impact color grade with a distinct visual identity (saturated and
 
 [Lens & finish]
 Creative lens choices (wide dramatic angles, extreme close-ups) supporting visual storytelling, intentional stylistic elements (grain, flare, motion blur) used deliberately for impact.`,
+    ambiancePromptFr: `[Style visuel]
+Style visuel de clip musical conçu pour épouser et amplifier l'énergie émotionnelle d'un morceau précis, affirmé et stylisé plutôt que littéral ou documentaire.
+
+[Cinématographie]
+Mouvement de caméra et rythme de montage dynamiques calés sur le tempo et l'énergie du morceau, alternance de plans de performance et de séquences narratives ou conceptuelles selon l'histoire de la chanson.
+
+[Lumière & moment]
+Parti pris d'éclairage affirmé et porté par l'ambiance (bains de couleur intenses, fort contraste ou dispositifs low-key intimes) choisi pour épouser le registre émotionnel du morceau plutôt que pour un réalisme naturaliste.
+
+[Étalonnage]
+Étalonnage stylisé à fort impact doté d'une identité visuelle marquée (saturé et affirmé, ou désaturé et atmosphérique) choisi pour renforcer la tonalité émotionnelle du morceau.
+
+[Objectif & finition]
+Choix d'objectifs créatifs (grands-angles spectaculaires, très gros plans) au service de la narration visuelle, éléments stylistiques assumés (grain, flare, flou de mouvement) utilisés délibérément pour l'impact.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4837,6 +5441,20 @@ Punchy, high-contrast broadcast-style color grade with saturated team colors and
 
 [Lens & finish]
 Telephoto lens for tight action shots from a distance, fast shutter-style crisp motion capture (no motion blur on key action), sharp throughout to keep fast-moving subjects legible.`,
+    ambiancePromptFr: `[Style visuel]
+Montage de temps forts sportifs centré spécifiquement sur l'action athlétique et l'intensité de la compétition — montage rapide et énergique construit autour des actions décisives, à distinguer d'un récapitulatif d'événement généraliste.
+
+[Cinématographie]
+Plans de suivi dynamiques accompagnant l'action, coupes rapides entre les actions clés, ralentis ponctuels sur les moments décisifs (but, réception, ligne d'arrivée) pour l'emphase dramatique.
+
+[Lumière & moment]
+Éclairage disponible du stade ou de la salle (lumière du jour vive pour le sport en extérieur, fort éclairage artificiel pour l'intérieur ou le nocturne), éclairage très contrasté typique de la retransmission sportive.
+
+[Étalonnage]
+Étalonnage broadcast percutant et très contrasté, couleurs d'équipe saturées et blancs nets, traitement énergique typique des modules de temps forts du sport professionnel.
+
+[Objectif & finition]
+Téléobjectif pour des plans d'action serrés à distance, capture nette du mouvement façon vitesse d'obturation rapide (aucun flou sur l'action clé), netteté constante pour garder lisibles des sujets en déplacement rapide.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4870,6 +5488,20 @@ Clean, neutral corporate color grade with accurate, professional-looking skin to
 
 [Lens & finish]
 Standard 50-85mm equivalent for natural, flattering presenter framing, consistent sharp focus throughout, minimal depth-of-field blur to keep supporting visual aids legible.`,
+    ambiancePromptFr: `[Style visuel]
+Style de vidéo de formation d'entreprise équilibrant crédibilité professionnelle et engagement visuel — environnements épurés et bien éclairés (bureau, dispositif de présentateur) soutenant l'apprentissage sans distraire.
+
+[Cinématographie]
+Plans stables centrés sur le présentateur (plan poitrine pour les segments parlés) combinés à des plans de coupe illustrant le contenu de la formation, rythme calme et constant adapté à la mémorisation.
+
+[Lumière & moment]
+Éclairage professionnel vif et homogène sur le présentateur (dispositif à trois points) garantissant clarté et accessibilité, éclairage constant du début à la fin pour éviter toute distraction visuelle entre les segments.
+
+[Étalonnage]
+Étalonnage corporate neutre et propre avec des carnations justes et professionnelles et des accents de couleur cohérents avec la marque le cas échéant, aucune stylisation lourde.
+
+[Objectif & finition]
+Équivalent 50-85 mm standard pour un cadrage de présentateur naturel et flatteur, netteté constante, flou de profondeur de champ minimal pour garder lisibles les supports visuels d'appui.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4903,6 +5535,20 @@ Clean, accurate color grade preserving the app's true interface colors and brand
 
 [Lens & finish]
 Sharp, clear focus on the screen at all times, subtle hand or device movement for a natural, human feel rather than a static, clinical screen recording.`,
+    ambiancePromptFr: `[Style visuel]
+Style de démonstration d'application mobile épuré, entièrement centré sur l'interface en cours d'usage, distraction minimale par rapport au contenu de l'écran, énergie de marketing produit professionnel.
+
+[Cinématographie]
+Cadrage centré sur l'écran (appareil en main ou capture d'écran épurée) suivant un parcours utilisateur naturel à travers les fonctionnalités clés, transitions fluides entre les écrans et les fonctions.
+
+[Lumière & moment]
+Éclairage vif et homogène si un appareil physique est montré en main, garantissant que l'écran reste lisible et sans reflet du début à la fin.
+
+[Étalonnage]
+Étalonnage propre et fidèle préservant les vraies couleurs de l'interface et de la marque, aucune manipulation chromatique qui trahirait le produit réel.
+
+[Objectif & finition]
+Netteté franche et constante sur l'écran, léger mouvement de la main ou de l'appareil pour un rendu naturel et humain plutôt qu'un enregistrement d'écran statique et clinique.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4936,6 +5582,20 @@ Polished, high-end architectural-render color grade with clean whites and true m
 
 [Lens & finish]
 Wide architectural lens with corrected perspective for design clarity, crisp material rendering (glass, concrete, wood) throughout, no distracting artifacts — presentation-quality finish.`,
+    ambiancePromptFr: `[Style visuel]
+Visualisation architecturale présentant un concept — bâti ou non bâti — sous forme de survol rendu et soigné, artistique et conceptuel plutôt que documentant un bien réel existant.
+
+[Cinématographie]
+Mouvement de caméra ample et cinématographique traversant et contournant le concept architectural (approche extérieure, espaces intérieurs, détails de conception clés), rythme délibéré conçu pour mettre en valeur l'intention du projet.
+
+[Lumière & moment]
+Éclairage architectural idéalisé — souvent une lumière extérieure d'heure dorée ou une simulation de lumière du jour intérieure parfaitement équilibrée — choisi pour présenter le projet sous son meilleur jour conceptuel.
+
+[Étalonnage]
+Étalonnage de rendu architectural haut de gamme et soigné, blancs propres et couleurs de matériaux fidèles, légère chaleur pour une présentation premium et aspirationnelle.
+
+[Objectif & finition]
+Grand-angle architectural à perspective corrigée pour la lisibilité du projet, rendu net des matériaux (verre, béton, bois) du début à la fin, aucun artefact distrayant — finition de qualité présentation.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -4969,6 +5629,20 @@ Genre-appropriate cinematic color grade — warm, saturated tones for fantasy ma
 
 [Lens & finish]
 Wide cinematic lens for establishing scale, tighter dramatic framing for character moments, atmospheric effects (haze, particles, lens flare) used deliberately to enhance immersion.`,
+    ambiancePromptFr: `[Style visuel]
+Scène de fantasy ou de science-fiction cinématographique située dans un monde imaginaire pleinement réalisé — environnement épique (royaume magique ou décor futuriste), ampleur visuelle typique du cinéma de genre à gros budget.
+
+[Cinématographie]
+Plans d'ensemble amples révélant l'échelle du monde, mouvement de caméra dynamique suivant l'action des personnages, contre-plongées et plongées spectaculaires soulignant la puissance, le danger ou l'émerveillement selon la tonalité de la scène.
+
+[Lumière & moment]
+Éclairage dramatique et atmosphérique adapté au genre — halo mystique et faisceaux de lumière volumétrique pour la fantasy, éclairage artificiel froid et accents néon pour la science-fiction — sources directionnelles marquées sculptant l'ambiance.
+
+[Étalonnage]
+Étalonnage cinéma adapté au genre — tons chauds et saturés pour la magie et la nature en fantasy, bleus froids contrastés par des hautes lumières chaudes pour la technologie en science-fiction.
+
+[Objectif & finition]
+Grand-angle cinéma pour établir l'échelle, cadrage dramatique plus serré pour les moments de personnage, effets atmosphériques (brume, particules, flare) utilisés délibérément pour renforcer l'immersion.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5002,6 +5676,20 @@ Muted, historically-toned color grade reflecting the period's visual character (
 
 [Lens & finish]
 Classic cinematic framing avoiding modern lens artifacts, subtle grain for a period-film texture, sharp but not clinically digital rendering of costume and set detail.`,
+    ambiancePromptFr: `[Style visuel]
+Scène de reconstitution historique située dans une époque précise et clairement définie, exactitude visuelle et authenticité de période privilégiées dans les costumes, le décor et la mise en scène.
+
+[Cinématographie]
+Mouvement de caméra mesuré et délibéré, adapté à l'époque représentée, plans larges établissant le cadre historique, plans plus serrés captant le détail d'époque (costume, objets, architecture).
+
+[Lumière & moment]
+Éclairage naturel ou de source pratique cohérent avec l'époque représentée (chaleur de la bougie et du feu pour les périodes pré-électriques, sources lumineuses d'époque adaptées), en évitant toute qualité de lumière anachronique.
+
+[Étalonnage]
+Étalonnage feutré aux tons d'époque reflétant le caractère visuel de la période (tons terreux désaturés pour les époques anciennes, palette adaptée à la période), en évitant un rendu trop moderne et numérique.
+
+[Objectif & finition]
+Cadrage cinéma classique évitant les artefacts d'objectifs modernes, léger grain pour une texture de film d'époque, rendu net mais non cliniquement numérique des costumes et des décors.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5035,6 +5723,20 @@ Rich, natural color grade emphasizing the environment's authentic colors (lush g
 
 [Lens & finish]
 Telephoto lens for wildlife detail without disturbing the subject, wide-angle for environmental scale shots, natural depth of field mimicking a real documentary camera's optical characteristics.`,
+    ambiancePromptFr: `[Style visuel]
+Style de documentaire animalier captant la faune ou les milieux naturels avec une narration visuelle patiente et contemplative, dans l'esprit des productions animalières haut de gamme.
+
+[Cinématographie]
+Plans longs, patients et contemplatifs laissant le comportement naturel se déployer, alternance de plans d'ensemble larges du milieu et de gros plans intimes sur le détail animalier, mouvement de caméra minimal et non intrusif.
+
+[Lumière & moment]
+Lumière naturelle disponible du début à la fin, heure dorée privilégiée pour les silhouettes animalières spectaculaires et les tons chauds, éclairage toujours fidèle au milieu naturel documenté.
+
+[Étalonnage]
+Étalonnage riche et naturel valorisant les couleurs authentiques du milieu (verts luxuriants, bleus profonds, bruns terreux), éclat rehaussé mais jamais artificiel.
+
+[Objectif & finition]
+Téléobjectif pour le détail animalier sans déranger le sujet, grand-angle pour les plans d'échelle du milieu, profondeur de champ naturelle imitant les caractéristiques optiques d'une vraie caméra de documentaire.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5068,6 +5770,20 @@ Smooth, consistent color grade across the full time-lapse sequence avoiding jarr
 
 [Lens & finish]
 Wide-angle lens typical of time-lapse work for maximum scene coverage, consistently sharp focus throughout, smooth frame-rate blending for fluid compressed motion.`,
+    ambiancePromptFr: `[Style visuel]
+Séquence en time-lapse compressant un processus réel de longue durée (mouvement du ciel, chantier, croissance végétale, activité urbaine) en une séquence de mouvement condensée, rapide et visuellement frappante.
+
+[Cinématographie]
+Position de caméra fixe ou en mouvement très lent maintenant un cadre constant sur toute la période compressée, composition conçue pour montrer clairement le changement ou le mouvement qui s'opère dans le temps.
+
+[Lumière & moment]
+Le changement de lumière est souvent le sujet visuel lui-même (transition jour-nuit, lumière changeante des nuages), sinon cadrage constant au fil des variations lumineuses naturelles de la période captée.
+
+[Étalonnage]
+Étalonnage fluide et cohérent sur toute la séquence, évitant les sauts de couleur brutaux d'une image à l'autre, transitions tonales naturelles au fil des changements de lumière.
+
+[Objectif & finition]
+Grand-angle typique du time-lapse pour une couverture maximale de la scène, netteté constante du début à la fin, fondu entre images pour un mouvement compressé fluide.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5101,6 +5817,20 @@ Warm, slightly muted color palette typical of handcrafted animation, gentle colo
 
 [Lens & finish]
 Slight softness and micro-imperfections characteristic of the stop-motion medium (subtle frame judder, tactile material texture visible in close-ups), avoiding an overly smooth, digital-clean finish.`,
+    ambiancePromptFr: `[Style visuel]
+Style d'animation en stop-motion avec le charme artisanal et légèrement imparfait caractéristique de l'animation physique image par image — matériaux tactiles et mouvement délibéré et tangible.
+
+[Cinématographie]
+Cadrage fixe ou volontairement simple, typique de la production stop-motion artisanale, mise en scène montrant clairement le décor fait main et le mouvement des personnages sans chorégraphie de caméra complexe.
+
+[Lumière & moment]
+Éclairage chaud de type source pratique, typique d'un plateau de stop-motion physique (key light douce et directionnelle, ombres portées visibles), éclairage constant sur toute la séquence pour préserver l'illusion tactile.
+
+[Étalonnage]
+Palette chaude et légèrement feutrée, typique de l'animation artisanale, étalonnage doux préservant la qualité tactile et matérielle des images.
+
+[Objectif & finition]
+Légère douceur et micro-imperfections caractéristiques du médium stop-motion (léger tremblement d'image, texture matérielle visible en gros plan), en évitant une finition trop lisse et numérique.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5134,6 +5864,20 @@ Warm, vibrant, feel-good color grade with boosted warmth and slight saturation l
 
 [Lens & finish]
 Natural focal length capturing genuine candid moments, soft background blur on close emotional reactions, no heavy stylization that would distract from the authentic celebration energy.`,
+    ambiancePromptFr: `[Style visuel]
+Style de vidéo de célébration chaleureux et joyeux (anniversaire, étape marquante, fête) captant l'émotion sincère et l'énergie festive, personnel et pris sur le vif plutôt que formellement mis en scène.
+
+[Cinématographie]
+Alternance de moments à l'épaule pris sur le vif captant les réactions spontanées et de plans plus fluides sur les temps forts (gâteau, discours, ouverture des cadeaux), rythme énergique épousant l'ambiance festive.
+
+[Lumière & moment]
+Éclairage d'ambiance chaud de la fête (guirlandes lumineuses, bougies, décor coloré) assumé comme partie intégrante de l'atmosphère festive plutôt que corrigé vers le neutre.
+
+[Étalonnage]
+Étalonnage chaud, vif et positif avec un gain de chaleur et une légère montée de saturation, restituant la joie et la chaleur de la célébration.
+
+[Objectif & finition]
+Focale naturelle captant des moments sincères pris sur le vif, léger flou d'arrière-plan sur les réactions émotionnelles rapprochées, aucune stylisation lourde qui détournerait de l'énergie authentique de la fête.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5167,6 +5911,20 @@ Warm, natural color grade with true-to-life fur tones, gentle warmth boost for a
 
 [Lens & finish]
 Natural to slightly telephoto focal length allowing candid distance without disturbing the pet, shallow depth of field isolating the animal from a softly blurred background.`,
+    ambiancePromptFr: `[Style visuel]
+Style de vidéo animalière chaleureux et enjoué captant la personnalité et le comportement naturel de l'animal, cadrage intime et affectueux plutôt que clinique ou distant.
+
+[Cinématographie]
+Angle de caméra bas, à hauteur d'œil de l'animal, pour l'intimité, alternance de plans d'action ludiques (course, jeu) et de gros plans plus calmes sur la personnalité, rythme naturel et sans forçage.
+
+[Lumière & moment]
+Lumière naturelle vive et douce (idéalement près d'une fenêtre ou en extérieur) révélant la texture du pelage et l'expression, en évitant une lumière directe dure qui ferait plisser les yeux de l'animal ou créerait des ombres marquées.
+
+[Étalonnage]
+Étalonnage chaud et naturel aux tons de pelage fidèles, léger gain de chaleur pour un rendu cosy et affectueux sans paraître artificiel.
+
+[Objectif & finition]
+Focale naturelle à légèrement téléobjectif permettant de garder ses distances sans déranger l'animal, faible profondeur de champ isolant l'animal d'un fond doucement flouté.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5200,6 +5958,20 @@ Punchy, high-energy color grade with boosted contrast and slight cool undertone 
 
 [Lens & finish]
 Standard to wide-angle lens capturing full body movement clearly, sharp focus throughout to keep exercise form legible, minimal blur except for intentional motion emphasis on fast movements.`,
+    ambiancePromptFr: `[Style visuel]
+Style de vidéo fitness très énergique montrant le mouvement d'exercice avec clarté et intensité motivante, environnement de salle ou d'entraînement épuré comme décor.
+
+[Cinématographie]
+Plans de suivi dynamiques et changements d'angle montrant clairement le mouvement (angle de profil pour la lisibilité de la posture, angle de face pour l'énergie), coupes rapides et énergiques entre les exercices épousant l'intensité de la séance.
+
+[Lumière & moment]
+Éclairage vif et énergique (lumière du jour par les baies de la salle ou fort éclairage artificiel homogène) garantissant que le mouvement et la posture restent clairement visibles du début à la fin.
+
+[Étalonnage]
+Étalonnage percutant et très énergique au contraste rehaussé et à la légère dominante froide typique du contenu fitness, assez vif pour transmettre l'énergie sans paraître artificiel.
+
+[Objectif & finition]
+Focale standard à grand-angle captant clairement le mouvement du corps entier, netteté constante pour garder la posture lisible, flou minimal sauf effet de mouvement volontaire sur les gestes rapides.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5233,6 +6005,20 @@ Clean, neutral broadcast color grade with accurate skin tones and crisp studio c
 
 [Lens & finish]
 Standard broadcast framing (medium shot, eye-level), sharp focus throughout on the anchor and any graphic overlays, no stylistic blur or grain — clarity and professionalism prioritized.`,
+    ambiancePromptFr: `[Style visuel]
+Style de journal télévisé généraliste avec un plateau et un bureau de présentateur, langage visuel crédible et institutionnel typique d'une émission d'information couvrant des sujets variés.
+
+[Cinématographie]
+Cadrage professionnel et stable sur le présentateur (plan taille au bureau), inserts ponctuels vers des graphiques ou des synthés en bandeau, mouvement de caméra minimal préservant la stabilité broadcast.
+
+[Lumière & moment]
+Éclairage de studio broadcast professionnel, vif et homogène sur le présentateur et le bureau, éclairage plat et constant typique d'un plateau d'information garantissant clarté et crédibilité.
+
+[Étalonnage]
+Étalonnage broadcast neutre et propre aux carnations justes et aux couleurs de plateau nettes, conforme aux standards de production de l'information télévisée.
+
+[Objectif & finition]
+Cadrage broadcast standard (plan taille, hauteur d'œil), netteté constante sur le présentateur et les incrustations graphiques, aucun flou ni grain stylistique — clarté et professionnalisme priment.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
@@ -5266,6 +6052,20 @@ Clean, vivid broadcast color grade with clear, saturated map graphic colors (tem
 
 [Lens & finish]
 Standard broadcast medium-wide framing keeping the presenter's gestures and the map/graphic both legible, sharp focus throughout, no stylistic blur that would obscure the forecast information.`,
+    ambiancePromptFr: `[Style visuel]
+Style de bulletin météo avec un présentateur désignant une carte ou un fond vert, langage visuel énergique et clair, distinct du format de présentateur de journal au bureau.
+
+[Cinématographie]
+Plan taille à plan large montrant toute l'amplitude gestuelle du présentateur vers la carte ou l'écran, caméra positionnée pour garder le présentateur et l'affichage graphique tous deux clairement visibles et équilibrés dans le cadre.
+
+[Lumière & moment]
+Éclairage de studio vif et homogène sur le présentateur, conforme à l'éclairage broadcast standard d'un module météo, équilibre soigné pour ne pas perturber l'incrustation sur fond vert le cas échéant.
+
+[Étalonnage]
+Étalonnage broadcast propre et vif avec des couleurs de carte claires et saturées (zones de température, icônes météo) et des carnations neutres et justes.
+
+[Objectif & finition]
+Cadrage broadcast standard en plan taille-large gardant lisibles les gestes du présentateur et la carte, netteté constante, aucun flou stylistique qui masquerait l'information de prévision.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer ma scène", flow: "keep-ambiance" },
