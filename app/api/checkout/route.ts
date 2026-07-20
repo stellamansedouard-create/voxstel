@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, PRICE_BY_PRODUCT, isCreditProduct } from "@/lib/stripe";
+import { stripe, priceIdForProduct, isCreditProduct } from "@/lib/stripe";
 import { getCurrentUser } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_product" }, { status: 400 });
     }
 
-    const priceId = PRICE_BY_PRODUCT[product];
+    // Throws if the product's price env var is missing — surfaces as the 500
+    // below with the reason logged, instead of creating a broken Checkout
+    // Session with `price: undefined`.
+    const priceId = priceIdForProduct(product);
     const isSubscription = product === "unlimited";
     const supabase = createServerSupabase();
 

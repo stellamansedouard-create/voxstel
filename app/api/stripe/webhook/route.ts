@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   stripe,
   PLAN_BY_PRICE_ID,
-  CREDITS_BY_PRICE_ID,
+  creditsForPriceId,
   PACK_REASON_BY_CREDITS,
 } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase";
@@ -135,10 +135,10 @@ export async function POST(req: NextRequest) {
             limit: 10,
           });
           const packLine = lineItems.data.find(
-            (li) => li.price?.id && CREDITS_BY_PRICE_ID[li.price.id] !== undefined
+            (li) => li.price?.id && creditsForPriceId(li.price.id) !== undefined
           );
           const priceId = packLine?.price?.id;
-          const perUnit = priceId ? CREDITS_BY_PRICE_ID[priceId] : undefined;
+          const perUnit = priceId ? creditsForPriceId(priceId) : undefined;
 
           if (perUnit) {
             const credits = perUnit * (packLine?.quantity ?? 1);

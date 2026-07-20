@@ -60,20 +60,78 @@ export function isCreditProduct(value: unknown): value is CreditProduct {
   );
 }
 
-/** Product -> Stripe price id (from env). `unlimited` reuses STRIPE_PRICE_UNLIMITED. */
-export const PRICE_BY_PRODUCT: Record<CreditProduct, string> = {
-  pack_10: process.env.STRIPE_PRICE_PACK_10!,
-  pack_50: process.env.STRIPE_PRICE_PACK_50!,
-  pack_200: process.env.STRIPE_PRICE_PACK_200!,
-  unlimited: process.env.STRIPE_PRICE_UNLIMITED!,
+/** Env var holding each product's Stripe price id. */
+const PRICE_ENV_BY_PRODUCT: Record<CreditProduct, string> = {
+  pack_10: "STRIPE_PRICE_PACK_10",
+  pack_50: "STRIPE_PRICE_PACK_50",
+  pack_200: "STRIPE_PRICE_PACK_200",
+  unlimited: "STRIPE_PRICE_UNLIMITED",
 };
 
-/** Reverse: Stripe price id -> credits granted. Packs only. */
-export const CREDITS_BY_PRICE_ID: Record<string, number> = {
-  [PRICE_BY_PRODUCT.pack_10]: 10,
-  [PRICE_BY_PRODUCT.pack_50]: 50,
-  [PRICE_BY_PRODUCT.pack_200]: 200,
+/** Credits granted per pack. `unlimited` is a subscription and grants none. */
+const CREDITS_BY_PACK: Record<Exclude<CreditProduct, "unlimited">, number> = {
+  pack_10: 10,
+  pack_50: 50,
+  pack_200: 200,
 };
+
+/**
+ * Resolves a product's price id, refusing to continue without one.
+ *
+ * Why this is a function and not the old PRICE_BY_PRODUCT literal: those ids
+ * were used as object KEYS in the price -> credits table. A missing env var
+ * stringifies to "undefined", so several missing vars collapsed onto ONE key
+ * and the last write won — with all three absent the table became
+ * { "undefined": 200 } and every pack, including the 4,90 € one, would have
+ * granted 200 credits. Silent, and wrong in the direction that costs money.
+ *
+ * Resolution is lazy and per-product on purpose. lib/credits.ts imports this
+ * module for UNLIMITED_PRICE_IDS alone, and it backs the credit gate on every
+ * generation route — so throwing at module load would let a missing PACK price
+ * take down the whole question engine, which has nothing to do with packs.
+ * The throw lands only on the paths that genuinely need the id.
+ */
+export function priceIdForProduct(product: CreditProduct): string {
+  const envName = PRICE_ENV_BY_PRODUCT[product];
+  const value = process.env[envName]?.trim();
+
+  if (!value) {
+    throw new Error(
+      `[stripe] Missing env var ${envName} (product "${product}"). Refusing to ` +
+        `continue: an absent price id would silently grant the wrong number of credits.`
+    );
+  }
+
+  // Shape check, not just presence. A truthy but wrong value (a prod_ id pasted
+  // instead of a price_ id, a stray quote) fails silently in the other
+  // direction: creditsForPriceId simply never matches, the webhook logs "no
+  // recognized pack price", and a customer who paid gets zero credits.
+  if (!/^price_[A-Za-z0-9]+$/.test(value)) {
+    throw new Error(
+      `[stripe] Env var ${envName} (product "${product}") is not a Stripe price ` +
+        `id — got "${value}". Expected the form price_XXXX. Refusing to continue: ` +
+        `an unrecognised id would leave a paid purchase uncredited.`
+    );
+  }
+
+  return value;
+}
+
+/**
+ * Credits for a Stripe price id, or undefined if it is not a known pack.
+ * Validates every pack price id it compares against, so a missing var throws
+ * loudly here instead of quietly failing to match (which would drop a real
+ * purchase on the floor).
+ */
+export function creditsForPriceId(priceId: string): number | undefined {
+  for (const [product, credits] of Object.entries(CREDITS_BY_PACK) as [
+    Exclude<CreditProduct, "unlimited">,
+    number,
+  ][]) {
+    if (priceIdForProduct(product) === priceId) return credits;
+  }
+  return undefined;
+}
 
 /** credit_transactions.reason for a pack purchase, keyed by credits granted. */
 export const PACK_REASON_BY_CREDITS: Record<number, string> = {
