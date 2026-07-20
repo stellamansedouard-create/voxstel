@@ -150,6 +150,12 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         router.push(`/login?next=${encodeURIComponent(pathname)}`);
         return;
       }
+      // Server-side credit gate. outOfCredits() above fails open by design, so
+      // this 402 is what actually stops a 0-credit user. finally{} clears loading.
+      if (res.status === 402) {
+        setPaywalled(true);
+        return;
+      }
       if (!res.ok) throw new Error("analyze failed");
 
       const data: {
@@ -210,6 +216,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         router.push(`/login?next=${encodeURIComponent(pathname)}`);
         return;
       }
+      // The question engine is credit-gated server-side now; 402 means 0 credits.
+      if (res.status === 402) {
+        setPaywalled(true);
+        return;
+      }
       if (!res.ok) throw new Error("refine-precision failed");
 
       const data: { questions: DirectQuestion[] } = await res.json();
@@ -257,6 +268,10 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
           previousQA,
         }),
       });
+      if (res.status === 402) {
+        setPaywalled(true);
+        return;
+      }
       if (!res.ok) throw new Error("refinement analysis failed");
 
       const data: { questions: DirectQuestion[] } = await res.json();
@@ -350,6 +365,12 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
         // the draft and send back to login instead of dead-ending on an error.
         localStorage.setItem("vx_pending_description", JSON.stringify(pending));
         router.push(`/login?next=${encodeURIComponent(pathname)}`);
+        return;
+      }
+      // Server-side credit gate. outOfCredits() above fails open by design, so
+      // this 402 is what actually stops a 0-credit user. finally{} clears loading.
+      if (res.status === 402) {
+        setPaywalled(true);
         return;
       }
       if (!res.ok) throw new Error("analyze failed");

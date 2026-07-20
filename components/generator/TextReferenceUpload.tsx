@@ -54,6 +54,11 @@ function UploadWidget() {
         }),
       });
 
+      // 402 = out of credits — see ImageReferenceUpload for the reasoning.
+      if (res.status === 402) {
+        setUploadError("Vous n'avez plus de crédits. Rechargez pour analyser un fichier.");
+        return;
+      }
       if (!res.ok) throw new Error("analyze-text-reference failed");
       const data = await res.json();
 

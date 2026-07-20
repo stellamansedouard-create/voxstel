@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/auth";
+import { assertCanGenerate } from "@/lib/deliver";
+import { InsufficientCreditsError } from "@/lib/credits";
 import { createServerSupabase } from "@/lib/supabase";
 import { FEATURE_IMAGE_REFERENCE_PLAN_RESTRICTED } from "@/lib/features";
 import type { AITool, ImageAspect } from "@/types";
@@ -28,6 +30,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "plan_required" }, { status: 403 });
       }
     }
+
+    // Credits gate — see analyze-description. Runs after the plan check so a
+    // user without the feature still gets 403 (the more specific reason) rather
+    // than being told to buy credits for something credits would not unlock.
+    await assertCanGenerate(user.id);
 
     const { tool, category, base64, mimeType, usageContext } = await req.json() as {
       tool: AITool;
@@ -107,6 +114,9 @@ Réponds UNIQUEMENT avec du JSON valide, sans markdown, sans champ supplémentai
 
     return NextResponse.json({ aspects: parsed.aspects });
   } catch (error) {
+    if (error instanceof InsufficientCreditsError) {
+      return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
     console.error("analyze-image error:", error);
     return NextResponse.json(
       { error: "Erreur lors de l'analyse de l'image" },

@@ -3,6 +3,8 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
+import { assertCanGenerate } from "@/lib/deliver";
+import { InsufficientCreditsError } from "@/lib/credits";
 import type { AITool, DirectQuestion, PreviousQAItem } from "@/types";
 
 export async function POST(req: NextRequest) {
@@ -11,6 +13,11 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
+
+    // Credits gate — see analyze-description. Must be mapped to 402 ahead of the
+    // catch-all below, which deliberately swallows failures into a 200 and would
+    // otherwise hide the gate behind an empty question list.
+    await assertCanGenerate(user.id);
 
     const { tool, category, useCase, description, usageContext, generatedPromptEn, previousQA } =
       await req.json() as {
@@ -99,6 +106,9 @@ Que faut-il améliorer ou préciser pour rendre ce prompt meilleur ?`,
 
     return NextResponse.json(parsed);
   } catch (error) {
+    if (error instanceof InsufficientCreditsError) {
+      return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
     console.error("analyze-refinement error:", error);
     return NextResponse.json(
       { questions: [], readyToGenerate: false },

@@ -106,6 +106,9 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
           }),
         });
         if (res.status === 401) return bounceToLogin();
+        // The question engine is credit-gated server-side now. Same paywall the
+        // delivery step raises, so backing out returns to the current step.
+        if (res.status === 402) return showPaywall();
         if (!res.ok) throw new Error("questions failed");
 
         const data: { questions: DirectQuestion[] } = await res.json();

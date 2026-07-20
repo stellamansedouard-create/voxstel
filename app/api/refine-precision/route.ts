@@ -3,6 +3,8 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
+import { assertCanGenerate } from "@/lib/deliver";
+import { InsufficientCreditsError } from "@/lib/credits";
 import { buildSeededQuestionSystem } from "@/lib/ambiance";
 import { getThemeHints, PLAIN_LANGUAGE_RULE } from "@/lib/question-themes";
 import type { AITool, Category, DirectQuestion } from "@/types";
@@ -25,8 +27,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
-    // Affinage supplémentaire is available to every authenticated user
-    // (incl. free) — the monthly quota is the real limiter.
+    // Credits gate — see analyze-description. The previous note here said the
+    // monthly quota was the real limiter; that quota is gone with the credits
+    // pivot, which left this route with no limiter at all.
+    await assertCanGenerate(user.id);
 
     const { tool, category, useCase, description, usageContext, previousQA, ambianceSeed } = await req.json() as {
       tool: AITool;
@@ -136,6 +140,9 @@ Identifie les axes d'ambiguïté restants non couverts et génère les questions
 
     return NextResponse.json({ questions: parsed.questions });
   } catch (error) {
+    if (error instanceof InsufficientCreditsError) {
+      return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
     console.error("refine-precision error:", error);
     return NextResponse.json(
       { error: "Erreur lors de l'affinage" },

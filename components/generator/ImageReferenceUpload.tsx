@@ -50,6 +50,14 @@ function UploadWidget() {
         }),
       });
 
+      // 402 = out of credits (this route is credit-gated server-side). Say so
+      // rather than falling into the generic "réessayez", which would have the
+      // user retrying something that cannot succeed until they top up.
+      if (res.status === 402) {
+        setUploadError("Vous n'avez plus de crédits. Rechargez pour analyser une image.");
+        setPreviewUrl(null);
+        return;
+      }
       if (!res.ok) throw new Error("analyze-image failed");
       const data = await res.json();
 

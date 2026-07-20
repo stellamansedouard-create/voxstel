@@ -3,6 +3,8 @@ import { anthropic, MODELS } from "@/lib/anthropic";
 import { getToolById } from "@/lib/metadata";
 import { getUseCaseById } from "@/lib/usecases";
 import { getCurrentUser } from "@/lib/auth";
+import { assertCanGenerate } from "@/lib/deliver";
+import { InsufficientCreditsError } from "@/lib/credits";
 import { getThemeHints, PLAIN_LANGUAGE_RULE } from "@/lib/question-themes";
 import type { AITool, DirectQuestion } from "@/types";
 
@@ -56,6 +58,12 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
+
+    // Credits gate — the question engine is an Anthropic call like any other, so
+    // a user who can never be charged must not reach it. Auth alone left this
+    // route open: the client-side pre-gate in GeneratorFlow is a UX guard that
+    // fails open, so this is the enforcement point. 402 -> paywall.
+    await assertCanGenerate(user.id);
 
     const { tool, category, useCase, description, usageContext } = await req.json() as {
       tool: AITool;
@@ -186,6 +194,9 @@ Génère les questions de précision.`,
       readyToGenerate: parsed.questions.length === 0,
     });
   } catch (error) {
+    if (error instanceof InsufficientCreditsError) {
+      return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
     console.error("analyze-description error:", error);
     return NextResponse.json(
       { error: "Erreur lors de l'analyse de la description" },
