@@ -122,24 +122,25 @@ export default async function HomePage() {
                 Trois étapes, zéro page blanche
               </h2>
               <p className="text-lg text-muted leading-relaxed text-balance max-w-2xl mx-auto">
-                Tu ne pars jamais de rien. L&apos;ambiance est déjà écrite, gratuite,
-                prête à copier — à toi de dire ce qu&apos;il te faut en plus.
+                Vous ne partez jamais de rien. L&apos;ambiance est déjà écrite,
+                gratuite, prête à copier — à vous de dire ce qu&apos;il vous faut
+                en plus.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
-                  title: "Choisis une page bibliothèque",
+                  title: "Choisissez une page bibliothèque",
                   body: "Musique, image, texte ou vidéo — chaque page a déjà un prompt d'ambiance riche, gratuit, sans inscription.",
                 },
                 {
-                  title: "Copie-le tel quel, ou affine-le",
-                  body: "L'ambiance suffit souvent. Si tu veux l'ajuster à ton goût, quelques questions simples suffisent.",
+                  title: "Copiez-le tel quel, ou affinez-le",
+                  body: "L'ambiance suffit souvent. Si vous voulez l'ajuster à votre goût, quelques questions simples suffisent.",
                 },
                 {
-                  title: "Ajoute ton sujet précis",
-                  body: "Ton personnage, tes paroles, ton produit — la partie unique à toi, construite avec Voxstel.",
+                  title: "Ajoutez votre sujet précis",
+                  body: "Votre personnage, vos paroles, votre produit — la partie qui n'appartient qu'à vous, construite avec Voxstel.",
                 },
               ].map((step, i) => (
                 <div
