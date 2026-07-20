@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -124,7 +123,6 @@ export default function MentionsLegalesPage() {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
