@@ -230,6 +230,47 @@ punchy transient design
       "Une intro qui dit VRAIMENT ton nom et ton univers, on la construit avec toi.",
     renderAsset: null,
   },
+  {
+    slug: "prompt-suno-drill-francais",
+    title: "Drill français",
+    tagline: "Une basse qui menace et un flow qui claque sec.",
+    category: "music",
+    tool: "suno",
+    seoTitle: "Prompt Suno drill français — le style prêt à copier",
+    seoDescription:
+      "Un prompt Suno complet pour un drill français sombre : 808 glissés, hi-hats triplets, piano menaçant, mix froid. À copier tel quel, sans inscription.",
+    targetKeywords: ["prompt suno drill", "prompt drill français"],
+    ambiancePrompt: `[Genre & era]
+French drill, UK drill influence adapted to French flow, dark and
+aggressive modern trap-adjacent sound, 2020s underground
+
+[Instrumental]
+Sliding 808 bass with pitch glides, dark minor-key piano or string
+stabs, sparse eerie melodic loop, cold atmospheric pads
+
+[Drums]
+Hard-hitting drill hi-hat rolls and triplets, syncopated open hi-hats,
+punchy layered kick, sharp rimshot-style snare on the off-beat
+
+[Voice & flow]
+Male voice, tense and sharp delivery, aggressive short-phrase flow with
+rapid-fire ad-libs, clear French diction, menacing undertone
+
+[Mix & mood]
+Dark cinematic mix, heavy low-end, cold reverb on vocals, tense and
+confrontational mood, minimal but suffocating atmosphere
+
+[Tempo & key]
+140 BPM (half-time feel), minor key, drill swing`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
+      { label: "Affiner le style + écrire mes paroles", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style, c'est la partie facile. Des paroles qui riment juste et racontent ton histoire, c'est un métier.",
+    renderAsset: null,
+  },
 
   // ---------------------------------------------------------------- image
   {
@@ -386,6 +427,47 @@ picture-book finish, crisp and colorful`,
     ],
     fomoMicrocopy:
       "Ton personnage, son histoire, ses expressions — pour qu'il soit vraiment le tien, on le dessine avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-fantasy-medievale",
+    title: "Ambiance fantasy médiévale épique",
+    tagline: "Une forteresse dans la brume et une lumière qui ne pardonne pas.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt image fantasy médiévale — ambiance épique à copier",
+    seoDescription:
+      "Un prompt d'ambiance fantasy médiévale épique : forteresse dans la brume, lumière d'orage, étalonnage cinématique 8K. À copier tel quel, sans inscription.",
+    targetKeywords: ["prompt midjourney fantasy", "prompt image médiéval"],
+    ambiancePrompt: `[Scene & universe]
+Epic medieval fantasy landscape, towering stone fortress on a
+cliffside, dense misty forest below, distant mountain range, sense of
+ancient scale
+
+[Lighting]
+Overcast dramatic sky, diffused silver light breaking through storm
+clouds, faint god-rays, cold ambient light with warm torchlight accents
+from the fortress windows
+
+[Color & grade]
+Desaturated cinematic palette, cool greys and deep greens, muted gold
+accents, moody fantasy grade
+
+[Composition & lens]
+Wide epic establishing shot, low horizon line, strong
+foreground-to-background depth, subtle atmospheric perspective, slight
+wide-angle distortion
+
+[Texture & render]
+Photoreal painterly hybrid, fine atmospheric mist, ultra-detailed
+stonework and foliage, 8K render, cinematic depth of field`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Ton personnage, ta pose, ta lumière — pour un rendu parfait, il faut la précision qu'on t'apporte.",
     renderAsset: null,
   },
 
@@ -563,6 +645,53 @@ d'égal à égal.`,
       "La personnalisation, c'est 80 % du taux de réponse. Ta cible, ton offre, ton angle — on les cale avec toi.",
     renderAsset: null,
   },
+  {
+    slug: "prompt-chatgpt-description-produit-ecommerce",
+    title: "Description produit e-commerce",
+    tagline: "Trois lignes qui vendent, pas qui décrivent.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT fiche produit e-commerce — structure à copier",
+    seoDescription:
+      "Un prompt complet pour une fiche produit e-commerce qui convertit : titre SEO, accroche bénéfice, points forts, levée d'objection. À copier tel quel, sans inscription.",
+    targetKeywords: ["prompt chatgpt fiche produit", "prompt description produit"],
+    ambiancePrompt: `[Rôle]
+Tu es un copywriter e-commerce spécialisé en fiches produit qui
+convertissent, maîtrisant le SEO produit et les déclencheurs d'achat.
+
+[Objectif]
+Produire une fiche produit qui capte l'attention en une phrase, lève
+les objections, et pousse au clic "Ajouter au panier" — sans jargon
+marketing vide.
+
+[Structure imposée]
+1. Un titre produit clair incluant le mot-clé principal.
+2. Une accroche d'1 à 2 phrases centrée sur le bénéfice, pas la
+fonctionnalité.
+3. Une liste de 3 à 5 points forts, formulés en bénéfice concret pour
+le client.
+4. Un paragraphe court qui lève l'objection la plus probable (prix,
+qualité, livraison).
+5. Une phrase de réassurance ou d'urgence légère, sans pression
+artificielle.
+
+[Règles de rédaction]
+Bénéfice avant caractéristique à chaque ligne. Bannir les superlatifs
+vides ("incroyable", "révolutionnaire"). Phrases courtes, rythme qui se
+lit à voix haute.
+
+[Contraintes]
+Ton adapté à la cible (premium, familial, technique...). Longueur
+totale 80 à 150 mots sauf indication contraire.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon produit", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon produit", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Ton produit, ta cible, ton positionnement — une fiche qui convertit se construit sur mesure.",
+    renderAsset: null,
+  },
 
   // ---------------------------------------------------------------- video
   {
@@ -639,6 +768,120 @@ slow-motion capability, glossy advertising polish`,
     ],
     fomoMicrocopy:
       "Ton produit, ses angles, son argument — une vidéo qui vend se cale sur ton projet précis.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-reels-tiktok-vertical",
+    title: "Vidéo réseaux sociaux verticale (Reels/TikTok)",
+    tagline: "Un format vertical pensé pour arrêter le pouce.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo Reels / TikTok vertical — style à copier",
+    seoDescription:
+      "Un prompt de style pour une vidéo verticale 9:16 Reels/TikTok : montage rapide, hooks, lumière punchy, rendu mobile. À copier tel quel, sans inscription.",
+    targetKeywords: ["prompt sora tiktok", "prompt video reels"],
+    ambiancePrompt: `[Visual style]
+Vertical 9:16 social media video, energetic and punchy handheld-feel
+aesthetic, bright modern lifestyle look, fast-paced editing rhythm
+
+[Cinematography]
+Quick dynamic cuts, whip pans, close-up hooks in the first second, mix
+of handheld motion and stabilized inserts
+
+[Lighting & time]
+Bright natural daylight or clean studio lighting, high-key exposure,
+crisp and punchy contrast
+
+[Color grade]
+Vibrant modern social-media grade, punchy saturation, clean skin tones,
+slight warmth
+
+[Lens & finish]
+Sharp digital look, 30fps smooth motion, subtle motion blur on fast
+pans, optimized for mobile viewing`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-interview-temoignage",
+    title: "Vidéo interview / témoignage client",
+    tagline: "Un cadrage qui inspire confiance, une lumière qui ne ment pas.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo interview / témoignage — style à copier",
+    seoDescription:
+      "Un prompt de style pour une vidéo interview/témoignage : cadrage portrait, lumière douce, profondeur de champ, rendu 85mm broadcast. À copier sans inscription.",
+    targetKeywords: ["prompt sora interview", "prompt video témoignage"],
+    ambiancePrompt: `[Visual style]
+Clean corporate interview setup, warm and trustworthy documentary look,
+shallow depth of field portrait framing
+
+[Cinematography]
+Static or subtle slow push-in, eye-level camera, three-quarter framing,
+soft focus falloff on the background
+
+[Lighting & time]
+Soft key light with gentle fill, natural window-light feel, warm
+neutral color temperature, no harsh shadows
+
+[Color grade]
+Natural true-to-life grade, warm neutral tones, gentle contrast,
+professional and approachable
+
+[Lens & finish]
+85mm-equivalent look, creamy background blur, clean 24fps cinematic
+motion, broadcast-quality sharpness`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-video-motion-design-intro-logo",
+    title: "Vidéo motion design intro logo / chaîne",
+    tagline: "Trois secondes pour poser une identité qu'on n'oublie pas.",
+    category: "video",
+    tool: "sora",
+    seoTitle: "Prompt vidéo motion design intro logo — style à copier",
+    seoDescription:
+      "Un prompt de style pour une intro logo en motion design : formes géométriques, reveal fluide, palette de marque, rendu vectoriel 60fps. À copier sans inscription.",
+    targetKeywords: ["prompt sora motion design", "prompt video intro logo"],
+    ambiancePrompt: `[Visual style]
+Clean minimal motion design intro, modern tech-brand aesthetic,
+geometric shapes and smooth logo reveal
+
+[Cinematography]
+Smooth camera-less motion graphics movement, elegant logo build-up,
+precise timing, no organic camera shake
+
+[Lighting & time]
+Studio-clean lighting simulation, soft gradient background, subtle glow
+on key elements
+
+[Color grade]
+Bold brand-color palette, high contrast between background and logo,
+crisp modern grade
+
+[Lens & finish]
+Ultra-clean vector-sharp render, smooth 60fps motion, subtle particle
+or light-trail accents, polished commercial finish`,
+    buttons: [
+      { label: "Affiner le style", flow: "refine-ambiance" },
+      { label: "Créer ma scène", flow: "keep-ambiance" },
+      { label: "Affiner + créer ma scène", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style pose l'ambiance. Ton sujet, ton action, ton découpage de plans — on les construit avec toi.",
     renderAsset: null,
   },
 ];
