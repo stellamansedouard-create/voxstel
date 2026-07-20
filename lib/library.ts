@@ -516,12 +516,15 @@ Mix stays dry and tight, low end controlled and precise, no wide stereo effects 
 [Tempo & key]
 125-135 BPM. Modal or key-ambiguous tonal center — harmonic movement is minimal by design.`,
     buttons: [
+      // Two buttons, like prompt-suno-lofi-chill: this style states "No lead
+      // vocal", and music's subject layer is the Suno LYRICS field, so a
+      // keep-ambiance entry would freeze an instrumental style and then write
+      // lyrics over it.
       { label: "Affiner le style", flow: "refine-ambiance" },
-      { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
-      { label: "Affiner le style + écrire mes paroles", flow: "refine-and-subject" },
+      { label: "Ajouter une voix", flow: "refine-and-subject" },
     ],
     fomoMicrocopy:
-      "Le style, c'est la partie facile. Des paroles qui riment juste et racontent ton histoire, c'est un métier.",
+      "Envie d'un groove calé sur ton ambiance exacte, pas d'un preset ? On l'affine avec toi.",
     renderAsset: null,
   },
   {
@@ -840,12 +843,13 @@ Wide, spacious stereo field with long reverb tails, low dynamic range for consis
 [Tempo & key]
 50-70 BPM or tempo-free (free-floating, non-metric). Modal or drone-based tonal center avoiding strong harmonic resolution.`,
     buttons: [
+      // Two buttons, like prompt-suno-lofi-chill — this style states "No lead
+      // vocal", so there are no lyrics to write over it.
       { label: "Affiner le style", flow: "refine-ambiance" },
-      { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
-      { label: "Affiner le style + écrire mes paroles", flow: "refine-and-subject" },
+      { label: "Ajouter une voix", flow: "refine-and-subject" },
     ],
     fomoMicrocopy:
-      "Le style, c'est la partie facile. Des paroles qui riment juste et racontent ton histoire, c'est un métier.",
+      "Une ambiance vraiment à toi — durée, texture, intensité — ça se règle ensemble.",
     renderAsset: null,
   },
   {
@@ -1020,12 +1024,13 @@ Chiptune variant stays bright, compressed, and energetic; orchestral variant sta
 [Tempo & key]
 Chiptune: 140-170 BPM, bright major keys. Orchestral: variable tempo with dramatic rubato, minor keys for tension building to major-key resolution.`,
     buttons: [
+      // Two buttons, like prompt-suno-lofi-chill — this style is "Instrumental
+      // by default" in both variants, so there are no lyrics to write over it.
       { label: "Affiner le style", flow: "refine-ambiance" },
-      { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
-      { label: "Affiner le style + écrire mes paroles", flow: "refine-and-subject" },
+      { label: "Ajouter une voix", flow: "refine-and-subject" },
     ],
     fomoMicrocopy:
-      "Le style, c'est la partie facile. Des paroles qui riment juste et racontent ton histoire, c'est un métier.",
+      "Chiptune ou orchestral, c'est ta scène et ton moment de jeu qui décident. On les cale avec toi.",
     renderAsset: null,
   },
   {
@@ -1056,12 +1061,15 @@ Mid-range-focused mix leaving clear space for spoken voice frequencies, moderate
 [Tempo & key]
 90-110 BPM for energetic formats, 70-90 BPM for calmer/interview formats. Major or neutral keys for broad topical flexibility across episode content.`,
     buttons: [
+      // Two buttons, like prompt-suno-lofi-chill — this style is "Instrumental
+      // only", built as a bed under narration, so there are no sung lyrics to
+      // write over it. The voice here is the announcer, added on top after a
+      // refining round lifts the instrumental-only constraint.
       { label: "Affiner le style", flow: "refine-ambiance" },
-      { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
-      { label: "Affiner le style + écrire mes paroles", flow: "refine-and-subject" },
+      { label: "Ajouter une voix", flow: "refine-and-subject" },
     ],
     fomoMicrocopy:
-      "Le style, c'est la partie facile. Des paroles qui riment juste et racontent ton histoire, c'est un métier.",
+      "Le nom de ton podcast, ton ton, ta durée d'intro — une identité sonore, ça se construit avec toi.",
     renderAsset: null,
   },
   {
