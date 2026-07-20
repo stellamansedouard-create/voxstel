@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Lock, RefreshCcw, MapPin, ShieldCheck } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
+import ScrollReveals from "@/components/ScrollReveals";
 
 export const dynamic = 'force-dynamic';
 
@@ -48,6 +49,7 @@ export default async function HomePage() {
   const isLoggedIn = !!user;
   return (
     <>
+      <ScrollReveals />
       <main className="bg-background overflow-x-hidden">
 
         {/* ─────────────────────────────────────────────────────────────
@@ -112,7 +114,7 @@ export default async function HomePage() {
             montrer le mécanisme concret avant que les blocs de persuasion
             qui suivent puissent porter.
         ───────────────────────────────────────────────────────────── */}
-        <section className="py-24 px-4" style={{ backgroundColor: "#F8F6F0" }}>
+        <section data-reveal className="py-24 px-4" style={{ backgroundColor: "#F8F6F0" }}>
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
               <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-5 block">
@@ -173,7 +175,7 @@ export default async function HomePage() {
         {/* ─────────────────────────────────────────────────────────────
             FOMO — Pourquoi pas seul
         ───────────────────────────────────────────────────────────── */}
-        <section
+        <section data-reveal
           className="relative py-24 px-4 overflow-hidden"
           style={{ backgroundColor: "rgba(200,145,10,0.035)" }}
         >
@@ -223,7 +225,7 @@ export default async function HomePage() {
         {/* ─────────────────────────────────────────────────────────────
             PROBLÈME → SOLUTION — Le fossé du prompt
         ───────────────────────────────────────────────────────────── */}
-        <section
+        <section data-reveal
           className="relative py-24 px-4 overflow-hidden"
           style={{ backgroundColor: "rgba(200,145,10,0.035)" }}
         >
@@ -293,7 +295,7 @@ export default async function HomePage() {
         {/* ─────────────────────────────────────────────────────────────
             TRANSFORMATION — Avant / Après visuel
         ───────────────────────────────────────────────────────────── */}
-        <section className="py-20 px-4">
+        <section data-reveal className="py-20 px-4">
           <div className="max-w-6xl mx-auto">
 
             <div className="text-center mb-14">
@@ -454,7 +456,7 @@ export default async function HomePage() {
         {/* ─────────────────────────────────────────────────────────────
             FONCTIONNALITÉS — 4 catégories
         ───────────────────────────────────────────────────────────── */}
-        <section id="fonctionnalites" className="py-20 px-4 relative overflow-hidden">
+        <section data-reveal id="fonctionnalites" className="py-20 px-4 relative overflow-hidden">
 
           {/* Decorative accent shape */}
           <div
@@ -510,7 +512,7 @@ export default async function HomePage() {
         {/* ─────────────────────────────────────────────────────────────
             CTA FINAL — Chaleureux
         ───────────────────────────────────────────────────────────── */}
-        <section className="py-24 px-4 relative overflow-hidden">
+        <section data-reveal className="py-24 px-4 relative overflow-hidden">
 
           {/* Warm ambient glow */}
           <div

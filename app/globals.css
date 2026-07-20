@@ -63,12 +63,43 @@ body {
   to { transform: translateY(0); }
 }
 
+/* Scroll reveals — une section marquée `data-reveal` entre en fondu avec une
+   courte montée quand elle atteint le viewport (voir ScrollReveals.tsx).
+   Un seul et même effet partout : aucune variante par section, et aucune
+   cascade interne — la section apparaît d'un bloc, pas ligne par ligne.
+
+   L'état masqué est volontairement porté par `.reveals-armed`, posée par le JS
+   uniquement quand il peut effectivement révéler. Sans cette classe (pas de
+   JS, pas d'IntersectionObserver, observateur muet, mouvement réduit), aucune
+   de ces règles ne s'applique et les sections restent simplement visibles. */
+.reveals-armed [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 450ms ease-out,
+    transform 450ms ease-out;
+}
+
+.reveals-armed [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-lcp {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  /* Affichage direct : ni état masqué initial, ni transition. Le JS n'arme
+     déjà pas dans ce cas ; cette règle est la ceinture en plus des bretelles,
+     y compris si la préférence change après le montage. */
+  .reveals-armed [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 
