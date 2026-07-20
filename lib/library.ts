@@ -2418,6 +2418,831 @@ totale 80 à 150 mots sauf indication contraire.`,
     renderAsset: null,
   },
 
+  {
+    slug: "prompt-article-blog-seo",
+    title: "Article de blog SEO",
+    tagline: "Un article structuré pour se positionner sur Google.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT article de blog SEO — structure à copier",
+    seoDescription:
+      "Un prompt complet pour un article de blog optimisé SEO : H1 avec mot-clé, intro accroche, 3-5 H2, conclusion et meta-description. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt article de blog", "prompt rédaction seo ia"],
+    ambiancePrompt: `[Rôle]
+Act as an experienced SEO content writer and editor who understands French search intent, on-page optimization, and how to structure long-form content that both ranks and genuinely helps the reader.
+
+[Objectif]
+Produce a complete, publish-ready blog article in French that targets a specific keyword and search intent, balancing SEO structure with genuine reader value — never keyword-stuffed, never generic filler.
+
+[Structure imposée]
+Title (H1) including the target keyword naturally, a hook introduction stating the reader's problem, 3-5 H2 sections each answering a distinct sub-question, a practical conclusion with a clear next step, and a meta-description under 155 characters.
+
+[Règles de rédaction]
+Write in clear, direct French at a general-audience reading level, use short paragraphs (2-4 sentences) and bullet points where they aid scanability, back claims with concrete examples rather than vague assertions.
+
+[Contraintes]
+Target length 1200-1800 words unless otherwise specified, avoid AI-sounding transitional clichés ("dans le monde d'aujourd'hui", "il est important de noter"), output in French regardless of the language of these instructions.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon sujet et mon mot-clé", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure SEO est posée. Ton sujet précis, ton mot-clé cible, ta ligne éditoriale — c'est ce qui fait vraiment ranker.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-communique-de-presse",
+    title: "Communiqué de presse",
+    tagline: "Une annonce professionnelle, prête pour les médias.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT communiqué de presse — structure à copier",
+    seoDescription:
+      "Un prompt complet pour un communiqué de presse : titre informatif, chapô, corps en pyramide inversée, citation, boilerplate. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt communiqué de presse", "prompt communiqué presse ia"],
+    ambiancePrompt: `[Rôle]
+Act as a corporate communications professional experienced in writing French press releases that journalists actually read and use, following AFP-style journalistic conventions.
+
+[Objectif]
+Produce a publish-ready press release announcing a company event, product launch, or milestone, written to maximize the chance of media pickup and clear third-party comprehension.
+
+[Structure imposée]
+Headline stating the news in one line, dateline (city, date), lead paragraph covering who/what/when/where/why, 2-3 supporting paragraphs with context and a quote from a company spokesperson, boilerplate company description, media contact block.
+
+[Règles de rédaction]
+Write in formal, neutral journalistic French (third person, no marketing hype language), lead with the most newsworthy fact first following the inverted-pyramid structure, keep sentences factual and verifiable.
+
+[Contraintes]
+Target length 300-500 words, include one clearly-marked placeholder quote for the spokesperson to review, avoid superlatives ("révolutionnaire", "unique au monde") unless factually substantiated.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon annonce", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon annonce", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le format presse est posé. Ton annonce précise, ton porte-parole, ta date — c'est ce qui rend le communiqué vraiment diffusable.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-page-de-vente-landing-page",
+    title: "Page de vente (landing page)",
+    tagline: "Une page complète pensée pour convertir, de l'accroche au CTA.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT page de vente — structure landing à copier",
+    seoDescription:
+      "Un prompt complet pour une landing page qui convertit : accroche, bénéfices, preuve sociale, levée d'objections, CTA. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt page de vente", "prompt landing page ia"],
+    ambiancePrompt: `[Rôle]
+Act as a direct-response copywriter specialized in high-converting French landing pages, combining persuasive copywriting principles with clear, honest communication.
+
+[Objectif]
+Produce a complete, section-by-section landing page for a specific offer (product, service, or lead magnet), structured to guide a visitor from initial attention to a single clear conversion action.
+
+[Structure imposée]
+Hero section (headline + subheadline + primary CTA), problem/agitation section, solution/offer presentation, 3-5 benefit blocks (not just features), social proof section (testimonials/numbers), objection-handling FAQ, final CTA section — one offer, one page, one goal.
+
+[Règles de rédaction]
+Write benefit-driven copy that speaks directly to the reader ("vous"), keep sentences short and scannable, every section must earn its place by moving the reader closer to the single conversion action.
+
+[Contraintes]
+No competing calls-to-action — only one offer per page, avoid generic stock-phrase headlines, output in French, flag clearly where real testimonials/numbers/proof need to be inserted by the user.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon offre", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon offre", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure de vente est posée. Ton offre précise, ta preuve sociale, ton prix — c'est ce qui transforme la page en machine à convertir.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-newsletter-email",
+    title: "Newsletter email",
+    tagline: "Un email qui se lit jusqu'au bout et donne envie de cliquer.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT newsletter — structure email à copier",
+    seoDescription:
+      "Un prompt complet pour une newsletter qui se lit jusqu'au bout : objet, accroche, corps rythmé, un seul CTA clair. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt newsletter", "prompt email marketing ia"],
+    ambiancePrompt: `[Rôle]
+Act as an email marketing copywriter experienced in French B2C/B2B newsletters, understanding what drives opens, reads, and clicks in an inbox.
+
+[Objectif]
+Produce a complete, ready-to-send newsletter email that informs or promotes while maintaining a genuine, non-salesy relationship tone with the subscriber.
+
+[Structure imposée]
+Subject line (with an optional A/B alternative), preview text, personal opening line, 1-3 content blocks each with a clear focus, single primary call-to-action, friendly sign-off.
+
+[Règles de rédaction]
+Write in a warm, conversational French tone as if from one person to another (not corporate broadcast voice), keep paragraphs to 1-3 sentences for mobile readability, lead with value before any ask.
+
+[Contraintes]
+Target length 150-300 words for the body, one dominant CTA (secondary links allowed but visually subordinate), avoid spam-trigger phrasing ("gratuit", "urgent" in excess, all-caps).`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à ma liste et mon sujet", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le squelette est posé. Ton actualité, ton offre, ta liste précise — c'est ce qui rend l'email vraiment pertinent pour tes abonnés.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-legendes-reseaux-sociaux-instagram",
+    title: "Légendes réseaux sociaux (Instagram)",
+    tagline: "Une légende qui capte l'attention et donne envie d'interagir.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT légende Instagram — structure à copier",
+    seoDescription:
+      "Un prompt complet pour une légende Instagram qui engage : première ligne qui arrête le scroll, corps aéré, CTA et hashtags. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt instagram", "prompt légende instagram ia"],
+    ambiancePrompt: `[Rôle]
+Act as a social media copywriter specialized in Instagram captions that stop the scroll and drive engagement, distinct from general marketing copy.
+
+[Objectif]
+Produce a scroll-stopping caption tied to a specific post/photo, designed to maximize engagement (comments, saves, shares) for that individual piece of content — not a permanent profile statement.
+
+[Structure imposée]
+Hook line (first 1-2 lines visible before "more"), short body developing the thought or story, engagement prompt (question or call-to-comment), 5-10 relevant hashtags grouped at the end.
+
+[Règles de rédaction]
+Write in a casual, first-person French tone matching Instagram's conversational register, use line breaks for readability, hook must work standalone since it's the only visible text before truncation.
+
+[Contraintes]
+Target length 50-150 words for the body (excluding hashtags), one clear engagement prompt per caption, avoid generic hashtag stuffing — hashtags must be topically specific.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon post", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon post", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'accroche est posée. Ta photo précise, ton moment, ton ton — c'est ce qui rend la légende vraiment tienne.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-script-video-youtube",
+    title: "Script vidéo YouTube",
+    tagline: "Un script pensé pour la rétention, pas juste pour le texte.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT script vidéo YouTube — structure à copier",
+    seoDescription:
+      "Un prompt complet pour un script YouTube pensé rétention : hook 15 secondes, promesse, développement rythmé, CTA. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt script youtube", "prompt script vidéo ia"],
+    ambiancePrompt: `[Rôle]
+Act as a YouTube scriptwriter who understands retention mechanics, pacing, and how spoken delivery differs from written prose.
+
+[Objectif]
+Produce a complete, timestamped video script optimized to hook viewers in the first 15 seconds and hold attention through to a clear call-to-action at the end.
+
+[Structure imposée]
+Hook (0-15s, states the payoff up front), brief context/promise section, 3-5 main content sections with a pattern interrupt or visual cue note between each, recap, call-to-action (subscribe/next video).
+
+[Règles de rédaction]
+Write in spoken, conversational French meant to be read aloud (short sentences, natural rhythm, no complex subordinate clauses), include bracketed notes for visual cues or B-roll where relevant.
+
+[Contraintes]
+Match target video length if specified (roughly 150 spoken words per minute), avoid written-style formalities that sound stiff when spoken aloud, one clear CTA at the end only.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à ma vidéo", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à ma vidéo", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le rythme est posé. Ton sujet, tes exemples, tes visuels — c'est ce qui retient vraiment le spectateur.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-script-podcast",
+    title: "Script podcast",
+    tagline: "Une trame audio naturelle, du lancement à la conclusion.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT script de podcast — trame à copier",
+    seoDescription:
+      "Un prompt complet pour une trame de podcast : accroche, annonce du sujet, segments, transitions et conclusion. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt podcast", "prompt script podcast ia"],
+    ambiancePrompt: `[Rôle]
+Act as a podcast producer and scriptwriter experienced in French audio-only content, understanding the difference between a rigid script and a flexible talking-point outline.
+
+[Objectif]
+Produce a structured episode outline (not a word-for-word script) that guides a natural-sounding spoken episode while ensuring key points and transitions aren't missed.
+
+[Structure imposée]
+Cold open/hook, intro (show branding + episode topic), 3-5 main talking-point segments with natural transition cues, listener call-to-action (subscribe/review), outro.
+
+[Règles de rédaction]
+Write as flexible talking points and guiding questions rather than word-for-word dialogue, French phrasing should sound natural when paraphrased aloud, include suggested transition phrases between segments.
+
+[Contraintes]
+Target segment timing notes if episode length is specified, avoid over-scripting to preserve natural conversational flow, one clear listener CTA placed near the end.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon épisode", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon épisode", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La trame est posée. Ton invité, tes anecdotes, ton ton — c'est ce qui rend l'épisode vraiment vivant.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-section-business-plan",
+    title: "Section business plan",
+    tagline: "Une section claire et structurée, prête pour investisseurs ou banque.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT business plan — structure de section à copier",
+    seoDescription:
+      "Un prompt complet pour rédiger une section de business plan claire et chiffrée, prête pour un investisseur ou une banque. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt business plan", "prompt business plan ia"],
+    ambiancePrompt: `[Rôle]
+Act as a business consultant experienced in writing French business plan sections that satisfy both investor and bank-lender expectations for clarity and rigor.
+
+[Objectif]
+Produce a specific, well-argued business plan section (e.g. market analysis, financial projections narrative, or executive summary) that reads as professional and credible, not generic template filler.
+
+[Structure imposée]
+Clear section heading, opening statement of the section's core claim, supporting evidence/data points (clearly marked as placeholders where user data is needed), concluding statement tying back to overall business viability.
+
+[Règles de rédaction]
+Write in formal, precise French business register, back every claim with a data point or clearly-flagged placeholder rather than vague assertion, avoid startup-pitch hype language in favor of measured credibility.
+
+[Contraintes]
+Length appropriate to section type (typically 300-600 words), explicitly flag every place where the user's real figures/data must be inserted, output in French.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon projet", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon projet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure argumentaire est posée. Tes chiffres réels, ton marché précis — c'est ce qui rend la section vraiment crédible.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-lettre-de-demission",
+    title: "Lettre de démission",
+    tagline: "Une lettre claire, professionnelle, sans mauvaise surprise.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT lettre de démission — modèle à copier",
+    seoDescription:
+      "Un prompt complet pour une lettre de démission claire et professionnelle : mention du préavis, ton neutre, aucune formule à risque. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt lettre de démission", "prompt lettre démission ia"],
+    ambiancePrompt: `[Rôle]
+Act as an HR-savvy professional writer who knows the formal conventions and legal courtesy expected in a French resignation letter.
+
+[Objectif]
+Produce a formal, unambiguous resignation letter that clearly states the intent to resign, the notice period, and maintains a professional tone regardless of the underlying reason for leaving.
+
+[Structure imposée]
+Sender/recipient header block, formal salutation, opening paragraph stating the resignation clearly and the last working day, brief (optional) reason or thanks paragraph, formal closing.
+
+[Règles de rédaction]
+Write in formal French business letter register ("Je vous prie de bien vouloir accepter..."), keep tone neutral and professional even if the underlying context is difficult, avoid emotional language or grievances.
+
+[Contraintes]
+Length under 250 words, explicitly state the legal/contractual notice period as a placeholder for the user to confirm, output in French following standard French formal letter conventions.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à ma situation", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à ma situation", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le cadre formel est posé. Ton préavis exact, ton poste, ta date — c'est ce qui rend la lettre vraiment conforme.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-lettre-de-reclamation",
+    title: "Lettre de réclamation",
+    tagline: "Une réclamation ferme, argumentée et professionnelle.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT lettre de réclamation — modèle à copier",
+    seoDescription:
+      "Un prompt complet pour une réclamation ferme et argumentée : faits datés, préjudice, demande précise, délai de réponse. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt lettre de réclamation", "prompt réclamation ia"],
+    ambiancePrompt: `[Rôle]
+Act as a consumer rights-savvy writer experienced in French formal complaint letters that are firm, factual, and effective at prompting resolution.
+
+[Objectif]
+Produce a formal complaint letter that clearly states the issue, the factual timeline, the specific resolution requested, and a reasonable deadline — firm without being aggressive.
+
+[Structure imposée]
+Sender/recipient header block with reference numbers, formal salutation, factual issue statement with dates/references, clear statement of the requested resolution, deadline and next-step consequence, formal closing.
+
+[Règles de rédaction]
+Write in firm, factual French formal register, state facts chronologically and objectively before making the request, avoid emotional or accusatory language even when the situation is frustrating.
+
+[Contraintes]
+Length under 300 words, explicitly flag placeholders for order numbers/dates/reference numbers, output in French following standard "lettre de réclamation" conventions (with optional recommandé avec accusé de réception mention).`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon litige", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon litige", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'argumentaire est posé. Tes dates précises, ton préjudice, ta référence de commande — c'est ce qui rend la réclamation vraiment solide.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-discours-de-mariage",
+    title: "Discours de mariage",
+    tagline: "Un discours sincère qui marque les esprits sans tomber dans le cliché.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT discours de mariage — trame à copier",
+    seoDescription:
+      "Un prompt complet pour un discours de mariage sincère : accroche, anecdote, hommage aux mariés, toast final. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt discours mariage", "prompt discours mariage ia"],
+    ambiancePrompt: `[Rôle]
+Act as a warm, skilled speechwriter experienced in French wedding toasts, balancing genuine emotion with well-timed humor.
+
+[Objectif]
+Produce a heartfelt, personalized wedding speech (from a specified role — parent, best man/maid of honor, sibling) that tells a genuine story rather than reciting generic wedding platitudes.
+
+[Structure imposée]
+Warm opening (who the speaker is and their relationship to the couple), one or two specific personal anecdotes illustrating the couple's relationship, a heartfelt wish for their future, closing toast line.
+
+[Règles de rédaction]
+Write in a warm, personal spoken-French register meant to be read aloud, prioritize one or two specific, vivid anecdotes over generic praise, balance genuine emotion with light, well-placed humor.
+
+[Contraintes]
+Target length 2-3 minutes spoken (roughly 300-450 words), explicitly flag where the user must insert real names, anecdotes, and personal details — no generic filler standing in for real content.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mes mariés et mes anecdotes", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon discours", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le squelette émotionnel est posé. Ton anecdote précise, ton lien avec le couple — c'est ce qui rend le discours vraiment inoubliable.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-eloge-funebre",
+    title: "Éloge funèbre",
+    tagline: "Un hommage sincère, écrit avec justesse et respect.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT éloge funèbre — trame à copier",
+    seoDescription:
+      "Un prompt complet pour un hommage juste et respectueux : ouverture, portrait, souvenirs marquants, mot de fin. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt éloge funèbre", "prompt hommage funéraille ia"],
+    ambiancePrompt: `[Rôle]
+Act as a compassionate, experienced writer skilled in helping people compose a French eulogy that honors a life with dignity, warmth, and authenticity.
+
+[Objectif]
+Produce a respectful, personal eulogy structure that helps the speaker honor the deceased's life and character through specific memories, while remaining deliverable within an emotionally difficult moment.
+
+[Structure imposée]
+Gentle opening acknowledging the loss and the speaker's relationship to the deceased, reflection on their character (values, what made them who they were), one or two specific personal memories, closing message of gratitude or farewell.
+
+[Règles de rédaction]
+Write in a gentle, sincere French register, prioritize specific concrete memories over generic praise, allow space for both grief and warmth — avoid forced positivity.
+
+[Contraintes]
+Target length 3-5 minutes spoken (roughly 450-700 words), explicitly flag where the user must insert real names, dates, and personal memories, keep tone respectful throughout regardless of any complexity in the relationship.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à la personne", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon hommage", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le cadre est posé avec respect. Ton souvenir précis, votre lien — c'est ce qui rend l'hommage vraiment sincère.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-evaluation-annuelle-performance-review",
+    title: "Évaluation annuelle (performance review)",
+    tagline: "Un entretien annuel structuré, constructif et équitable.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT entretien annuel — trame à copier",
+    seoDescription:
+      "Un prompt complet pour une évaluation annuelle structurée : bilan factuel, réussites, axes de progrès, objectifs mesurables. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt entretien annuel", "prompt évaluation performance ia"],
+    ambiancePrompt: `[Rôle]
+Act as an experienced HR manager skilled in writing constructive, fair French performance reviews that balance recognition with clear developmental feedback.
+
+[Objectif]
+Produce a structured performance review write-up covering achievements, areas for development, and forward-looking goals, written to be both honest and motivating.
+
+[Structure imposée]
+Opening summary of the review period, achievements section with specific examples, areas for development framed constructively (not just criticism), concrete goals for the next period, closing supportive statement.
+
+[Règles de rédaction]
+Write in professional, balanced French HR register, back every point (positive or developmental) with a specific, concrete example rather than vague generalization, frame development areas as forward-looking opportunities.
+
+[Contraintes]
+Length 400-700 words depending on role seniority, explicitly flag where the user must insert specific real examples/metrics, maintain a fair, non-punitive tone even when addressing underperformance.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon collaborateur", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon équipe", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure équitable est posée. Tes exemples concrets, tes objectifs précis — c'est ce qui rend l'évaluation vraiment utile.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-offre-emploi-fiche-de-poste",
+    title: "Offre d'emploi (fiche de poste)",
+    tagline: "Une annonce claire qui attire les bons profils.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT offre d'emploi — fiche de poste à copier",
+    seoDescription:
+      "Un prompt complet pour une offre d'emploi qui attire les bons profils : intitulé clair, missions, profil, conditions. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt offre emploi", "prompt fiche de poste ia"],
+    ambiancePrompt: `[Rôle]
+Act as a recruiter and employer-branding copywriter experienced in writing French job postings that attract qualified candidates rather than generic, low-quality applications.
+
+[Objectif]
+Produce a complete, publish-ready job posting that clearly communicates the role, expectations, and company culture, structured to help the right candidates self-select in.
+
+[Structure imposée]
+Job title and one-line hook, company/team introduction, role summary and key responsibilities (bulleted), required and nice-to-have qualifications (bulleted, clearly separated), benefits/what's offered, application instructions.
+
+[Règles de rédaction]
+Write in clear, direct French avoiding corporate jargon and buzzword-stuffed requirement lists, distinguish clearly between must-have and nice-to-have qualifications, be specific about actual day-to-day responsibilities.
+
+[Contraintes]
+Length 300-500 words, avoid inflated requirement lists that would discourage qualified candidates from applying, output in French, flag salary range as an optional placeholder to insert.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon poste", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon poste", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure est posée. Ton poste précis, ton équipe, tes vraies conditions — c'est ce qui attire les bons candidats.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-page-faq-produit",
+    title: "Page FAQ produit",
+    tagline: "Les vraies questions de tes clients, avec des réponses qui rassurent.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT page FAQ produit — structure à copier",
+    seoDescription:
+      "Un prompt complet pour une FAQ produit qui rassure : vraies questions clients, réponses courtes, levée d'objections. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt faq", "prompt faq produit ia"],
+    ambiancePrompt: `[Rôle]
+Act as a customer support and conversion copywriter experienced in writing French product FAQ pages that reduce pre-purchase hesitation and support tickets simultaneously.
+
+[Objectif]
+Produce a complete FAQ section addressing the real objections and questions a prospective customer has before purchasing a specific product, structured to reduce friction and build trust.
+
+[Structure imposée]
+Questions grouped by theme (e.g. product/shipping/returns/support), each question phrased as the customer would actually ask it, each answer direct and complete without requiring a follow-up question.
+
+[Règles de rédaction]
+Write questions in natural, first-person customer phrasing (not corporate rephrasing), keep answers direct and specific (2-4 sentences), address genuine objections rather than only easy softball questions.
+
+[Contraintes]
+8-15 questions depending on product complexity, explicitly flag where the user must insert real policy details (shipping times, return windows, pricing), output in French.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon produit", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon produit", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Les vraies questions sont posées. Ton produit précis, tes vraies politiques (livraison, retours) — c'est ce qui rassure vraiment le client.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-ordre-du-jour-de-reunion",
+    title: "Ordre du jour de réunion",
+    tagline: "Une réunion cadrée, avec des objectifs clairs pour chaque point.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT ordre du jour de réunion — à copier",
+    seoDescription:
+      "Un prompt complet pour un ordre du jour cadré : objectif par point, durée, responsable, décisions attendues. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt ordre du jour", "prompt réunion ia"],
+    ambiancePrompt: `[Rôle]
+Act as an experienced project manager skilled in structuring French meeting agendas that keep discussions focused and produce actionable outcomes.
+
+[Objectif]
+Produce a clear, time-boxed meeting agenda that states the purpose of each item, who owns it, and what decision or outcome is expected — designed to prevent meetings from drifting.
+
+[Structure imposée]
+Meeting title, date/time/duration, attendee list, objective statement (one sentence: why this meeting exists), agenda items each with owner and time allocation, decisions-needed section, next-steps/action-items placeholder.
+
+[Règles de rédaction]
+Write each agenda item as an actionable statement, not a vague topic ("Décider du budget Q3" rather than "Budget"), keep language direct and French professional register.
+
+[Contraintes]
+Total time allocations must sum to the stated meeting duration, limit to 3-6 agenda items to keep the meeting focused, explicitly flag where real attendee names/times must be inserted.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à ma réunion", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à ma réunion", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le cadre est posé. Tes participants réels, tes sujets précis, ta durée — c'est ce qui rend la réunion vraiment efficace.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-trame-presentation-pitch-deck",
+    title: "Trame de présentation (pitch deck)",
+    tagline: "La structure slide par slide d'une présentation qui convainc.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT pitch deck — trame slide par slide à copier",
+    seoDescription:
+      "Un prompt complet pour un pitch deck investisseur : problème, solution, marché, traction, équipe, demande. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt pitch deck", "prompt présentation investisseur ia"],
+    ambiancePrompt: `[Rôle]
+Act as a presentation strategist experienced in structuring French pitch decks (investor, client, or internal) that build a clear, persuasive narrative arc across multiple slides.
+
+[Objectif]
+Produce a complete slide-by-slide outline (not a spoken script) where each slide has a single clear message, structured to build toward a specific ask or decision by the final slide.
+
+[Structure imposée]
+Title slide, problem/context slide, solution/offer slide, 2-4 supporting slides (market/traction/team/product depending on pitch type), objection-handling slide, closing ask slide with clear next step — one core message per slide.
+
+[Règles de rédaction]
+Write each slide as a headline statement plus 2-3 supporting bullet points (not paragraphs — decks are read, not narrated line by line), keep language punchy and confident in French.
+
+[Contraintes]
+8-12 slides total unless otherwise specified, one idea per slide (no slide should require the audience to process two separate arguments), explicitly flag where real data/numbers must be inserted.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à ma startup", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon projet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La trame slide par slide est posée. Tes chiffres réels, ton offre précise — c'est ce qui rend le deck vraiment convaincant.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-pitch-elevator-30-secondes",
+    title: "Pitch elevator (30 secondes)",
+    tagline: "Un pitch oral qui tient en 30 secondes et donne envie d'en savoir plus.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT pitch elevator 30 secondes — à copier",
+    seoDescription:
+      "Un prompt complet pour un pitch oral de 30 secondes : accroche, problème, solution, preuve, ouverture. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt elevator pitch", "prompt pitch 30 secondes ia"],
+    ambiancePrompt: `[Rôle]
+Act as a communication coach specialized in French elevator pitches, skilled at compressing a complex idea into a short, spoken, memorable statement.
+
+[Objectif]
+Produce a single, tightly-written spoken script (roughly 30 seconds when read aloud) that clearly states what the speaker does, for whom, and why it matters — memorable enough to say without notes.
+
+[Structure imposée]
+Opening hook (who you help + the problem, one sentence), what you offer (one sentence), what makes it different/credible (one sentence), closing line inviting further conversation.
+
+[Règles de rédaction]
+Write in natural spoken French, not written prose — short sentences, no subordinate clauses that are hard to deliver aloud, must be memorable enough to internalize rather than read from a card.
+
+[Contraintes]
+Strict target of 75-90 spoken words (roughly 30 seconds at natural pace), no jargon requiring further explanation, single version only — this is a one-shot spoken script, not a multi-section document.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon activité", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon pitch", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le squelette oral est posé. Ton activité précise, ton public cible — c'est ce qui rend le pitch vraiment mémorable à l'oral.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-resume-de-livre-synopsis",
+    title: "Résumé de livre / synopsis",
+    tagline: "Un résumé fidèle qui donne l'essentiel sans spoiler ce qu'il ne faut pas.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT résumé de livre et synopsis — à copier",
+    seoDescription:
+      "Un prompt complet pour un résumé fidèle : intrigue principale, personnages, thèmes, sans divulguer le dénouement. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt résumé de livre", "prompt synopsis ia"],
+    ambiancePrompt: `[Rôle]
+Act as a skilled literary editor experienced in writing French book synopses that accurately represent a work's content and tone for different purposes (back-cover blurb, book club summary, or full plot synopsis).
+
+[Objectif]
+Produce a summary of a specified book at the requested depth (short back-cover teaser vs. full plot synopsis), accurately representing the work's content, themes, and tone without misrepresenting it.
+
+[Structure imposée]
+For a teaser: hook line, premise, central tension, no ending revealed. For a full synopsis: setup, main plot progression through key turning points, resolution — clearly labeled if it contains spoilers.
+
+[Règles de rédaction]
+Match the tone of the summary to the tone of the source work (a thriller synopsis should feel tense, a comedy should feel light), stay factually accurate to the actual plot rather than inventing details.
+
+[Contraintes]
+150-300 words for a teaser, 400-800 words for a full synopsis, explicitly state whether the output contains spoilers, output in French.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon livre", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon livre", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le format est posé. Le livre précis, la profondeur voulue (teaser ou synopsis complet) — c'est ce qui rend le résumé vraiment fidèle.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-requete-sql-a-partir-dune-description",
+    title: "Requête SQL à partir d'une description",
+    tagline: "Une requête SQL fonctionnelle à partir d'une simple description en français.",
+    category: "text",
+    tool: "claude",
+    seoTitle: "Prompt Claude requête SQL — structure à copier",
+    seoDescription:
+      "Un prompt complet pour obtenir une requête SQL correcte à partir d'une description en français : schéma, contraintes, explication. À copier sans inscription.",
+    targetKeywords: ["prompt claude sql", "prompt générer requête sql ia"],
+    ambiancePrompt: `[Rôle]
+Act as a senior database engineer skilled at translating plain-language business questions into correct, efficient SQL queries across common dialects (PostgreSQL, MySQL, SQL Server).
+
+[Objectif]
+Produce a working SQL query that precisely answers the described data request, including a brief explanation of the query's logic and any assumptions made about the schema.
+
+[Structure imposée]
+Assumed table/column names stated explicitly at the top (as an assumption block), the SQL query itself formatted and readable, a short plain-French explanation of what the query does and why.
+
+[Règles de rédaction]
+Write clean, readable SQL with consistent capitalization (keywords uppercase) and clear aliasing, favor explicit JOIN syntax over implicit joins, comment complex logic inline.
+
+[Contraintes]
+State which SQL dialect the query targets, flag any ambiguity in the original description that required an assumption, avoid SELECT * in production-style examples — specify needed columns explicitly.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon schéma de données", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à ma base", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La logique est posée. Ton schéma réel, tes noms de tables et colonnes — c'est ce qui rend la requête vraiment exécutable.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-generation-de-tests-unitaires",
+    title: "Génération de tests unitaires",
+    tagline: "Des tests unitaires solides, couvrant les cas limites qui comptent.",
+    category: "text",
+    tool: "claude",
+    seoTitle: "Prompt Claude tests unitaires — structure à copier",
+    seoDescription:
+      "Un prompt complet pour générer des tests unitaires solides : cas nominaux, cas limites, erreurs attendues, isolation. À copier sans inscription.",
+    targetKeywords: ["prompt claude tests unitaires", "prompt génération de tests ia"],
+    ambiancePrompt: `[Rôle]
+Act as a senior software engineer experienced in writing thorough, maintainable unit tests that catch real bugs rather than just inflating coverage metrics.
+
+[Objectif]
+Produce a complete unit test suite for a specified function or module, covering happy-path behavior, edge cases, and error conditions, in the testing framework appropriate to the language.
+
+[Structure imposée]
+Setup/fixture block if needed, grouped test cases (happy path, edge cases, error handling) each with a clearly descriptive test name stating what is being verified, assertions that check specific expected behavior.
+
+[Règles de rédaction]
+Write descriptive test names that state the expected behavior in plain terms (e.g. "throws error when input is negative" rather than "test1"), keep each test focused on a single behavior.
+
+[Contraintes]
+Cover at minimum: standard expected input, boundary/edge-case input, and invalid/error input, specify the testing framework and language being targeted, flag any external dependencies that would need mocking.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon code", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon code", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La couverture logique est posée. Ta fonction réelle, ton langage précis — c'est ce qui rend les tests vraiment fiables.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-documentation-api",
+    title: "Documentation d'API",
+    tagline: "Une documentation claire que les développeurs peuvent suivre sans poser de questions.",
+    category: "text",
+    tool: "claude",
+    seoTitle: "Prompt Claude documentation d'API — structure à copier",
+    seoDescription:
+      "Un prompt complet pour documenter une API : endpoints, paramètres, exemples de requête et réponse, codes d'erreur. À copier sans inscription.",
+    targetKeywords: ["prompt claude documentation api", "prompt doc technique ia"],
+    ambiancePrompt: `[Rôle]
+Act as a technical writer specialized in developer-facing API documentation, understanding what information a developer needs to successfully integrate an endpoint without guesswork.
+
+[Objectif]
+Produce complete, developer-ready documentation for a specified API endpoint, including all information needed to make a successful request and correctly handle the response.
+
+[Structure imposée]
+Endpoint summary (method + path + one-line purpose), authentication requirements, request parameters table (name/type/required/description), example request, response schema, example response, common error codes with explanations.
+
+[Règles de rédaction]
+Write in precise, unambiguous technical English or French as specified, use consistent formatting for parameter tables, include realistic example values rather than placeholder text like "string".
+
+[Contraintes]
+Every parameter must state whether it's required or optional and its type, include at least one full example request/response pair, flag any assumptions about the API's actual behavior that need verification.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon API", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon API", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure technique est posée. Ton endpoint réel, tes paramètres exacts — c'est ce qui rend la doc vraiment utilisable.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-regex-a-partir-dune-description",
+    title: "Regex à partir d'une description",
+    tagline: "Une expression régulière qui fait exactement ce qu'il faut, expliquée simplement.",
+    category: "text",
+    tool: "claude",
+    seoTitle: "Prompt Claude expression régulière — structure à copier",
+    seoDescription:
+      "Un prompt complet pour obtenir une regex juste à partir d'une description : cas couverts, cas exclus, explication pas à pas. À copier sans inscription.",
+    targetKeywords: ["prompt claude regex", "prompt expression régulière ia"],
+    ambiancePrompt: `[Rôle]
+Act as a developer skilled at translating plain-language pattern-matching requirements into correct, efficient regular expressions, and explaining them in terms a non-regex-expert can follow.
+
+[Objectif]
+Produce a working regular expression that precisely matches the described pattern, along with a plain-language breakdown of what each part of the expression does and test examples showing matches and non-matches.
+
+[Structure imposée]
+The regex pattern itself (clearly formatted), a part-by-part plain-French explanation of the pattern, 2-3 example strings that should match, 2-3 example strings that should not match.
+
+[Règles de rédaction]
+Explain each component of the regex in plain terms rather than assuming regex fluency, favor readable patterns (named groups, comments if the language/flavor supports it) over maximally clever one-liners.
+
+[Contraintes]
+State which regex flavor/language the pattern targets (JavaScript, Python, PCRE, etc., since syntax varies), flag any edge cases the pattern deliberately does or doesn't handle, avoid catastrophic backtracking risk in the pattern.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon besoin", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon besoin", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La logique de correspondance est posée. Ton cas d'usage réel, tes exemples précis — c'est ce qui rend la regex vraiment fiable.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-checklist-de-revue-de-code",
+    title: "Checklist de revue de code",
+    tagline: "Une revue de code structurée qui ne laisse rien passer.",
+    category: "text",
+    tool: "claude",
+    seoTitle: "Prompt Claude revue de code — checklist à copier",
+    seoDescription:
+      "Un prompt complet pour une revue de code structurée : correction, lisibilité, sécurité, performance, tests. À copier sans inscription.",
+    targetKeywords: ["prompt claude revue de code", "prompt code review ia"],
+    ambiancePrompt: `[Rôle]
+Act as a senior engineer experienced in conducting thorough, constructive code reviews that catch real issues without being pedantic or discouraging.
+
+[Objectif]
+Produce a structured code review checklist adapted to the specified language/context, covering correctness, readability, security, and maintainability, usable as a repeatable review process.
+
+[Structure imposée]
+Grouped checklist sections (correctness/logic, readability/naming, error handling, security, performance, tests), each item phrased as a concrete yes/no question rather than a vague principle.
+
+[Règles de rédaction]
+Phrase each checklist item as a specific, checkable question ("Are all user inputs validated before use?" rather than "Check security"), prioritize the items most likely to catch real bugs over stylistic nitpicks.
+
+[Contraintes]
+Adapt specific items to the stated language/framework where relevant (e.g. SQL injection checks for backend code, prop-type checks for frontend code), keep the list to 15-25 items to remain practically usable.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon projet", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon projet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le cadre de revue est posé. Ton langage précis, ton contexte projet — c'est ce qui rend la checklist vraiment adaptée à ton code.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-bio-instagram-reseaux-sociaux",
+    title: "Bio Instagram / réseaux sociaux",
+    tagline: "Une bio de profil qui dit qui tu es en quelques secondes.",
+    category: "text",
+    tool: "gpt4",
+    seoTitle: "Prompt ChatGPT bio Instagram — structure à copier",
+    seoDescription:
+      "Un prompt complet pour une bio de profil percutante : positionnement en une ligne, preuve, appel à l'action, format court. À copier sans inscription.",
+    targetKeywords: ["prompt chatgpt bio instagram", "prompt bio réseaux sociaux ia"],
+    ambiancePrompt: `[Rôle]
+Act as a personal branding copywriter specialized in writing French social media bios that communicate identity and value instantly within tight character limits.
+
+[Objectif]
+Produce a permanent profile bio (distinct from a single-post caption) that clearly communicates who the person or brand is, what they offer, and why to follow — readable in under 3 seconds.
+
+[Structure imposée]
+Identity/role line (who you are), value proposition line (what you offer or what followers get), personality or credibility marker (optional emoji-supported line), single call-to-action line (link/DM/shop).
+
+[Règles de rédaction]
+Write in extremely condensed, high-signal French — every word must earn its place, use line breaks and sparse emoji as visual structure rather than decoration, avoid vague self-descriptions ("passionné(e) de...") in favor of concrete value statements.
+
+[Contraintes]
+Strict 150-character total limit (Instagram bio constraint), one clear call-to-action only, flag where a real link/handle must be inserted.`,
+    buttons: [
+      { label: "Affiner la structure", flow: "refine-ambiance" },
+      { label: "Adapter à mon profil", flow: "keep-ambiance" },
+      { label: "Affiner + adapter à mon profil", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La structure de la bio est posée. Ton positionnement précis, ton lien — c'est ce qui rend le profil vraiment identifiable en un coup d'œil.",
+    renderAsset: null,
+  },
   // ---------------------------------------------------------------- video
   {
     slug: "prompt-video-cinematique-drone",
