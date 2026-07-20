@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Lock, RefreshCcw, MapPin, ShieldCheck } from "lucide-react";
-import Footer from "@/components/layout/Footer";
 import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = 'force-dynamic';
@@ -506,7 +505,6 @@ export default async function HomePage() {
         </section>
 
       </main>
-      <Footer />
     </>
   );
 }

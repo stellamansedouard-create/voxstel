@@ -6,6 +6,7 @@ import CookieBanner from "@/components/CookieBanner";
 import { PixelEventHandler } from "@/components/PixelEventHandler";
 import { GoogleAdsTagLoader } from "@/components/GoogleAdsTagLoader";
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -95,6 +96,12 @@ export default function RootLayout({
           <PixelEventHandler />
         </Suspense>
         {children}
+        {/* Global footer — same rule as the header above: rendered ONCE here so
+            every route gets it, including the ones added later. It used to be
+            imported page by page, which silently left /bibliotheque,
+            /prompts/[slug] and /generate with no footer and no internal links
+            out. Pages must not render <Footer/> themselves. */}
+        <Footer />
         <Suspense fallback={null}>
           <CookieBanner />
         </Suspense>

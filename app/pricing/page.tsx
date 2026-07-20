@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Footer from "@/components/layout/Footer";
 import CreditCheckoutButton from "@/components/pricing/CreditCheckoutButton";
 import type { Metadata } from "next";
 
@@ -166,7 +165,6 @@ export default function PricingPage() {
           </Link>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

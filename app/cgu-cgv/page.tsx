@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -271,7 +270,6 @@ export default function CguCgvPage() {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

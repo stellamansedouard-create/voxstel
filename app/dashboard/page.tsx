@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Footer from "@/components/layout/Footer";
 import PromptHistoryList from "@/components/dashboard/PromptHistoryList";
 import DeleteAccountButton from "@/components/dashboard/DeleteAccountButton";
 import ManageSubscriptionButton from "@/components/dashboard/ManageSubscriptionButton";
@@ -269,7 +268,6 @@ export default async function DashboardPage() {
 
         </div>
       </main>
-      <Footer />
     </>
   );
 }
