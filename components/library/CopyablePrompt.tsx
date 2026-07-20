@@ -14,9 +14,22 @@ interface CopyablePromptProps {
    * translation has not landed yet: the toggle then does not render at all.
    */
   valueFr?: string;
+  /**
+   * Whether English is genuinely the better language to copy. True for the
+   * generative tools (Suno, Midjourney, Sora) whose parsing is measurably
+   * better in English. False for the text category, where the target is an
+   * LLM that handles French just as well — recommending English there would
+   * push the visitor toward a version they understand less, for no gain.
+   */
+  recommendEnglish?: boolean;
 }
 
-export default function CopyablePrompt({ label, value, valueFr }: CopyablePromptProps) {
+export default function CopyablePrompt({
+  label,
+  value,
+  valueFr,
+  recommendEnglish = true,
+}: CopyablePromptProps) {
   const [copied, setCopied] = useState(false);
   // French first: the visitor has to understand what they are looking at
   // before they can decide whether they want to refine it.
@@ -61,7 +74,7 @@ export default function CopyablePrompt({ label, value, valueFr }: CopyablePrompt
             >
               <span className="inline-flex items-center gap-2">
                 {code === "fr" ? "🇫🇷 Français" : "🇬🇧 English"}
-                {code === "en" && (
+                {code === "en" && recommendEnglish && (
                   <span className="text-[10px] font-semibold bg-accent/10 text-accent px-2 py-0.5 rounded-full">
                     Recommandé
                   </span>
@@ -85,7 +98,9 @@ export default function CopyablePrompt({ label, value, valueFr }: CopyablePrompt
         </button>
         {showingFr && (
           <p className="text-xs text-muted mt-1.5">
-            Le prompt copié sera en anglais, recommandé pour de meilleurs résultats.
+            {recommendEnglish
+              ? "Le prompt copié sera en anglais, recommandé pour de meilleurs résultats."
+              : "Le prompt copié sera en anglais."}
           </p>
         )}
       </div>

@@ -74,6 +74,7 @@ export default function PromptPage({ params }: { params: { slug: string } }) {
             label={w.ambianceLabel}
             value={page.ambiancePrompt}
             valueFr={page.ambiancePromptFr}
+            recommendEnglish={page.category !== "text"}
           />
         </section>
 
