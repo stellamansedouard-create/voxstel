@@ -1371,6 +1371,831 @@ stonework and foliage, 8K render, cinematic depth of field`,
     renderAsset: null,
   },
 
+  {
+    slug: "prompt-image-photographie-mode-editoriale",
+    title: "Photographie de mode éditoriale",
+    tagline: "Un shooting mode digne d'un magazine, entre styling et narration visuelle.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photo de mode éditoriale — à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour un shooting mode magazine : garde-robe stylée, flash directionnel, étalonnage saturé, rendu 85-135mm. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney mode", "prompt photo de mode ia"],
+    ambiancePrompt: `[Scene & universe]
+High-fashion editorial spread set in a fashion magazine context — model in full designer wardrobe, styled hair and makeup, dynamic pose suggesting movement or narrative, studio or striking location backdrop (urban rooftop, minimalist set, or dramatic landscape).
+
+[Lighting]
+Hard, directional studio strobe lighting creating sculpted shadows on fabric and face, or a single dramatic light source for editorial tension; occasional colored gel lighting for a bold fashion-forward mood.
+
+[Color & grade]
+Bold, saturated color grading true to fashion magazine aesthetics, or high-contrast desaturated grade for an austere haute-couture feel; skin tones kept true while background and wardrobe colors are pushed.
+
+[Composition & lens]
+Full-body or three-quarter framing emphasizing silhouette and wardrobe detail, shot on an 85-135mm equivalent lens for flattering compression, dynamic off-center composition following editorial conventions.
+
+[Texture & render]
+Crisp fabric texture (silk sheen, leather grain, tailored structure), sharp focus on wardrobe detail, subtle skin retouching that preserves natural texture rather than over-smoothing.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le styling et la lumière posent le ton. Ton mannequin, ta collection, ta direction artistique — c'est là que la précision fait la différence.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-photographie-culinaire",
+    title: "Photographie culinaire",
+    tagline: "Des plats qui donnent envie, avec la lumière et la texture d'un vrai shoot pro.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photographie culinaire — à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour une photo culinaire pro : lumière rasante, textures appétissantes, macro 100mm, stylisme food. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney culinaire", "prompt photo plat ia"],
+    ambiancePrompt: `[Scene & universe]
+Professional food photography setup — a single plated dish as the hero subject, styled with complementary props (linen napkin, rustic wood surface, minimal garnish), context suggesting a restaurant or high-end cookbook shoot.
+
+[Lighting]
+Soft, directional window-style light from one side creating gentle shadow and highlight on the food's texture, diffused to avoid harsh specular hotspots on glossy surfaces.
+
+[Color & grade]
+Warm, appetizing color grade emphasizing natural food tones (rich browns, deep reds, fresh greens), slight contrast boost to make textures pop without looking artificial.
+
+[Composition & lens]
+Overhead flat-lay or 45-degree angle shot, shallow depth of field with a macro-capable lens (100mm equivalent) isolating the dish's focal point while background softly blurs.
+
+[Texture & render]
+Sharp, glistening texture detail on sauces, steam or condensation rendered where relevant for freshness cues, crumb and garnish detail crisp and appetizing.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'assiette est posée, la lumière est parfaite. Ton plat, ta recette, ta marque — c'est l'étape suivante.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-photographie-immobiliere-architecture",
+    title: "Photographie immobilière / architecture",
+    tagline: "Des espaces mis en valeur, lumière et lignes maîtrisées.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photo immobilière et architecture",
+    seoDescription:
+      "Un prompt d'ambiance pour une photo immobilière : verticales redressées, lumière naturelle, grand angle, rendu catalogue. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney immobilier", "prompt photo architecture ia"],
+    ambiancePrompt: `[Scene & universe]
+Professional real estate or architectural photography of an interior or exterior space, composition emphasizing clean lines, spatial flow, and the property's best features (natural light, open layout, architectural detail).
+
+[Lighting]
+Balanced, evenly-exposed lighting blending available natural daylight with subtle fill to avoid blown-out windows or overly dark interior shadows — a natural, true-to-life look.
+
+[Color & grade]
+Neutral, true-to-life color grade with accurate white balance, slight warmth boost for inviting interiors, cool clarity for modern architectural exteriors.
+
+[Composition & lens]
+Wide-angle lens (16-24mm equivalent) with corrected vertical lines to avoid distortion, composition following leading lines and symmetry to showcase spatial scale.
+
+[Texture & render]
+Crisp detail on architectural materials (wood grain, stone, glass reflections), clean and sharp throughout the frame with no distracting clutter.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'espace est révélé. Ton bien, ton angle, ta mise en scène — c'est ce qui vend.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-photographie-mariage",
+    title: "Photographie de mariage",
+    tagline: "Des instants capturés avec émotion et élégance intemporelle.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photographie de mariage — à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour une photo de mariage : lumière dorée, émotion candide, bokeh 85mm, étalonnage intemporel. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney mariage", "prompt photo mariage ia"],
+    ambiancePrompt: `[Scene & universe]
+Documentary-style wedding photography capturing genuine emotional moments — ceremony, portraits, or candid reception scenes — set against a romantic venue backdrop (garden, chapel, or elegant reception hall).
+
+[Lighting]
+Soft, flattering natural light (golden hour preferred for outdoor portraits) or elegant ambient venue lighting for indoor moments, always prioritizing flattering skin tones and gentle shadow falloff.
+
+[Color & grade]
+Warm, romantic color grade with soft highlights and gentle contrast, film-inspired tonal curve evoking timeless elegance rather than clinical sharpness.
+
+[Composition & lens]
+Mix of candid wide shots (24-35mm equivalent) for scene context and intimate close portraits (85mm equivalent) for emotional detail, natural unposed framing.
+
+[Texture & render]
+Soft, slightly dreamy rendering with gentle grain, fine detail preserved in fabric (lace, veil) and floral elements without looking harsh or overly digital.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le moment est posé. Ton couple, ton lieu, ton histoire — c'est ce qui rend chaque photo unique.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-paysage-nature-grand-angle",
+    title: "Paysage nature grand angle",
+    tagline: "Des panoramas grandioses, entre échelle et détail.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney paysage grand angle — ambiance à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour un paysage grandiose : premier plan marqué, heure dorée, perspective atmosphérique, rendu 8K. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney paysage", "prompt paysage nature ia"],
+    ambiancePrompt: `[Scene & universe]
+Sweeping wide-angle nature landscape — mountains, coastline, forest, or open valley — composition emphasizing vast scale and natural grandeur, often with a strong foreground element for depth.
+
+[Lighting]
+Golden hour or blue hour natural lighting creating dramatic directional light across the terrain, long shadows and warm rim light on peaks or ridgelines.
+
+[Color & grade]
+Rich, natural color grade with enhanced sky drama (deep blues, warm oranges) balanced against true-to-life terrain colors, avoiding oversaturation.
+
+[Composition & lens]
+Ultra-wide-angle lens (14-20mm equivalent), rule-of-thirds horizon placement, strong foreground-to-background depth layering for scale and immersion.
+
+[Texture & render]
+Sharp detail across the full depth of field (foreground rocks and foliage through distant mountains), crisp atmospheric clarity or intentional soft haze for mood.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le décor est planté. Ton sujet, ta composition finale — c'est toi qui la construis.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-portrait-animalier",
+    title: "Portrait animalier",
+    tagline: "Des portraits d'animaux pleins de caractère et de détails.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney portrait animalier — ambiance à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour un portrait animalier : détail du pelage, regard net, téléobjectif, arrière-plan compressé. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney animal", "prompt portrait animalier ia"],
+    ambiancePrompt: `[Scene & universe]
+Close-up wildlife or pet portrait photography emphasizing the animal's personality and expression, natural or softly blurred habitat background providing context without distraction.
+
+[Lighting]
+Soft, directional natural light highlighting fur or feather texture and catching a natural highlight in the eyes, avoiding harsh flash that flattens detail.
+
+[Color & grade]
+Natural, true-to-life color grade with subtle warmth, fur or feather tones rendered accurately and richly rather than overly stylized.
+
+[Composition & lens]
+Telephoto lens (200-400mm equivalent) for wildlife or 85mm for pets, shallow depth of field isolating the animal from background, eye-level framing for intimacy.
+
+[Texture & render]
+Extremely sharp detail on fur, feathers, or eyes — the defining feature of a strong animal portrait — with soft, creamy background blur.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le regard est capté. Ton animal, sa posture, son environnement — à toi de compléter la scène.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-design-tatouage",
+    title: "Design de tatouage",
+    tagline: "Un design de tatouage précis, prêt à transmettre au tatoueur.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney design de tatouage — à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour un design de tatouage : trait net, contraste lisible, fond neutre, prêt à montrer au tatoueur. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney tatouage", "prompt design tatouage ia"],
+    ambiancePrompt: `[Scene & universe]
+Clean tattoo flash design presented on a neutral background (skin-tone mockup or plain white), style ranging from fine-line minimalist to bold traditional linework depending on desired direction.
+
+[Lighting]
+Even, shadowless studio-style lighting ensuring every line and detail of the design is clearly visible with no ambiguity for the tattoo artist.
+
+[Color & grade]
+Black-and-white linework as the default (standard for tattoo stencils), or a limited, deliberate color palette if a color tattoo style is specified.
+
+[Composition & lens]
+Flat, front-facing presentation of the design at full detail, proportioned for the intended body placement (forearm, back piece, small accent).
+
+[Texture & render]
+Crisp, clean line quality with consistent line weight, no unintended texture or shading artifact that would confuse the stencil transfer process.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le design est là. Ton emplacement, ta taille, ton style final — c'est la précision qui suit.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-logo-identite-marque",
+    title: "Logo / identité de marque",
+    tagline: "Un logo clair, mémorable, prêt à porter une marque.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney logo et identité de marque",
+    seoDescription:
+      "Un prompt d'ambiance pour un logo : formes géométriques simples, lisibilité à petite taille, fond neutre, rendu vectoriel. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney logo", "prompt création logo ia"],
+    ambiancePrompt: `[Scene & universe]
+Clean brand logo concept presented on a neutral or brand-colored background, style ranging from minimalist wordmark to iconic symbol mark, appropriate for the brand's industry and tone.
+
+[Lighting]
+Flat, even studio-style presentation lighting with no directional shadow, ensuring the logo reads clearly at any scale.
+
+[Color & grade]
+Deliberate, limited color palette (2-3 colors max) chosen for brand recognition and reproducibility across print and digital, with a monochrome version implied for versatility.
+
+[Composition & lens]
+Centered, balanced composition with strong negative space, scalable geometric structure that remains legible from business card to billboard size.
+
+[Texture & render]
+Crisp vector-style clean edges, no unnecessary gradient or texture noise that would break at small sizes or in single-color print.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La base est posée. Ton nom de marque, ton secteur, tes déclinaisons — c'est là qu'on affine.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-style-anime-manga",
+    title: "Style anime / manga",
+    tagline: "Un rendu anime authentique, entre expressivité et dynamisme.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney style anime et manga — à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour un rendu anime authentique : cel shading, traits expressifs, couleurs franches, cadrage dynamique. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney anime", "prompt style manga ia"],
+    ambiancePrompt: `[Scene & universe]
+Character or scene illustrated in authentic Japanese anime/manga style, dynamic pose or expressive scene composition typical of anime key visuals or manga panel art.
+
+[Lighting]
+Cel-shaded lighting with hard-edged highlight and shadow blocks characteristic of anime rendering, occasional dramatic rim lighting for emotional emphasis.
+
+[Color & grade]
+Vibrant, saturated color palette typical of anime production, or muted manga-style grayscale with screentone shading patterns depending on desired output.
+
+[Composition & lens]
+Dynamic anime-style framing with exaggerated perspective or dramatic close-up angles, speed lines or motion effects where action is implied.
+
+[Texture & render]
+Clean cel-shaded flat color rendering with crisp linework, characteristic large expressive eyes and stylized proportions.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style est fixé. Ton personnage, son univers, sa scène — c'est ce qui donne vie à l'histoire.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-peinture-huile-classique",
+    title: "Peinture à l'huile classique",
+    tagline: "La texture et la richesse d'une véritable peinture à l'huile.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney peinture à l'huile — style à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour une peinture à l'huile classique : empâtement visible, clair-obscur, glacis, toile texturée. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney peinture", "prompt peinture huile ia"],
+    ambiancePrompt: `[Scene & universe]
+Classical oil painting composition in the tradition of Old Master portraiture or still life, subject rendered with painterly realism and academic composition conventions.
+
+[Lighting]
+Chiaroscuro-inspired dramatic lighting with strong light-to-dark contrast, soft directional light source typical of classical studio painting setups.
+
+[Color & grade]
+Rich, warm classical color palette with deep umbers, burnt siennas, and muted golds, subtle color glazing effect reminiscent of layered oil technique.
+
+[Composition & lens]
+Traditional academic composition with balanced framing, subject often centered or following classical portrait conventions, painterly depth through atmospheric perspective.
+
+[Texture & render]
+Visible brushstroke texture and impasto detail, canvas grain subtly present, painterly softness at edges rather than photographic sharpness.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La toile est prête. Ton sujet, ta commande, ton format final — c'est là que l'œuvre prend forme.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-aquarelle",
+    title: "Aquarelle",
+    tagline: "La légèreté et la transparence d'une aquarelle authentique.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney aquarelle — style à copier",
+    seoDescription:
+      "Un prompt d'ambiance pour une aquarelle authentique : lavis transparents, bords humides, grain du papier, blancs réservés. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney aquarelle", "prompt aquarelle ia"],
+    ambiancePrompt: `[Scene & universe]
+Watercolor illustration with soft, flowing subject rendering — botanical, landscape, or portrait — capturing the medium's characteristic translucency and organic bleed.
+
+[Lighting]
+Soft, diffused implied lighting achieved through gentle color washes rather than hard directional shading, natural light quality throughout.
+
+[Color & grade]
+Delicate, transparent color layering with visible pigment bleed at edges, muted or pastel palette with occasional bold color accents for focal points.
+
+[Composition & lens]
+Loose, organic composition with intentional negative space (unpainted paper visible), soft edges that fade rather than hard-line boundaries.
+
+[Texture & render]
+Visible paper texture (cold-press grain), soft color bleeding and granulation effects characteristic of real watercolor pigment behavior.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'aquarelle prend forme. Ton sujet précis, ta palette, ton format — c'est la suite logique.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-concept-art-science-fiction",
+    title: "Concept art science-fiction",
+    tagline: "Un univers SF pensé jusque dans les moindres détails techniques.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney concept art science-fiction",
+    seoDescription:
+      "Un prompt d'ambiance pour un concept art SF : design fonctionnel, échelle lisible, éclairage volumétrique, finition production. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney concept art", "prompt science fiction ia"],
+    ambiancePrompt: `[Scene & universe]
+Cinematic science-fiction concept art — spacecraft, futuristic environment, or advanced technology — designed with plausible functional detail suggesting a lived-in, engineered universe.
+
+[Lighting]
+Dramatic cinematic lighting with strong volumetric elements (light shafts, atmospheric haze), high-contrast highlights on metallic and glass surfaces.
+
+[Color & grade]
+Cool, futuristic color grade (blues, teals, cold whites) contrasted with warm accent lighting (engine glow, neon), cinematic color grading typical of film concept art.
+
+[Composition & lens]
+Wide establishing-shot composition emphasizing scale and technological grandeur, dynamic camera angle suggesting a film production still.
+
+[Texture & render]
+Highly detailed hard-surface texturing (weathered metal, exposed circuitry, reflective glass), photorealistic rendering with fine mechanical detail.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'univers est posé. Ton personnage, ton vaisseau, ta scène d'action — c'est ce qui raconte l'histoire.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-ambiance-horreur-sombre",
+    title: "Ambiance horreur / sombre",
+    tagline: "Une atmosphère oppressante, entre tension et détail glaçant.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney ambiance horreur — atmosphère à copier",
+    seoDescription:
+      "Un prompt d'ambiance horreur : clair-obscur, brouillard, menace hors-champ, palette désaturée et grain marqué. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney horreur", "prompt ambiance sombre ia"],
+    ambiancePrompt: `[Scene & universe]
+Dark, unsettling horror atmosphere — abandoned location, ominous figure, or eerie environment — composition designed to build tension and psychological unease.
+
+[Lighting]
+Low-key lighting with deep shadows dominating the frame, a single harsh or flickering light source creating stark, unsettling contrast.
+
+[Color & grade]
+Desaturated, cold color palette with sickly greens or deep blacks, occasional blood-red accent for shock emphasis, heavy shadow crush.
+
+[Composition & lens]
+Off-kilter or claustrophobic framing (Dutch angles, tight corridors), negative space used to suggest an unseen threat lurking just outside the frame.
+
+[Texture & render]
+Grimy, weathered surface texture (decay, rust, damp), grain and slight noise for a raw, unpolished horror-film quality.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La tension est posée. Ton personnage, ta menace, ta scène précise — c'est ce qui fait vraiment peur.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-style-minimaliste-epure",
+    title: "Style minimaliste épuré",
+    tagline: "L'épure au service de l'impact visuel.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney style minimaliste épuré — à copier",
+    seoDescription:
+      "Un prompt d'ambiance minimaliste : espace négatif dominant, palette réduite, une seule forme forte, lumière douce. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney minimaliste", "prompt style épuré ia"],
+    ambiancePrompt: `[Scene & universe]
+Minimalist composition stripped to essential elements — a single subject against generous negative space, clean and deliberate visual simplicity.
+
+[Lighting]
+Soft, even, shadowless lighting or a single clean directional source, avoiding visual clutter from complex shadow patterns.
+
+[Color & grade]
+Restrained color palette, often monochromatic or two-tone, high clarity with no unnecessary color noise.
+
+[Composition & lens]
+Strong use of negative space and geometric balance, subject placed with intentional, often off-center, precision following minimalist design principles.
+
+[Texture & render]
+Clean, smooth rendering with minimal texture detail, sharp focus on the singular subject with nothing competing for attention.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'espace est prêt. Ton sujet précis, son placement — c'est ce qui transforme l'épure en message.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-photographie-vintage-argentique",
+    title: "Photographie vintage / argentique",
+    tagline: "Le grain, la chaleur et l'imperfection charmante de la pellicule.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photo argentique vintage — à copier",
+    seoDescription:
+      "Un prompt d'ambiance argentique : grain de pellicule, dominante chaude, halation, imperfections de développement. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney argentique", "prompt photo vintage ia"],
+    ambiancePrompt: `[Scene & universe]
+Photography styled after analog film photography — any subject rendered with the specific optical and chemical characteristics of shooting on real film stock, evoking a nostalgic, non-digital feel.
+
+[Lighting]
+Natural, slightly imperfect lighting typical of film-era photography, soft highlight rolloff rather than the clinical dynamic range of digital sensors.
+
+[Color & grade]
+Warm, slightly faded color grade with characteristic film color shifts (warm highlights, muted shadows), light halation around bright highlights.
+
+[Composition & lens]
+Classic 35mm or medium-format framing conventions, occasionally slightly imperfect composition evoking candid, unposed film-era shooting.
+
+[Texture & render]
+Visible authentic film grain structure, subtle light leaks or vignetting at frame edges, soft optical characteristics of vintage lens glass.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le grain est posé. Ton sujet, ton époque précise, ta pellicule — c'est ce qui rend le rendu vraiment authentique.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-photographie-de-rue",
+    title: "Photographie de rue",
+    tagline: "L'instant décisif, capté dans le mouvement de la ville.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photographie de rue — ambiance à copier",
+    seoDescription:
+      "Un prompt d'ambiance street photo : instant décisif, lumière urbaine disponible, 35mm, cadrage pris sur le vif. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney street photo", "prompt photographie de rue ia"],
+    ambiancePrompt: `[Scene & universe]
+Candid street photography capturing an authentic urban moment — a passerby, a fleeting interaction, or an unposed slice of city life — composition built around spontaneity rather than staging.
+
+[Lighting]
+Available natural city light, hard midday shadow for graphic contrast or soft overcast diffusion for even tonal range, occasionally supplemented by neon or shop-window glow at dusk.
+
+[Color & grade]
+True-to-life urban color palette with slightly boosted contrast, or a muted, documentary-style desaturation depending on the mood — color choice always secondary to the captured moment itself.
+
+[Composition & lens]
+35mm or 50mm equivalent for a natural human perspective, off-center or layered composition using urban framing elements (doorways, reflections, crowds) to add depth.
+
+[Texture & render]
+Slightly gritty, unpolished realism — visible texture in pavement, brick, and weathered surfaces — nothing overly smoothed or artificially clean.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'instant est saisi. Ton lieu, ton personnage, ta ville — c'est ce qui rend la scène vraiment tienne.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-astrophotographie-espace",
+    title: "Astrophotographie / espace",
+    tagline: "L'immensité du ciel nocturne, capturée avec précision.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney astrophotographie — ambiance à copier",
+    seoDescription:
+      "Un prompt d'ambiance astro : voie lactée, ciel profond, pose longue, premier plan en silhouette, rendu ultra-net. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney espace", "prompt astrophotographie ia"],
+    ambiancePrompt: `[Scene & universe]
+Astrophotography scene — star-filled night sky, Milky Way arch, or deep-space nebula view — often paired with a grounded foreground element (mountain silhouette, lone tree) for scale.
+
+[Lighting]
+Minimal ambient light dominated by starlight and celestial glow, faint horizon glow from distant light pollution if a foreground landscape is included, otherwise true deep-space darkness.
+
+[Color & grade]
+Deep blue-black sky tones with visible star color variation (blue-white to warm orange), nebula and galactic core rendered in rich purples and teals where relevant.
+
+[Composition & lens]
+Ultra-wide lens (14-24mm equivalent) for sky-dominant framing, long-exposure-style star clarity with pin-sharp point sources rather than streaked trails unless intentionally specified.
+
+[Texture & render]
+Crisp, high-clarity star detail against a smooth, noise-controlled dark sky, subtle atmospheric glow around brighter celestial objects.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le ciel est posé. Ton point de vue, ton premier plan, ta composition — c'est ce qui ancre l'image sur Terre.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-photographie-sous-marine",
+    title: "Photographie sous-marine",
+    tagline: "La lumière filtrée et le silence du monde aquatique.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney photographie sous-marine — à copier",
+    seoDescription:
+      "Un prompt d'ambiance sous-marine : lumière filtrée en rayons, dominante bleu-vert, particules en suspension, grand angle. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney sous-marine", "prompt photo océan ia"],
+    ambiancePrompt: `[Scene & universe]
+Underwater photography capturing marine life, coral reef, or a diver's silhouette, composition shaped by the diffused, weightless quality unique to the underwater environment.
+
+[Lighting]
+Filtered, blue-tinted natural light streaming from the surface above, softened and scattered by water, occasional strobe-lit foreground detail for color accuracy on close subjects.
+
+[Color & grade]
+Deep blue-green ambient color grade with warmer color correction applied to the foreground subject to counteract water's natural color absorption at depth.
+
+[Composition & lens]
+Wide-angle lens (16mm equivalent) to counteract water's magnification effect, composition using light rays (god rays) filtering from the surface for atmospheric depth.
+
+[Texture & render]
+Soft, slightly hazy background from suspended particulates, sharp detail retained on the main subject, natural water movement suggested through subtle blur on loose elements (hair, fins, marine flora).`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'eau est posée. Ta créature, ton plongeur, ta profondeur — c'est ce qui donne vie à la scène.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-macro-photographie",
+    title: "Macro photographie",
+    tagline: "L'infiniment petit révélé dans les moindres détails.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney macro photographie — ambiance à copier",
+    seoDescription:
+      "Un prompt d'ambiance macro : rapport 1:1, profondeur de champ minuscule, texture révélée, éclairage diffusé. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney macro", "prompt macro photographie ia"],
+    ambiancePrompt: `[Scene & universe]
+Extreme close-up macro photography revealing intricate detail invisible to the naked eye — insect, flower, water droplet, or textured surface — subject filling the frame at magnified scale.
+
+[Lighting]
+Soft, controlled diffused lighting (ring light or softbox style) eliminating harsh shadow at extreme close range, occasional backlighting to reveal translucency in petals or wings.
+
+[Color & grade]
+Vivid, true-to-life color rendering with enhanced micro-contrast to bring out fine surface detail, colors kept natural rather than artificially boosted.
+
+[Composition & lens]
+True macro lens equivalent (1:1 magnification), extremely shallow depth of field isolating a precise focal plane while the rest melts into soft bokeh.
+
+[Texture & render]
+Extraordinarily sharp, high-resolution surface detail (pollen grains, water droplet refraction, insect exoskeleton texture), background rendered as a smooth color wash.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le détail est révélé. Ton sujet précis, ton échelle — c'est ce qui transforme l'observation en image.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-noir-et-blanc-contraste",
+    title: "Noir et blanc contrasté",
+    tagline: "La force du contraste, sans artifice de couleur.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney noir et blanc contrasté — à copier",
+    seoDescription:
+      "Un prompt d'ambiance monochrome : noirs profonds, hautes lumières préservées, lumière sculptante, grain argentique. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney noir et blanc", "prompt photo monochrome ia"],
+    ambiancePrompt: `[Scene & universe]
+Any subject rendered in bold black-and-white treatment where tonal contrast — not color — carries the visual impact, composition built around light-versus-dark graphic relationships.
+
+[Lighting]
+Strong directional lighting deliberately chosen to maximize tonal separation, deep shadow areas contrasted against bright, clipped highlights for dramatic graphic effect.
+
+[Color & grade]
+Full monochrome conversion with a wide tonal range from true black to bright white, deliberately high contrast curve rather than a flat, low-contrast gray scale.
+
+[Composition & lens]
+Composition relying on shape, line, and tonal contrast rather than color cues to guide the eye, strong geometric or graphic framing.
+
+[Texture & render]
+Crisp micro-contrast bringing out fine texture (skin, fabric, stone) that color might otherwise distract from, deep blacks with retained shadow detail rather than crushed noise.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le contraste est posé. Ton sujet, ta scène précise — c'est ce qui donne au noir et blanc toute sa force.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-pop-art",
+    title: "Pop art",
+    tagline: "Des couleurs franches et un style graphique qui claque.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney pop art — style à copier",
+    seoDescription:
+      "Un prompt d'ambiance pop art : aplats saturés, contours noirs marqués, trame Ben Day, composition graphique frontale. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney pop art", "prompt style pop art ia"],
+    ambiancePrompt: `[Scene & universe]
+Bold pop art illustration in the tradition of 1960s graphic art movements — a subject rendered with flat, graphic simplicity and iconic visual punch, often with a consumer-culture or portrait focus.
+
+[Lighting]
+Flat, graphic lighting with minimal gradient — light and shadow rendered as distinct flat color blocks rather than smooth photographic transitions.
+
+[Color & grade]
+Bold, high-saturation primary and secondary colors (reds, yellows, blues) in deliberate flat blocks, strong color contrast between adjacent shapes.
+
+[Composition & lens]
+Bold, centered composition with graphic outline (thick black contour lines), often incorporating halftone dot patterns or repeated panel elements.
+
+[Texture & render]
+Flat, screen-print-style rendering with visible halftone dot texture in shaded areas, crisp hard edges with no photographic gradient blending.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le style est posé. Ton sujet, ta palette précise — c'est ce qui rend l'image immédiatement reconnaissable.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-steampunk",
+    title: "Steampunk",
+    tagline: "Rouages, cuivre et vapeur — l'esthétique rétro-futuriste par excellence.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney steampunk — ambiance à copier",
+    seoDescription:
+      "Un prompt d'ambiance steampunk : laiton et cuivre, rouages apparents, vapeur, palette sépia rétro-futuriste. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney steampunk", "prompt style steampunk ia"],
+    ambiancePrompt: `[Scene & universe]
+Steampunk scene blending Victorian-era aesthetics with fantastical brass-and-steam mechanical technology — a character, vehicle, or environment built from intricate gears, pipes, and pressure valves.
+
+[Lighting]
+Warm, amber-toned lighting evoking gaslight and firelight, dramatic shadow cast by mechanical structures, occasional glowing steam or ember accents.
+
+[Color & grade]
+Rich sepia and brass color palette (warm browns, burnished copper, muted gold) with deep charcoal shadows, vintage-toned overall grade.
+
+[Composition & lens]
+Detailed wide or medium shot showcasing intricate mechanical elements, composition allowing space for the elaborate machinery to read clearly.
+
+[Texture & render]
+Highly detailed metallic texture (polished brass, aged copper, leather straps, riveted iron), visible steam wisps and fine mechanical engraving detail.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'univers est posé. Ton personnage, sa machine, son histoire — c'est ce qui donne vie au rouage.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-cottagecore-champetre",
+    title: "Cottagecore / champêtre",
+    tagline: "La douceur d'une vie simple, entre nature et nostalgie.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney cottagecore champêtre — à copier",
+    seoDescription:
+      "Un prompt d'ambiance cottagecore : lumière douce de fin d'après-midi, textures naturelles, palette pastel fanée. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney cottagecore", "prompt ambiance champêtre ia"],
+    ambiancePrompt: `[Scene & universe]
+Cottagecore pastoral scene — a rustic countryside cottage, a flower-filled meadow, or a cozy hand-crafted domestic moment — evoking a slow, romanticized rural lifestyle.
+
+[Lighting]
+Soft, warm natural sunlight filtering through trees or a cottage window, golden hour glow, gentle and diffused rather than dramatic or harsh.
+
+[Color & grade]
+Warm, muted pastel color palette (soft greens, dusty pinks, cream), slightly faded and nostalgic tonal quality reminiscent of a hand-painted storybook.
+
+[Composition & lens]
+Intimate, cozy framing with natural elements (wildflowers, wicker baskets, worn wood) filling the foreground, soft focus falloff toward the edges.
+
+[Texture & render]
+Tactile, handmade texture quality — woven fabric, aged wood grain, delicate flower petals — rendered with a gentle, slightly soft-focus warmth rather than clinical sharpness.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "L'ambiance est posée. Ton lieu, ton personnage, ta saison — c'est ce qui complète cette parenthèse champêtre.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-illustration-botanique",
+    title: "Illustration botanique",
+    tagline: "La précision scientifique au service de la beauté végétale.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney illustration botanique — à copier",
+    seoDescription:
+      "Un prompt d'ambiance botanique : précision scientifique, trait fin, fond parchemin, planche naturaliste. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney botanique", "prompt illustration botanique ia"],
+    ambiancePrompt: `[Scene & universe]
+Botanical illustration in the scientific naturalist tradition — a single plant, flower, or leaf specimen rendered with precise anatomical accuracy, isolated on a clean background as in classical field guides.
+
+[Lighting]
+Even, shadowless studio-style lighting ensuring every structural detail of the specimen (veins, petal layers, stem texture) is clearly visible without distracting shadow.
+
+[Color & grade]
+Naturalistic, botanically accurate color rendering true to the specific plant species, no artistic color exaggeration — accuracy takes priority over stylization.
+
+[Composition & lens]
+Centered, isolated specimen composition on a plain cream or white background, often including labeled detail insets (cross-section, seed, root) in the classical scientific plate style.
+
+[Texture & render]
+Fine, precise linework and delicate color layering reminiscent of watercolor or engraved botanical plates, crisp detail on leaf venation and petal translucency.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "La précision est posée. Ton espèce précise, sa composition — c'est ce qui transforme l'illustration en véritable planche botanique.",
+    renderAsset: null,
+  },
+  {
+    slug: "prompt-image-portrait-corporate-linkedin",
+    title: "Portrait corporate / LinkedIn",
+    tagline: "Une photo de profil professionnelle, nette et immédiatement crédible.",
+    category: "image",
+    tool: "midjourney",
+    seoTitle: "Prompt Midjourney portrait corporate LinkedIn",
+    seoDescription:
+      "Un prompt d'ambiance pour une photo de profil pro : lumière douce, fond neutre, cadrage buste, rendu net et crédible. À copier sans inscription.",
+    targetKeywords: ["prompt midjourney portrait corporate", "prompt photo linkedin ia"],
+    ambiancePrompt: `[Scene & universe]
+Clean, professional headshot designed specifically for a business or LinkedIn profile — subject in business attire, neutral or softly blurred office-style background, immediately readable as a professional profile photo rather than an artistic portrait.
+
+[Lighting]
+Soft, even, flattering studio lighting (large softbox or window-diffused) eliminating harsh shadow, ensuring a clean, approachable, trustworthy appearance.
+
+[Color & grade]
+Neutral, true-to-life color grade with accurate, healthy skin tones, no stylized color grading — clarity and professionalism take priority over artistic mood.
+
+[Composition & lens]
+Head-and-shoulders or waist-up framing, shot on an 85mm equivalent for natural, undistorted facial proportions, subject centered or slightly off-center following standard profile-photo conventions.
+
+[Texture & render]
+Crisp, clean skin rendering with natural texture retained (not over-smoothed), sharp focus on the eyes, softly blurred background to keep full attention on the subject.`,
+    buttons: [
+      { label: "Affiner l'ambiance", flow: "refine-ambiance" },
+      { label: "Placer mon sujet dans cette ambiance", flow: "keep-ambiance" },
+      { label: "Affiner + placer mon sujet", flow: "refine-and-subject" },
+    ],
+    fomoMicrocopy:
+      "Le cadrage est posé. Ta tenue, ton expression, ton secteur — c'est ce qui rend la photo vraiment toi.",
+    renderAsset: null,
+  },
   // ---------------------------------------------------------------- text
   {
     slug: "prompt-post-linkedin-engagement",
