@@ -45,6 +45,16 @@ export interface LibraryPage {
   targetKeywords: string[];
   /** The ambiance prompt: free to copy, and the seed for the refining engine. */
   ambiancePrompt: string;
+  /**
+   * French rendering of `ambiancePrompt`, shown by default so a visitor who
+   * does not read English can still judge whether the ambiance is what they
+   * want. Display only — never copied, never sent to the refining engine,
+   * because English is what the target tools actually parse.
+   *
+   * Optional while the translation rolls out category by category; a page
+   * without it simply shows English with no language toggle.
+   */
+  ambiancePromptFr?: string;
   /** The three entry points. Order is the display order. */
   buttons: LibraryButton[];
   /**
@@ -93,6 +103,32 @@ breathing room
 
 [Tempo & key]
 88 BPM, minor key, swing feel`,
+    ambiancePromptFr: `[Genre & époque]
+Rap français boom bap, influence East Coast âge d'or 90s, production
+moderne et propre, underground mais soignée
+
+[Instrumental]
+Boucle de piano jazz poussiéreuse façon sample, contrebasse chaude,
+accords de Rhodes doux en arrière-plan, léger crépitement de vinyle et
+souffle de bande, coups de trompette bouchée soul sur les accents
+
+[Batterie]
+Break boom bap qui frappe fort, kick compressé et punchy, caisse claire
+sèche et claquante avec une courte queue de réverbe, charleston serré,
+swing lo-fi par moments
+
+[Voix & flow]
+Voix masculine, timbre grave et chaud, flow posé et assuré, diction
+française claire, texture légèrement rugueuse, débit conversationnel
+qui se pose juste derrière le beat
+
+[Mix & ambiance]
+Mix analogique chaud, image stéréo large, ambiance nostalgique et
+introspective, groove qui fait hocher la tête, esthétique sample vinyle,
+basse en sidechain pour laisser respirer
+
+[Tempo & tonalité]
+88 BPM, tonalité mineure, feel swing`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -137,6 +173,32 @@ mood, summer-evening feel, dynamic build between verse and chorus
 
 [Tempo & key]
 112 BPM, major key, straight feel`,
+    ambiancePromptFr: `[Genre & époque]
+Pop française moderne, production radio années 2020, soignée et
+émotionnelle, grand public mais de bon goût
+
+[Instrumental]
+Arpèges de synthé plucké lumineux, nappes analogiques chaudes, sub-basse
+ronde et profonde, percussions de claquements de doigts au feel live,
+couche de piano aérienne sur le refrain, vocal chops discrets en texture
+
+[Batterie]
+Beat programmé punchy, kick serré, claps superposés nets en caisse
+claire, roulements de charleston doux en montée vers le drop, énergie
+four-on-the-floor sur le refrain
+
+[Voix & flow]
+Voix lead féminine claire, intime sur les couplets, ample et doublée sur
+le refrain, diction française naturelle, émotive mais maîtrisée, légère
+queue de réverbe
+
+[Mix & ambiance]
+Mix stéréo large et lumineux, niveau prêt pour la radio, ambiance
+nostalgique et lumineuse à la fois, sensation de soir d'été, dynamique
+marquée entre couplet et refrain
+
+[Tempo & tonalité]
+112 BPM, tonalité majeure, feel binaire`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -175,6 +237,26 @@ melancholic, no vocals, endless-loop feel
 
 [Tempo & key]
 72 BPM, major 7th chords, relaxed swing`,
+    ambiancePromptFr: `[Genre & époque]
+Lo-fi hip-hop, chillhop, esthétique cosy de producteur en chambre,
+instrumental, ambiance travail et détente
+
+[Instrumental]
+Accords de piano électrique jazzy et doux, basse mono chaude, licks de
+guitare étouffés, crépitement de vinyle poussiéreux du début à la fin,
+pluie et ambiance de café au loin, léger wobble et flutter de bande
+
+[Batterie]
+Boucle de batterie lo-fi nonchalante, kick doux et rond, caisse claire
+aux balais, charleston swingué et relâché, feel humain non quantifié,
+vélocité basse
+
+[Mix & ambiance]
+Mix chaud et filtré en passe-bas, aigus atténués, intime et apaisant,
+légèrement mélancolique, sans voix, sensation de boucle infinie
+
+[Tempo & tonalité]
+72 BPM, accords de septième majeure, swing détendu`,
     buttons: [
       // Two buttons, not three. This ambiance is instrumental and ends on "no
       // vocals", and music's subject layer is the Suno LYRICS field by
@@ -221,6 +303,24 @@ punchy transient design
 
 [Tempo & key]
 128 BPM, major key, 8-second loop feel`,
+    ambiancePromptFr: `[Genre & époque]
+Court jingle d'intro de marque, moderne et énergique, conçu pour être
+mémorable en moins de 10 secondes
+
+[Instrumental]
+Coups de synthé lumineux et punchy, riser en montée vers l'impact, sub
+profond sur la retombée, hook arpégé rapide, couche percussive serrée
+
+[Batterie]
+Gros kick d'impact sur le drop, clap sec, montée rapide de charleston,
+un coup final en point d'orgue
+
+[Mix & ambiance]
+Fort, lumineux, très énergique, confiant et hype, master moderne et
+propre, transitoires travaillées pour le punch
+
+[Tempo & tonalité]
+128 BPM, tonalité majeure, feel de boucle de 8 secondes`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Créer mon jingle (avec mon nom de chaîne)", flow: "keep-ambiance" },
@@ -262,6 +362,32 @@ confrontational mood, minimal but suffocating atmosphere
 
 [Tempo & key]
 140 BPM (half-time feel), minor key, drill swing`,
+    ambiancePromptFr: `[Genre & époque]
+Drill française, influence UK drill adaptée au flow français, son sombre
+et agressif proche de la trap moderne, underground années 2020
+
+[Instrumental]
+Basse 808 glissée avec des slides de hauteur, coups de piano ou de
+cordes en mineur sombre, boucle mélodique clairsemée et inquiétante,
+nappes froides et atmosphériques
+
+[Batterie]
+Roulements et triolets de charleston drill qui frappent fort, charleston
+ouvert syncopé, kick superposé et punchy, caisse claire sèche façon
+rimshot sur le contretemps
+
+[Voix & flow]
+Voix masculine, débit tendu et tranchant, flow agressif en phrases
+courtes avec des ad-libs rapides, diction française claire, sous-texte
+menaçant
+
+[Mix & ambiance]
+Mix cinématographique sombre, bas du spectre lourd, réverbe froide sur
+la voix, ambiance tendue et frontale, atmosphère minimale mais
+étouffante
+
+[Tempo & tonalité]
+140 BPM (feel half-time), tonalité mineure, swing drill`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -299,6 +425,23 @@ Vocals sit slightly buried in reverb, low end rounded and warm, no harsh top-end
 
 [Tempo & key]
 70-85 BPM. Minor keys (D minor, F# minor) for melancholic undertone. Occasional half-time feel to emphasize groove over speed.`,
+    ambiancePromptFr: `[Genre & époque]
+R&B alternatif ancré dans l'esthétique des années 2010-2020 (influences Frank Ocean, SZA, Kaytranada), mêlant voicings d'accords neo-soul et production downtempo brumeuse. Évite le vernis du R&B pop grand public et les refrains formatés radio.
+
+[Instrumental]
+Rhodes chaud et nappes de synthé désaccordées sous une ligne de sub-basse clairsemée. Quelques licks de guitare jazzy passés au chorus et au vibrato. L'arrangement reste minimal et aéré, laissant de la place aux ad-libs vocaux.
+
+[Batterie]
+Programmation relâchée et swinguée, kicks qui frappent doucement, caisses claires étouffées, charlestons qui respirent au lieu de mitrailler. Quelques fills au feel live, aucune quantification rigide sur la grille.
+
+[Voix & flow]
+Voix lead aérienne tirant vers la voix de tête, prise de son intime et rapprochée. Harmonies superposées et ad-libs pitchés vers le bas en arrière-plan. Le phrasé reste conversationnel, sans excès de mélismes.
+
+[Mix & ambiance]
+La voix se niche légèrement dans la réverbe, le bas du spectre est rond et chaud, aucun aigu agressif. Ambiance introspective, nocturne, émotionnellement à nu.
+
+[Tempo & tonalité]
+70-85 BPM. Tonalités mineures (ré mineur, fa# mineur) pour l'arrière-goût mélancolique. Feel half-time par moments pour privilégier le groove sur la vitesse.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -335,6 +478,23 @@ Bass and drums dominate the mix, vocals sit forward but not harsh. Roots reggae 
 
 [Tempo & key]
 70-90 BPM for roots reggae, 90-110 BPM for dancehall. Major or Mixolydian keys for an uplifting, rolling feel.`,
+    ambiancePromptFr: `[Genre & époque]
+Tradition du riddim jamaïcain, du roots reggae classique (one-drop de l'ère Marley) au dancehall contemporain (production façon Vybz Kartel, Popcaan). Choisir une seule voie par morceau plutôt que de mélanger les deux époques.
+
+[Instrumental]
+Guitare rythmique en skank sur le contretemps, ligne de basse profonde et chargée en sub qui porte la mélodie, et un motif d'orgue Hammond en bubble qui remplit les trous. Pour les variantes dancehall, remplacer la guitare organique par des synthés riddim numériques et des coups de cuivres.
+
+[Batterie]
+Motif one-drop (kick et caisse claire tombant ensemble sur le temps 3) pour le roots reggae, ou riddim numérique stepped avec roulements de caisse claire syncopés pour le dancehall. Charlestons serrés et secs.
+
+[Voix & flow]
+Le roots reggae privilégie une voix lead soul et mélodique avec des chœurs en question-réponse. Le dancehall privilégie un débit rythmique mi-chanté mi-toasté collé au riddim, avec une cadence teintée de patois.
+
+[Mix & ambiance]
+Basse et batterie dominent le mix, la voix reste en avant sans être agressive. Le roots reggae respire le chaleureux et le collectif ; le dancehall, le punchy, l'assurance, la fête.
+
+[Tempo & tonalité]
+70-90 BPM pour le roots reggae, 90-110 BPM pour le dancehall. Tonalités majeures ou mixolydiennes pour un feel enlevé et roulant.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -371,6 +531,23 @@ Percussion and log-drum bass sit forward and punchy, vocals warm and present. Mo
 
 [Tempo & key]
 100-112 BPM. Major keys with pentatonic melodic runs for an open, bright character.`,
+    ambiancePromptFr: `[Genre & époque]
+Afrobeats contemporain (production façon Burna Boy, Wizkid, Rema), à distinguer de l'Afrobeat de Fela Kuti des années 1970 — polyrythmique, porté par le log drum, taillé autant pour la radio que pour la piste.
+
+[Instrumental]
+Percussions polyrythmiques superposées (shakers, congas, tambour parleur) sous une ligne de log drum rebondissante et syncopée. Accords de synthé chauds façon analogique et coups de cuivres en question-réponse occupent le haut du spectre.
+
+[Batterie]
+Motif de log drum roulant comme colonne vertébrale rythmique, associé à un charleston shufflé et à des placements de kick décalés qui créent le bounce caractéristique. Les boucles de percussions se superposent densément sans encombrer les basses.
+
+[Voix & flow]
+Voix lead mélodique, mi-chantée mi-scandée, calée dans le pocket du log drum, en question-réponse fréquente avec les chœurs. Phrasé teinté de pidgin et ad-libs qui ponctuent le groove.
+
+[Mix & ambiance]
+Percussions et basse de log drum en avant et punchy, voix chaude et présente. Ambiance festive, gorgée de soleil, dansante sans effort.
+
+[Tempo & tonalité]
+100-112 BPM. Tonalités majeures avec des traits mélodiques pentatoniques pour un caractère ouvert et lumineux.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -407,6 +584,23 @@ Guitars and drums fight for the same frequency space intentionally — a dense, 
 
 [Tempo & key]
 110-140 BPM for standard rock, 70-90 BPM for the stoner-rock variant. Power chords in E or D minor/major for maximum drive.`,
+    ambiancePromptFr: `[Genre & époque]
+Rock porté par les guitares, entre influences classiques et alternatives (du riff-rock 70s au rock alternatif 90s), avec une variante stoner rock plus lourde et fuzzée pour une version plus sombre et hypnotique.
+
+[Instrumental]
+Guitare rythmique saturée sur les power chords, deuxième guitare lead qui superpose riffs mélodiques ou solos, et une basse motrice qui double les fondamentales de la rythmique. Pour la variante stoner, ajouter une fuzz épaisse et une structure plus lente à riff répété.
+
+[Batterie]
+Kit acoustique au feel live, kick et caisse claire punchy, crashs qui marquent les sections. Les fills sont énergiques et humains, jamais calés à la grille.
+
+[Voix & flow]
+Voix lead brute en voix de poitrine, avec du grain et du mordant, chœurs criés ou en gang vocal sur les refrains. Phrasé direct et fédérateur, conçu pour des refrains repris en chœur.
+
+[Mix & ambiance]
+Guitares et batterie se disputent volontairement les mêmes fréquences — un mix dense et fort, en mur de son. L'ambiance va du rebelle et énergique au lourd et hypnotique sur la variante stoner.
+
+[Tempo & tonalité]
+110-140 BPM pour le rock standard, 70-90 BPM pour la variante stoner. Power chords en mi ou ré, mineur ou majeur, pour un maximum de poussée.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -443,6 +637,23 @@ Guitars scooped in the mids for clarity against the drums, bass reinforcing low-
 
 [Tempo & key]
 130-180 BPM for traditional/thrash metal, 90-110 BPM for nu-metal groove sections. Drop D or drop C tunings for maximum heaviness.`,
+    ambiancePromptFr: `[Genre & époque]
+Base heavy metal (structures de riffs thrash / metal traditionnel) avec une variante nu-metal moderne en option, qui superpose des riffs axés groove et une cadence vocale influencée par le hip-hop.
+
+[Instrumental]
+Guitare rythmique fortement palm-mutée et accordée bas, portant des riffs serrés et syncopés ; une seconde guitare pour les lead harmonisés ou les solos. La basse double le riff une octave en dessous pour le poids. La variante nu-metal ajoute une 7 cordes accordée bas et, par moments, une texture de platine ou de synthé.
+
+[Batterie]
+Double pédale sous les sections de guitare rythmique rapides et serrées ; accents chargés en crash sur les changements de riff. La variante nu-metal privilégie une double pédale mid-tempo plus axée groove, avec un placement de caisse claire influencé par le hip-hop.
+
+[Voix & flow]
+Le metal traditionnel privilégie une voix puissante et tenue, ou un chant crié agressif. La variante nu-metal alterne refrains chantés mélodiques et couplets rythmiques proches du rap.
+
+[Mix & ambiance]
+Guitares creusées dans les médiums pour rester lisibles face à la batterie, basse qui renforce le poids du bas du spectre sans embrouiller le riff. Ambiance agressive, intense, cathartique.
+
+[Tempo & tonalité]
+130-180 BPM pour le metal traditionnel / thrash, 90-110 BPM pour les sections groove nu-metal. Accordages drop D ou drop C pour un maximum de lourdeur.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -479,6 +690,23 @@ Sub-bass and kick occupy the low end tightly (sidechained together), mids stay o
 
 [Tempo & key]
 122-128 BPM. Minor keys with uplifting major-key breakdowns for the classic tension-and-release arc.`,
+    ambiancePromptFr: `[Genre & époque]
+House en four-on-the-floor taillée pour l'énergie des clubs et des mainstages de festival, puisant dans la chaleur de la deep house et dans la production big-room EDM pour les drops.
+
+[Instrumental]
+Ligne de basse roulante et filtrée calée sur le kick, accords chauds façon analogique, et un lead synthé plucké ou arpégé qui porte le hook principal. Risers et balayages de bruit blanc installent la tension avant les drops.
+
+[Batterie]
+Kick régulier en four-on-the-floor, charleston ouvert sur les contretemps, et un clap en caisse claire sur les temps 2 et 4. Les breakdowns réduisent tout au kick et à l'atmosphère avant de remonter.
+
+[Voix & flow]
+Vocal chops filtrés et traités, ou une seule topline soul, utilisés avec parcimonie comme hook plutôt que comme voix lead complète. Vocoder et textures pitchées sont courants sur les versions orientées festival.
+
+[Mix & ambiance]
+Sub-basse et kick occupent le bas du spectre de façon serrée (en sidechain l'un sur l'autre), les médiums restent dégagés pour le lead. Ambiance euphorique, motrice, taillée pour le peak time.
+
+[Tempo & tonalité]
+122-128 BPM. Tonalités mineures avec des breakdowns en majeur pour l'arc classique tension-résolution.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -515,6 +743,23 @@ Mix stays dry and tight, low end controlled and precise, no wide stereo effects 
 
 [Tempo & key]
 125-135 BPM. Modal or key-ambiguous tonal center — harmonic movement is minimal by design.`,
+    ambiancePromptFr: `[Genre & époque]
+Techno minimale dans la tradition berlinoise / détroitienne — répétitive, hypnotique, construite par petites variations sur la durée plutôt que sur une structure de chanson.
+
+[Instrumental]
+Une seule texture de synthé ou de bruit filtré qui évolue lentement comme élément principal, avec des boucles de percussions sèches et clairsemées ajoutées progressivement. Ni progression d'accords ni hook mélodique — le groove est le hook.
+
+[Batterie]
+Kick four-on-the-floor sec et serré, très peu de réverbe, accents de percussions légèrement hors grille (shakers, rimshots) introduits lentement au fil du morceau pour créer de la micro-variation.
+
+[Voix & flow]
+Pas de voix lead. Éventuellement un unique fragment vocal parlé ou fortement traité, bouclé comme texture rythmique, jamais une mélodie chantée.
+
+[Mix & ambiance]
+Mix sec et serré, bas du spectre contrôlé et précis, aucun effet stéréo large qui casserait la focalisation hypnotique. Ambiance transique, clinique, immersive.
+
+[Tempo & tonalité]
+125-135 BPM. Centre tonal modal ou volontairement ambigu — le mouvement harmonique est minimal par principe.`,
     buttons: [
       // Two buttons, like prompt-suno-lofi-chill: this style states "No lead
       // vocal", and music's subject layer is the Suno LYRICS field, so a
@@ -554,6 +799,23 @@ Rhythmic, ad-lib-heavy rap delivery riding tight against the hi-hat pattern, hal
 
 [Tempo & key]
 130-150 BPM (often felt as half-time 65-75 BPM). Minor keys, frequently Phrygian-flavored for a dark, tense character.`,
+    ambiancePromptFr: `[Genre & époque]
+Production trap moderne (trap / hip-hop grand public des années 2020), à distinguer du boom bap — construite autour de mélodies de sub-basse 808 et d'une programmation de charleston rapide plutôt que de breaks samplés.
+
+[Instrumental]
+Mélodie de piano ou de cloches en mineur sombre comme hook principal, posée sur une 808 profonde aux slides de hauteur qui fait office de cœur mélodique de la basse. Nappes de synthé clairsemées et maussades en arrière-plan.
+
+[Batterie]
+Motifs de charleston en triolets avec roulements rapides, caisse claire sèche et claquante sur le temps 3, et kick 808 accordé sur les fondamentales de la ligne de basse. La vélocité des charlestons varie pour éviter un rendu robotique.
+
+[Voix & flow]
+Débit rap rythmique et chargé en ad-libs, collé au motif de charleston, avec des hooks mélodiques mi-chantés sur le refrain. Auto-tune courant sur les parties mélodiques.
+
+[Mix & ambiance]
+Les 808 dominent le bas du spectre, les charlestons restent nets et en avant, la voix est compressée fort pour un niveau prêt pour la radio. Ambiance sombre, assurée, très énergique.
+
+[Tempo & tonalité]
+130-150 BPM (souvent ressenti en half-time à 65-75 BPM). Tonalités mineures, souvent teintées de phrygien pour un caractère sombre et tendu.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -590,6 +852,23 @@ Vocal sits front and center, unmasked by heavy processing, intimate and slightly
 
 [Tempo & key]
 60-90 BPM, often with tempo rubato (flexible, expressive timing). Minor keys with modal inflections for a melancholic, timeless character.`,
+    ambiancePromptFr: `[Genre & époque]
+Chanson française dans l'esprit de l'ère auteur-compositeur des années 1950-70 (Brel, Brassens, Piaf) — écriture poétique et narrative, arrangement acoustique proche de l'orchestral, à distinguer de la pop radio contemporaine.
+
+[Instrumental]
+Guitare acoustique ou piano portant la fondation harmonique, avec une section de cordes (violon, violoncelle) qui entre sur les montées émotionnelles. Accents d'accordéon en option pour une couleur parisienne d'époque.
+
+[Batterie]
+Batterie légère aux balais, ou pas de batterie du tout — beaucoup de morceaux de cette tradition reposent sur la seule rythmique guitare/piano, la batterie n'entrant que sur les montées dramatiques.
+
+[Voix & flow]
+Voix lead expressive et théâtrale, privilégiant la diction et le récit sur les acrobaties vocales — chaque mot doit être intelligible. Le phrasé dynamique suit l'arc narratif du texte, des couplets murmurés vers des refrains habités.
+
+[Mix & ambiance]
+La voix est au premier plan, sans traitement lourd qui la masquerait, intime et légèrement sèche. Ambiance littéraire, nostalgique, lourde d'émotion.
+
+[Tempo & tonalité]
+60-90 BPM, souvent en tempo rubato (souple et expressif). Tonalités mineures avec des inflexions modales pour un caractère mélancolique et intemporel.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -626,6 +905,23 @@ Bright, well-balanced mix optimized for streaming loudness, vocal forward and cl
 
 [Tempo & key]
 95-115 BPM. Major keys with straightforward, singable melodic intervals.`,
+    ambiancePromptFr: `[Genre & époque]
+Pop française grand public contemporaine (format radio 2010-2020, dans l'esprit de Vitaa, Amir, Vianney), conçue pour plaire largement avec des hooks mélodiques immédiats — à distinguer de la tradition de la chanson d'auteur.
+
+[Instrumental]
+Motif de grattage de guitare acoustique ou électrique soigné, accords de piano pop moderne, et une couche électronique légère (nappes de synthé, éléments programmés discrets) pour le vernis radio contemporain.
+
+[Batterie]
+Programmation pop moderne et propre, ou kit hybride acoustique-électronique, kick punchy et caisse claire claquante, groove régulier pensé pour la rotation radio plutôt que pour l'expérimentation.
+
+[Voix & flow]
+Voix lead chaleureuse et accessible, phrasé pop clair, lignes de refrain accrocheuses et répétées, harmonies légères doublant la mélodie. Interprétation soignée et radiophonique, jamais brute.
+
+[Mix & ambiance]
+Mix lumineux et bien équilibré, optimisé pour le niveau des plateformes de streaming, voix en avant et claire. Ambiance positive, proche de l'auditeur, feel-good.
+
+[Tempo & tonalité]
+95-115 BPM. Tonalités majeures avec des intervalles mélodiques simples et chantables.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -662,6 +958,23 @@ Warm, roomy mix with natural reverb suggesting a live lounge space, instruments 
 
 [Tempo & key]
 70-100 BPM with a swung eighth-note feel. Major 7th and minor 7th chords for rich, unresolved harmonic color.`,
+    ambiancePromptFr: `[Genre & époque]
+Tradition du smooth jazz lounge — atmosphère de bar à cocktails puisant dans le cool jazz et l'harmonie teintée de bossa, conçue pour une élégance d'arrière-plan plutôt que pour la complexité improvisée.
+
+[Instrumental]
+Contrebasse chaude ou basse électrique demi-caisse en walking doux sous des accords de piano enrichis (septièmes, neuvièmes), avec une trompette bouchée ou un saxophone portant des phrases mélodiques feutrées.
+
+[Batterie]
+Batterie aux balais avec un motif de ride léger et un feel swing discret, kick et caisse claire à peine audibles — la rythmique est suggérée plus qu'imposée.
+
+[Voix & flow]
+Voix douce et soufflée en option, au phrasé détendu et légèrement en retard sur le beat, ou purement instrumental. Si elle est présente, la voix reste retenue, jamais poussée.
+
+[Mix & ambiance]
+Mix chaud et aéré avec une réverbe naturelle évoquant un vrai lounge, instruments serrés les uns contre les autres. Ambiance raffinée, détendue, élégance de fin de soirée.
+
+[Tempo & tonalité]
+70-100 BPM avec un feel de croches swinguées. Accords de septième majeure et mineure pour une couleur harmonique riche et non résolue.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -698,6 +1011,23 @@ Warm, slightly vintage-toned mix, guitar and vocal both given room to breathe. M
 
 [Tempo & key]
 70-110 BPM with a shuffled triplet feel. 12-bar blues progression in E, A, or G with dominant 7th chords throughout.`,
+    ambiancePromptFr: `[Genre & époque]
+Blues traditionnel et électrique dans la lignée Delta-Chicago — construit sur la forme du blues à 12 mesures, centré sur la guitare, émotionnellement direct.
+
+[Instrumental]
+Guitare électrique au son chaud et légèrement saturé, jouant des licks en question-réponse face à la ligne de chant, basse en walking suivant la grille de 12 mesures, quelques relances à l'harmonica.
+
+[Batterie]
+Rythmique shufflée et swinguée, groove kick / caisse claire nonchalant, ride ou charleston portant le feel shuffle. Simple, centrée sur le groove, jamais chargée.
+
+[Voix & flow]
+Voix lead éraillée et expressive, usage marqué des blue notes et des bends vocaux, phrasé qui laisse de la place aux réponses instrumentales entre les lignes de chant.
+
+[Mix & ambiance]
+Mix chaud à la couleur légèrement vintage, guitare et voix ayant chacune la place de respirer. Ambiance brute, habitée, cathartique.
+
+[Tempo & tonalité]
+70-110 BPM avec un feel de triolets shufflés. Grille de blues à 12 mesures en mi, la ou sol, avec des accords de septième de dominante du début à la fin.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -734,6 +1064,23 @@ Bright, radio-ready mix, vocal forward and warm, acoustic instruments given natu
 
 [Tempo & key]
 90-120 BPM. Major keys (G, C, D) for an open, accessible harmonic character.`,
+    ambiancePromptFr: `[Genre & époque]
+Country contemporaine (son de Nashville format radio), mêlant les racines acoustiques et narratives à un vernis de production pop-country moderne.
+
+[Instrumental]
+Guitare acoustique grattée comme fondation rythmique, accents de pedal steel ou de banjo colorant la mélodie, et une basse chaude sur un simple mouvement fondamentale-quinte.
+
+[Batterie]
+Groove direct et moteur, proche du rock, kick et caisse claire punchy sur un backbeat régulier, pensé pour la rotation radio plutôt que pour la complexité.
+
+[Voix & flow]
+Voix lead chaleureuse et narrative avec un léger twang, phrasé clair privilégiant l'intelligibilité du texte, harmonies entrant sur les refrains.
+
+[Mix & ambiance]
+Mix lumineux et prêt pour la radio, voix en avant et chaude, instruments acoustiques dotés d'une présence naturelle. Ambiance sincère, proche de l'auditeur, authentiquement provinciale.
+
+[Tempo & tonalité]
+90-120 BPM. Tonalités majeures (sol, do, ré) pour un caractère harmonique ouvert et accessible.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -770,6 +1117,23 @@ Bass and dembow percussion dominate the low-mid, vocal compressed forward for cl
 
 [Tempo & key]
 90-100 BPM (dembow feel). Minor keys with a rhythmic, groove-first melodic approach.`,
+    ambiancePromptFr: `[Genre & époque]
+Reggaeton contemporain bâti sur la fondation rythmique du dembow, intégrant des influences pop latines plus larges (production façon Bad Bunny, Karol G) pour un potentiel crossover.
+
+[Instrumental]
+Boucles de percussions latines syncopées (congas, timbales) superposées à une sub-basse profonde et ronde, avec des coups de synthé lumineux ou un hook mélodique façon marimba portant la topline.
+
+[Batterie]
+Motif dembow caractéristique (boum-tch-boum-tchik) comme colonne vertébrale rythmique, accents nets de caisse claire et de clap calés sur le motif, charlestons ajoutant une texture syncopée discrète par-dessus.
+
+[Voix & flow]
+Débit rythmique mi-chanté mi-rappé à la cadence espagnole, collé au groove dembow, phrases de hook accrocheuses et répétées, ad-libs ponctuant les fins de ligne.
+
+[Mix & ambiance]
+Basse et percussions dembow dominent le bas-médium, voix compressée en avant pour l'impact en club et en radio. Ambiance assurée, sensuelle, faite pour la piste.
+
+[Tempo & tonalité]
+90-100 BPM (feel dembow). Tonalités mineures avec une approche mélodique rythmique, le groove d'abord.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -806,6 +1170,23 @@ Sub-bass and breaks dominate the low end with tight, controlled dynamics; liquid
 
 [Tempo & key]
 170-176 BPM. Minor keys for neurofunk's tension, major or modal for liquid's uplifting character.`,
+    ambiancePromptFr: `[Genre & époque]
+Tradition drum and bass britannique — musique électronique rapide portée par des breakbeats hachés et syncopés et une sub-basse profonde, du liquid (mélodique) au neurofunk (agressif).
+
+[Instrumental]
+Sub-basse profonde et modulée avec un balayage de filtre évolutif comme ancrage mélodique et rythmique, superposée à des nappes atmosphériques (variante liquid) ou à des textures de basse saturées et grondantes (variante neurofunk).
+
+[Batterie]
+Breakbeat rapide et haché (typiquement dérivé de breaks samplés classiques) tournant au double du tempo perçu de la basse, placement complexe des charlestons et des caisses claires créant un mouvement constant vers l'avant.
+
+[Voix & flow]
+Topline vocale soul et mélodique en option pour la variante liquid, flottant au-dessus des breaks rapides ; la variante neurofunk reste généralement instrumentale ou n'utilise que des coups vocaux traités.
+
+[Mix & ambiance]
+Sub-basse et breaks dominent le bas du spectre avec une dynamique serrée et maîtrisée ; la variante liquid reste aérienne et émotive, la neurofunk sombre et agressive.
+
+[Tempo & tonalité]
+170-176 BPM. Tonalités mineures pour la tension du neurofunk, majeures ou modales pour le caractère lumineux du liquid.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -842,6 +1223,23 @@ Wide, spacious stereo field with long reverb tails, low dynamic range for consis
 
 [Tempo & key]
 50-70 BPM or tempo-free (free-floating, non-metric). Modal or drone-based tonal center avoiding strong harmonic resolution.`,
+    ambiancePromptFr: `[Genre & époque]
+Musique de méditation ambient dans la tradition du drone et du paysage sonore (influence Brian Eno), conçue pour l'immobilité et la concentration plutôt que pour une structure de chanson.
+
+[Instrumental]
+Nappes de synthé et drones tenus qui évoluent lentement comme lit harmonique, avec quelques sonorités de cloches douces, textures de bols chantants ou éléments de field recording (eau, vent) ajoutés avec parcimonie.
+
+[Batterie]
+Pas de batterie conventionnelle — si des éléments rythmiques existent, ils prennent la forme d'une pulsation lente et douce ou d'une vibration de sub-basse façon battement de cœur, jamais d'un beat défini.
+
+[Voix & flow]
+Pas de voix lead, ou éventuellement une texture vocale soufflée et sans paroles utilisée comme couche de nappe supplémentaire plutôt que comme élément de premier plan.
+
+[Mix & ambiance]
+Champ stéréo large et aéré avec de longues queues de réverbe, faible dynamique pour une écoute constante et discrète. Ambiance calme, ancrante, méditative.
+
+[Tempo & tonalité]
+50-70 BPM ou sans tempo (flottant, non mesuré). Centre tonal modal ou fondé sur un drone, évitant toute résolution harmonique marquée.`,
     buttons: [
       // Two buttons, like prompt-suno-lofi-chill — this style states "No lead
       // vocal", so there are no lyrics to write over it.
@@ -879,6 +1277,23 @@ Very quiet dynamic range throughout, warm and close-mic'd vocal, no sudden volum
 
 [Tempo & key]
 50-65 BPM. Simple major keys with narrow melodic range (avoiding large interval jumps).`,
+    ambiancePromptFr: `[Genre & époque]
+Forme traditionnelle de la berceuse — simple, répétitive, conçue spécifiquement pour accompagner un enfant vers le sommeil, à distinguer des chansons enfantines enjouées.
+
+[Instrumental]
+Guitare acoustique en fingerpicking doux ou mélodie de piano/célesta façon boîte à musique, instrumentation additionnelle minimale pour éviter toute stimulation, éventuellement une nappe de cordes très douce en dessous.
+
+[Batterie]
+Pas de batterie — la pulsation rythmique, s'il y en a une, ne vient que du motif instrumental arpégé ou joué au fingerpicking, gardé régulier et prévisible.
+
+[Voix & flow]
+Voix douce, soufflée, à faible volume, au phrasé lent et sans hâte, sur des phrases mélodiques simples et répétitives qu'un enfant peut reconnaître et sur lesquelles il peut s'apaiser.
+
+[Mix & ambiance]
+Dynamique très faible du début à la fin, voix chaude et prise de près, aucun changement de volume brusque. Ambiance tendre, rassurante, sans hâte.
+
+[Tempo & tonalité]
+50-65 BPM. Tonalités majeures simples avec une tessiture mélodique étroite (en évitant les grands sauts d'intervalles).`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -915,6 +1330,23 @@ Bright, full mix with generous reverb evoking a large room or hall, bells and st
 
 [Tempo & key]
 100-120 BPM. Major keys (C, G, F) with classic diatonic harmony for instant familiarity.`,
+    ambiancePromptFr: `[Genre & époque]
+Musique de Noël mêlant l'harmonie des chants traditionnels à une production festive moderne et radiophonique — chaleureuse et nostalgique plutôt que strictement religieuse.
+
+[Instrumental]
+Grelots et glockenspiel portant l'éclat mélodique, section de cordes chaude ou ensemble de cuivres remplissant les montées harmoniques, guitare acoustique ou piano ancrant la grille d'accords.
+
+[Batterie]
+Groove pop léger, aux balais ou en douceur, avec des accents de percussions à grelots superposés du début à la fin, kick et caisse claire gardés doux pour préserver le caractère cosy et festif.
+
+[Voix & flow]
+Voix lead chaleureuse et joyeuse au phrasé clair et chantable, pensée pour être reprise en groupe, avec des harmonies façon chorale entrant sur le refrain pour un effet collectif.
+
+[Mix & ambiance]
+Mix lumineux et plein avec une réverbe généreuse évoquant une grande salle, cloches et cordes brillantes dans le haut du spectre. Ambiance chaleureuse, nostalgique, festive.
+
+[Tempo & tonalité]
+100-120 BPM. Tonalités majeures (do, sol, fa) avec une harmonie diatonique classique pour une familiarité immédiate.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -951,6 +1383,23 @@ Warm, close, intimate mix in the verses opening into a wider, more spacious soun
 
 [Tempo & key]
 60-75 BPM, slow enough for a comfortable dance tempo. Major keys with occasional bittersweet minor inflections for emotional depth.`,
+    ambiancePromptFr: `[Genre & époque]
+Ballade romantique d'ouverture de bal, puisant dans les codes contemporains de la chanson de mariage acoustique-pop — conçue pour porter un vrai poids émotionnel sur une danse lente et intime.
+
+[Instrumental]
+Guitare acoustique en fingerpicking ou piano seul ouvrant le morceau dans l'intimité, cordes entrant progressivement pour enfler au pic émotionnel, arrangement se densifiant du dépouillé au plein tout au long du morceau.
+
+[Batterie]
+Minimale ou absente sur les couplets — une batterie douce aux balais ou une pulsation discrète de cajón peut n'entrer que sur le dernier refrain pour soulever le climax émotionnel.
+
+[Voix & flow]
+Voix lead tendre et sincère au phrasé intime et sans hâte, montée en dynamique d'un couplet presque murmuré vers un refrain plus plein et plus ouvert.
+
+[Mix & ambiance]
+Mix chaud, proche et intime sur les couplets, s'ouvrant vers un son plus large et plus aéré au pic émotionnel. Ambiance tendre, dévouée, discrètement bouleversante.
+
+[Tempo & tonalité]
+60-75 BPM, assez lent pour un tempo de danse confortable. Tonalités majeures avec quelques inflexions mineures douces-amères pour la profondeur émotionnelle.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -987,6 +1436,23 @@ Loud, in-your-face mix with maximum punch on kick and bass, minimal dynamic rang
 
 [Tempo & key]
 128-150 BPM. Minor keys with a hard-hitting, rhythmically insistent melodic approach.`,
+    ambiancePromptFr: `[Genre & époque]
+Musique d'entraînement très énergique dans la tradition hybride électronique / hip-hop — conçue pour les playlists de salle et de training, privilégiant la poussée continue sur la subtilité mélodique.
+
+[Instrumental]
+Basse de synthé punchy et saturée portant le groove, coups de synthé ou de cuivres agressifs accentuant le beat, complexité harmonique minimale pour garder l'énergie concentrée et tournée vers l'avant.
+
+[Batterie]
+Kick et caisse claire compressés qui frappent fort, calés dans un groove moteur et sans relâche, roulements de charleston énergiques installant la tension avant chaque refrain ou drop.
+
+[Voix & flow]
+Interprétation vocale assurée, puissante, presque scandée, sur des phrases de motivation courtes et répétables, avec des ad-libs criés ou en gang vocal renforçant le hook.
+
+[Mix & ambiance]
+Mix fort et frontal avec un maximum de punch sur le kick et la basse, dynamique réduite pour une énergie constamment haute. Ambiance agressive, motrice, motivante sans relâche.
+
+[Tempo & tonalité]
+128-150 BPM. Tonalités mineures avec une approche mélodique percutante et rythmiquement insistante.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -1023,6 +1489,23 @@ Chiptune variant stays bright, compressed, and energetic; orchestral variant sta
 
 [Tempo & key]
 Chiptune: 140-170 BPM, bright major keys. Orchestral: variable tempo with dramatic rubato, minor keys for tension building to major-key resolution.`,
+    ambiancePromptFr: `[Genre & époque]
+Tradition de la musique de jeu vidéo, entre deux pôles de production : le chiptune rétro (ère des consoles 8-bit / 16-bit) pour l'énergie arcade, et la partition orchestrale ample pour les moments cinématographiques et aventureux. Choisir une seule voie par morceau.
+
+[Instrumental]
+Variante chiptune : mélodies de synthé en ondes carrées et pulsées avec des lignes de basse arpégées, évoquant les puces sonores des consoles classiques. Variante orchestrale : section de cordes complète, fanfares de cuivres et contre-chants de bois construisant l'ampleur cinématographique.
+
+[Batterie]
+Variante chiptune : percussions samplées façon 8-bit, serrées et punchy, sur un motif bouclé et moteur. Variante orchestrale : percussions épiques façon taiko et coups de timbales ponctuant les montées dramatiques.
+
+[Voix & flow]
+Instrumental par défaut dans les deux variantes — si des éléments vocaux apparaissent, ils prennent la forme de textures de chœur sans paroles (orchestral) ou de coups de voix chiptune (rétro), jamais d'un chanteur lead.
+
+[Mix & ambiance]
+La variante chiptune reste lumineuse, compressée et énergique ; l'orchestrale reste large, dynamique et dramatique avec une grande amplitude. L'ambiance va de l'urgence joueuse à la grandeur héroïque.
+
+[Tempo & tonalité]
+Chiptune : 140-170 BPM, tonalités majeures lumineuses. Orchestral : tempo variable avec un rubato dramatique, tonalités mineures installant la tension avant une résolution en majeur.`,
     buttons: [
       // Two buttons, like prompt-suno-lofi-chill — this style is "Instrumental
       // by default" in both variants, so there are no lyrics to write over it.
@@ -1060,6 +1543,23 @@ Mid-range-focused mix leaving clear space for spoken voice frequencies, moderate
 
 [Tempo & key]
 90-110 BPM for energetic formats, 70-90 BPM for calmer/interview formats. Major or neutral keys for broad topical flexibility across episode content.`,
+    ambiancePromptFr: `[Genre & époque]
+Musique de marque pensée pour l'audio d'abord, conçue spécifiquement pour les formats podcast parlés — faite pour passer sous une voix off ou pour l'encadrer, à distinguer des stingers courts synchronisés sur de l'image.
+
+[Instrumental]
+Un motif instrumental simple et reconnaissable (une courte phrase mélodique au synthé, à la guitare ou au piano) qui reste mémorable à l'écoute répétée d'un épisode à l'autre, structuré avec un fondu d'entrée net pour les intros et un fondu de sortie propre pour les outros.
+
+[Batterie]
+Pulsation rythmique légère et discrète, si tant est qu'il y en ait une — pensée pour passer sous une narration parlée sans nuire à l'intelligibilité, disparaissant souvent complètement dès que la voix off commence.
+
+[Voix & flow]
+Instrumental uniquement, avec une structure bâtie autour de deux moments clairs : un lit d'intro de 10 à 20 secondes qui monte puis se pose sous la voix de l'annonceur, et un outro de 15 à 30 secondes qui peut se dérouler entièrement sans narration.
+
+[Mix & ambiance]
+Mix centré sur les médiums, laissant de la place aux fréquences de la voix parlée, dynamique modérée pour une lecture homogène quel que soit le support (écouteurs, voiture, enceintes). Ambiance professionnelle, reconnaissable, constante d'un épisode à l'autre.
+
+[Tempo & tonalité]
+90-110 BPM pour les formats énergiques, 70-90 BPM pour les formats calmes ou d'interview. Tonalités majeures ou neutres pour rester adaptable à tous les sujets d'épisode.`,
     buttons: [
       // Two buttons, like prompt-suno-lofi-chill — this style is "Instrumental
       // only", built as a bed under narration, so there are no sung lyrics to
@@ -1099,6 +1599,23 @@ Wide, full mix with the choir given room and depth, organ and lead vocal both pr
 
 [Tempo & key]
 80-130 BPM depending on song section (slow build to fast climax common). Major keys with gospel-specific chord extensions (add9, sus4) for emotional richness.`,
+    ambiancePromptFr: `[Genre & époque]
+Gospel traditionnel et contemporain — enraciné dans la tradition musicale des églises afro-américaines, construit autour d'arrangements de chorale puissants et d'une interprétation vocale habitée.
+
+[Instrumental]
+Orgue Hammond portant des accords riches et tenus comme fondation harmonique, piano doublant et ornant la partie d'orgue, quelques textures de tambourin et de claquements de mains renforçant le groove.
+
+[Batterie]
+Groove moteur et syncopé sur un backbeat marqué, montée dynamique de couplets retenus vers des refrains pleins et énergiques, fills ponctuant les pics émotionnels.
+
+[Voix & flow]
+Voix lead puissante et soul avec beaucoup de mélismes et de traits improvisés, chœurs de chorale complets entrant en question-réponse, amplitude allant de couplets murmurés à un climax à pleine voix.
+
+[Mix & ambiance]
+Mix large et plein donnant à la chorale de l'espace et de la profondeur, orgue et voix lead tous deux au premier plan. Ambiance élévatrice, cathartique, spirituellement chargée.
+
+[Tempo & tonalité]
+80-130 BPM selon la section (montée lente vers un climax rapide, cas fréquent). Tonalités majeures avec les enrichissements propres au gospel (add9, sus4) pour la richesse émotionnelle.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -1135,6 +1652,23 @@ Wide stereo synths with heavy chorus and reverb, punchy but not harsh low end. M
 
 [Tempo & key]
 100-120 BPM. Minor keys with dramatic, cinematic chord progressions for that widescreen retro-futuristic feel.`,
+    ambiancePromptFr: `[Genre & époque]
+Synthwave, puisant dans les esthétiques de la musique de film et de la synth-pop des années 1980 (partitions de John Carpenter, pop électronique des débuts) filtrées par un regard rétro-futuriste moderne.
+
+[Instrumental]
+Basse de synthé façon analogique au son chaud et saturé, lignes de synthé arpégées superposées portant le hook mélodique, accords de nappes amples évoquant les musiques de film 80s en grand écran.
+
+[Batterie]
+Caisse claire en gated reverb (la signature sonore des années 80), kick programmé punchy, et un beat électronique régulier et moteur avec très peu de syncope — volontairement simple sur le plan rythmique.
+
+[Voix & flow]
+Voix lead cool et légèrement distante en option, avec un soupçon de réverbe et de chorus, rappelant l'interprétation synth-pop des années 80, ou entièrement instrumental pour une version cinématographique.
+
+[Mix & ambiance]
+Synthés larges en stéréo avec beaucoup de chorus et de réverbe, bas du spectre punchy sans agressivité. Ambiance nostalgique, cinématographique, néon et mouvement.
+
+[Tempo & tonalité]
+100-120 BPM. Tonalités mineures avec des progressions d'accords dramatiques et cinématographiques pour ce feel rétro-futuriste en grand écran.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },
@@ -1171,6 +1705,23 @@ Clean, bright, uncluttered mix with the vocal always crystal clear, no heavy pro
 
 [Tempo & key]
 100-120 BPM. Major keys with a narrow, easy-to-sing melodic range and simple, repeating phrases.`,
+    ambiancePromptFr: `[Genre & époque]
+Forme traditionnelle de la comptine française — enjouée, pédagogique, conçue pour la participation active (taper dans les mains, compter, bouger), à distinguer de la berceuse orientée endormissement.
+
+[Instrumental]
+Instrumentation acoustique lumineuse et simple (ukulélé, glockenspiel, piano léger), courte phrase mélodique répétée, facile à imiter et à mémoriser pour un enfant.
+
+[Batterie]
+Percussions légères et ludiques — claquements de mains, tambourin ou simple motif de wood block — assez régulières et prévisibles pour qu'un enfant puisse taper ou bouger en rythme.
+
+[Voix & flow]
+Voix lumineuse, enjouée, très clairement articulée, sur une structure de texte simple et répétitive (souvent en question-réponse ou fondée sur le comptage), interprétation entraînante et légèrement exagérée pour capter l'attention.
+
+[Mix & ambiance]
+Mix propre, lumineux et dégagé, voix toujours parfaitement claire, aucun traitement lourd. Ambiance ludique, joyeuse, énergique.
+
+[Tempo & tonalité]
+100-120 BPM. Tonalités majeures avec une tessiture mélodique étroite et facile à chanter, sur des phrases simples et répétées.`,
     buttons: [
       { label: "Affiner le style", flow: "refine-ambiance" },
       { label: "Garder ce style + écrire mes paroles", flow: "keep-ambiance" },

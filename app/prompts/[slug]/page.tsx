@@ -70,7 +70,11 @@ export default function PromptPage({ params }: { params: { slug: string } }) {
 
         <section className="mb-8">
           <h2 className="sr-only">{w.ambianceLabel}</h2>
-          <CopyablePrompt label={w.ambianceLabel} value={page.ambiancePrompt} />
+          <CopyablePrompt
+            label={w.ambianceLabel}
+            value={page.ambiancePrompt}
+            valueFr={page.ambiancePromptFr}
+          />
         </section>
 
         <section>
