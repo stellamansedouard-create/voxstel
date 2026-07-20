@@ -39,6 +39,14 @@ export default function Footer() {
                   Générateur
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/bibliotheque"
+                  className="text-sm text-muted hover:text-foreground transition-colors"
+                >
+                  Bibliothèque
+                </Link>
+              </li>
             </ul>
           </div>
 
