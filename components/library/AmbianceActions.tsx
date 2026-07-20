@@ -47,45 +47,35 @@ export default function AmbianceActions({ page, microcopy }: AmbianceActionsProp
   const buttons = resolveButtons(page);
   const fomo = microcopy ?? page.fomoMicrocopy;
 
-  // The subject is what the buttons are here to sell, so the last button that
-  // reaches it leads. A page with only refine-ambiance buttons has no primary.
-  const primaryIndex = buttons.reduce(
-    (last, b, i) => (b.flow === "refine-ambiance" ? last : i),
-    -1
-  );
-
+  // No visual hierarchy between the three: they are equivalent, and which one
+  // fits depends on what the user actually needs. Singling one out with a solid
+  // fill reads as "this is the better choice", which is false. Brand colour
+  // stays via the gold liseré carried by ALL three, never by one.
   return (
     <div className="space-y-3">
-      {buttons.map((button, i) => {
-        const isPrimary = i === primaryIndex;
+      {buttons.map((button, i) => (
+        <div key={`${button.flow}-${i}`}>
+          <button
+            type="button"
+            onClick={() => start(button.flow)}
+            className="relative w-full flex flex-col items-start gap-0.5 px-5 py-3.5 rounded-xl border border-border bg-white text-left overflow-hidden hover:border-accent hover:bg-accent/5 transition-all duration-150"
+          >
+            <span
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-1"
+              style={{ backgroundColor: "#C8910A" }}
+            />
+            <span className="text-sm font-medium">{button.label}</span>
+            <span className="text-xs font-normal text-muted">
+              {getFlowDescription(button.flow, page.category)}
+            </span>
+          </button>
 
-        return (
-          <div key={`${button.flow}-${i}`}>
-            <button
-              type="button"
-              onClick={() => start(button.flow)}
-              className={
-                isPrimary
-                  ? "btn-primary w-full flex flex-col items-center gap-0.5 py-3.5"
-                  : "w-full flex flex-col items-start gap-0.5 px-5 py-3.5 rounded-xl border border-border bg-white text-left hover:border-accent hover:bg-accent/5 transition-all duration-150"
-              }
-            >
-              <span className="text-sm font-medium">{button.label}</span>
-              <span
-                className={`text-xs font-normal ${
-                  isPrimary ? "text-white/70" : "text-muted"
-                }`}
-              >
-                {getFlowDescription(button.flow, page.category)}
-              </span>
-            </button>
-
-            {isPrimary && fomo && (
-              <p className="text-xs text-muted mt-1.5 px-1">{fomo}</p>
-            )}
-          </div>
-        );
-      })}
+          {i === buttons.length - 1 && fomo && (
+            <p className="text-xs text-muted mt-1.5 px-1">{fomo}</p>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
