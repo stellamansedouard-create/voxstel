@@ -554,6 +554,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
                 key={store.generatedPrompt.en}
                 prompt={store.generatedPrompt}
                 tool={store.tool}
+                category={category}
                 refinementsLeft={refinementsLeft}
                 onRestart={() => {
                   store.reset();
