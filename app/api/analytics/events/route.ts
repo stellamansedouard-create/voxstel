@@ -7,15 +7,17 @@ const ALLOWED_EVENTS: EventType[] = [
   "prompt_generated",
   "user_signup",
   "plan_upgraded",
+  "category_selected",
+  "input_submitted",
+  "questions_shown",
+  "generation_started",
+  "prompt_copied",
+  "upgrade_clicked",
+  "pricing_viewed",
 ];
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await getCurrentUser();
-    if (!user) {
-      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
-    }
-
     const body = await req.json() as {
       event_type: string;
       prompt_category?: string;
@@ -27,8 +29,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "event_type invalide" }, { status: 400 });
     }
 
+    const user = await getCurrentUser().catch(() => null);
+
     await trackEvent({
-      userId: user.id,
+      userId: user?.id ?? null,
       eventType: body.event_type as EventType,
       promptCategory: body.prompt_category ?? null,
       sessionId: body.session_id ?? null,
