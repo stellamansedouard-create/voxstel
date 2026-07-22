@@ -122,8 +122,11 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
     // chargeAndRecord() the library journey uses (lib/deliver.ts). No layer /
     // source_page here (single blank-field prompt), so questions_answers stays
     // NULL, exactly as the previous raw insert left it. A failed history write
-    // refunds the credit inside chargeAndRecord.
-    await chargeAndRecord({
+    // refunds the credit inside chargeAndRecord. historyId comes back so the
+    // client can later mark this exact row was_copied=true (see
+    // app/api/prompts/mark-copied) — that write-path didn't exist before
+    // 22/07/2026, which is why was_copied was always false in practice.
+    const { historyId } = await chargeAndRecord({
       userId: user.id,
       category: category as Category,
       tool,
@@ -143,7 +146,7 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       sessionId: _tracking?.session_id ?? null,
     }).catch((e) => console.error("[analytics]", e));
 
-    return NextResponse.json(result);
+    return NextResponse.json({ ...result, historyId });
   } catch (error) {
     // 0 credits — from the pre-check, or lost to a concurrent generation at
     // charge time. Same 402 signal the library journey returns, so the front
