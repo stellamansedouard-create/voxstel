@@ -23,12 +23,17 @@ export function AnalyticsTracker() {
   const sessionStartedRef = useRef(false);
 
   // Session start — once per browser session (vx_sid), not once per page.
+  // utm_source/medium/campaign ride along here (from the same first-touch
+  // localStorage payload lib/utm.client.ts already maintains) so a session
+  // row can be attributed to instagram/google/etc. without re-deriving it
+  // from an unreliable document.referrer later.
   useEffect(() => {
     if (getConsentStatus() !== "accepted") return;
     if (sessionStartedRef.current) return;
     sessionStartedRef.current = true;
 
-    const sessionId = getStoredUTM().session_id;
+    const utm = getStoredUTM();
+    const sessionId = utm.session_id;
     if (!sessionId) return;
 
     fetch("/api/analytics/session-start", {
@@ -39,6 +44,9 @@ export function AnalyticsTracker() {
         landing_page: window.location.pathname,
         referrer: document.referrer || null,
         device: detectDevice(),
+        utm_source: utm.utm_source ?? null,
+        utm_medium: utm.utm_medium ?? null,
+        utm_campaign: utm.utm_campaign ?? null,
       }),
       keepalive: true,
     }).catch(() => {});
