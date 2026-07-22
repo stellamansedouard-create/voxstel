@@ -5,6 +5,7 @@
 // routes to /pricing, where the credit packs are actually sold, so no checkout
 // logic is duplicated here.
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/analytics.client";
 
 interface PaywallProps {
   /** Return to the previous step so the user can retry after topping up. */
@@ -29,7 +30,10 @@ export default function Paywall({ onBack }: PaywallProps) {
 
       <button
         type="button"
-        onClick={() => router.push("/pricing")}
+        onClick={() => {
+          track("upgrade_clicked", { metadata: { source: "paywall" } });
+          router.push("/pricing");
+        }}
         className="btn-primary w-full"
       >
         Voir les recharges →

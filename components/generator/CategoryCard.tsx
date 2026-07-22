@@ -2,6 +2,7 @@
 
 import type { CategoryMeta } from "@/types";
 import Badge from "@/components/ui/Badge";
+import { track } from "@/lib/analytics.client";
 
 interface CategoryCardProps {
   category: CategoryMeta;
@@ -13,7 +14,11 @@ export default function CategoryCard({ category, onSelect }: CategoryCardProps) 
 
   return (
     <button
-      onClick={() => !isDisabled && onSelect(category.id)}
+      onClick={() => {
+        if (isDisabled) return;
+        track("category_selected", { promptCategory: category.id });
+        onSelect(category.id);
+      }}
       disabled={isDisabled}
       className={`
         group relative w-full text-left rounded-2xl border p-6 transition-all duration-200

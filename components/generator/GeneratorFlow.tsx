@@ -6,6 +6,7 @@ import { useGeneratorStore } from "@/store/useGeneratorStore";
 import { getCategoryById, getToolById } from "@/lib/metadata";
 import { getStoredUTM } from "@/lib/utm.client";
 import { consumeHandoff } from "@/lib/ambiance-handoff";
+import { track, setLastStep } from "@/lib/analytics.client";
 import LibraryJourney from "@/components/generator/LibraryJourney";
 import Paywall from "@/components/generator/Paywall";
 import ToolSelector from "@/components/generator/ToolSelector";
@@ -96,6 +97,13 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     store.setCategory(category);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Records the step reached so AnalyticsTracker's exit beacon can report
+  // "left here" (sessions.last_step) instead of just going silent. Cheap
+  // sessionStorage write, no network call — see lib/analytics.client.ts.
+  useEffect(() => {
+    setLastStep(`generate/${category}:${store.step}`);
+  }, [category, store.step]);
+
   const handleSelectUseCase = useCallback(
     (useCaseId: string) => store.setUseCase(useCaseId),
     [store]
@@ -134,6 +142,8 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       return;
     }
 
+    track("input_submitted", { promptCategory: category });
+
     try {
       const res = await fetch("/api/analyze-description", {
         method: "POST",
@@ -168,6 +178,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       if (data.readyToGenerate || !hasContent) {
         await runGeneratePrompt({});
       } else {
+        track("questions_shown", { promptCategory: category, metadata: { count: data.questions.length } });
         store.setAdaptiveData({ directQuestions: data.questions ?? [] });
       }
     } catch {
@@ -296,6 +307,11 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
     adaptiveAnswers: Record<string, string>,
     explicit?: { tool: AITool; description: string; usageContext: string }
   ) {
+    // Single choke point for every path into generation (no-questions
+    // fast-path, adaptive submit, post-login auto-replay) — one call site
+    // instead of tracking each caller separately.
+    track("generation_started", { promptCategory: category });
+
     const tool = explicit?.tool ?? store.tool;
     const description = explicit?.description ?? store.description;
     const usageContext = explicit?.usageContext ?? store.usageContext;
@@ -383,6 +399,7 @@ export default function GeneratorFlow({ category }: GeneratorFlowProps) {
       if (data.readyToGenerate || !hasContent) {
         await runGeneratePrompt({}, pending);
       } else {
+        track("questions_shown", { promptCategory: category, metadata: { count: data.questions.length, via: "post_login_replay" } });
         store.setAdaptiveData({ directQuestions: data.questions ?? [] });
       }
     } catch {
