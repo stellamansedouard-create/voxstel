@@ -27,29 +27,52 @@ export function AnalyticsTracker() {
   // localStorage payload lib/utm.client.ts already maintains) so a session
   // row can be attributed to instagram/google/etc. without re-deriving it
   // from an unreliable document.referrer later.
+  //
+  // CookieBanner's "Accepter" click doesn't emit any event or callback — it
+  // just flips the vx_consent cookie and hides itself (see
+  // components/CookieBanner.tsx). A plain mount-time effect therefore only
+  // ever catches a visitor who had ALREADY accepted on a previous visit; a
+  // genuine first-time visitor (banner still showing at mount) got silently
+  // skipped forever, since [] never re-runs. Confirmed empirically: a fresh
+  // /ig visit with the banner accepted produced no sessions row. Polling
+  // until the banner is resolved (accepted, refused, or this tracker
+  // unmounts) is the fix that doesn't require touching CookieBanner itself.
   useEffect(() => {
-    if (getConsentStatus() !== "accepted") return;
     if (sessionStartedRef.current) return;
-    sessionStartedRef.current = true;
 
-    const utm = getStoredUTM();
-    const sessionId = utm.session_id;
-    if (!sessionId) return;
+    function tryStart(): boolean {
+      if (sessionStartedRef.current) return true;
+      const status = getConsentStatus();
+      if (status === null) return false; // banner still showing — keep polling
+      sessionStartedRef.current = true;
+      if (status !== "accepted") return true; // refused — stop, nothing to send
 
-    fetch("/api/analytics/session-start", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        session_id: sessionId,
-        landing_page: window.location.pathname,
-        referrer: document.referrer || null,
-        device: detectDevice(),
-        utm_source: utm.utm_source ?? null,
-        utm_medium: utm.utm_medium ?? null,
-        utm_campaign: utm.utm_campaign ?? null,
-      }),
-      keepalive: true,
-    }).catch(() => {});
+      const utm = getStoredUTM();
+      const sessionId = utm.session_id;
+      if (!sessionId) return true;
+
+      fetch("/api/analytics/session-start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sessionId,
+          landing_page: window.location.pathname,
+          referrer: document.referrer || null,
+          device: detectDevice(),
+          utm_source: utm.utm_source ?? null,
+          utm_medium: utm.utm_medium ?? null,
+          utm_campaign: utm.utm_campaign ?? null,
+        }),
+        keepalive: true,
+      }).catch(() => {});
+      return true;
+    }
+
+    if (tryStart()) return;
+    const interval = setInterval(() => {
+      if (tryStart()) clearInterval(interval);
+    }, 500);
+    return () => clearInterval(interval);
   }, []);
 
   // Track the current page as the "last step" for the exit beacon, and fire
