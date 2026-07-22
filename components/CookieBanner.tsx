@@ -13,6 +13,20 @@ export default function CookieBanner() {
     }
   }, []);
 
+  // Lock background scroll while the choice is pending — the point of
+  // moving this to a centered modal is that it should be genuinely hard
+  // to miss, not just present somewhere on the page. It never
+  // auto-dismisses: only clicking Accepter or Refuser closes it (no
+  // backdrop click, no Escape key, no timeout).
+  useEffect(() => {
+    if (!visible) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [visible]);
+
   function handleAccept() {
     applyConsent(true);
     grantAdsConsent();
@@ -29,31 +43,40 @@ export default function CookieBanner() {
   return (
     <div
       role="dialog"
+      aria-modal="true"
       aria-label="Gestion des cookies"
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
     >
-      <div className="max-w-2xl mx-auto bg-card border border-border rounded-2xl shadow-lg p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-        <p className="text-sm text-muted leading-relaxed flex-1">
-          Nous utilisons des cookies de mesure d&apos;audience (UTM) et des balises publicitaires
-          (Meta, Google Ads) pour comprendre d&apos;où viennent nos visiteurs et mesurer nos
-          campagnes. Rien n&apos;est déposé tant que vous n&apos;avez pas accepté.{" "}
-          <a
-            href="/politique-de-confidentialite"
-            className="text-accent underline hover:no-underline"
-          >
-            En savoir plus
-          </a>
-        </p>
-        <div className="flex gap-3 shrink-0">
+      <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-xl p-6 flex flex-col gap-5">
+        <div>
+          <p className="text-base font-semibold text-foreground mb-2">
+            Avant de continuer
+          </p>
+          <p className="text-sm text-muted leading-relaxed">
+            Nous utilisons des cookies de mesure d&apos;audience (UTM) et des balises publicitaires
+            (Meta, Google Ads) pour comprendre d&apos;où viennent nos visiteurs et mesurer nos
+            campagnes. Rien n&apos;est déposé tant que vous n&apos;avez pas fait votre choix.{" "}
+            <a
+              href="/politique-de-confidentialite"
+              className="text-accent underline hover:no-underline"
+            >
+              En savoir plus
+            </a>
+          </p>
+        </div>
+        {/* Deux boutons de même taille, même padding, même geste (un clic) —
+            accepter ne doit jamais être plus facile ou plus visible que
+            refuser (règle CNIL sur le consentement cookies). */}
+        <div className="grid grid-cols-2 gap-3">
           <button
             onClick={handleRefuse}
-            className="btn-secondary !px-4 !py-2 !text-sm"
+            className="btn-secondary w-full !px-4 !py-3 !text-sm"
           >
             Refuser
           </button>
           <button
             onClick={handleAccept}
-            className="btn-primary !px-4 !py-2 !text-sm"
+            className="btn-primary w-full !px-4 !py-3 !text-sm"
           >
             Accepter
           </button>
