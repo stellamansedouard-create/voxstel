@@ -215,8 +215,14 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
       if (res.status === 402) return showPaywall();
       if (!res.ok) throw new Error("deliver failed");
 
-      const data = (await res.json()) as { ambiance: string | null };
+      // historyId — added 22/07/2026 so LayeredResult can reconnect
+      // was_copied for this delivery, same mechanism as the classic
+      // generator. /api/deliver has returned it since lib/deliver.ts's
+      // chargeAndRecord started selecting the inserted row's id; only this
+      // client-side destructure was missing it.
+      const data = (await res.json()) as { ambiance: string | null; historyId: string };
       store.setAmbiancePrompt(data.ambiance ?? ambiance.prompt);
+      store.setLayeredHistoryId(data.historyId);
       store.setStep("result");
     } catch {
       store.setError("Erreur lors de l'affinage. Veuillez réessayer.");
@@ -275,8 +281,12 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
       if (res.status === 402) return showPaywall();
       if (!res.ok) throw new Error("deliver failed");
 
-      const data = (await res.json()) as { output: LayeredOutput | null };
-      if (data.output) store.setLayeredOutput(data.output);
+      // historyId — see the ambiance branch above for why this was missing.
+      const data = (await res.json()) as {
+        output: LayeredOutput | null;
+        historyId: string;
+      };
+      if (data.output) store.setLayeredOutput(data.output, data.historyId);
     } catch {
       store.setError("Erreur lors de la génération. Veuillez réessayer.");
     } finally {
@@ -373,6 +383,7 @@ export default function LibraryJourney({ category }: LibraryJourneyProps) {
           category={category}
           output={store.layeredOutput}
           ambiance={ambiance.prompt}
+          historyId={store.layeredHistoryId}
           onRestart={() => {
             store.reset();
             store.setCategory(category);
