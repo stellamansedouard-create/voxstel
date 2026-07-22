@@ -52,6 +52,14 @@ export type TextReference = ImageReference;
 export interface GeneratedPrompt {
   en: string;
   fr: string;
+  /**
+   * id de la ligne prompts_history correspondante — ajouté 22/07/2026 pour
+   * pouvoir reconnecter le tracking "was_copied" (mort dans le code depuis
+   * un refactor précédent : la colonne existe en base mais rien ne l'écrivait
+   * plus). Optionnel pour rester compatible avec tout appelant qui ne le
+   * fournit pas encore (parcours bibliothèque, non touché par ce correctif).
+   */
+  historyId?: string;
 }
 
 export type GeneratorStep =
