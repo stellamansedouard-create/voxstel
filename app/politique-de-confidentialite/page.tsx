@@ -13,7 +13,7 @@ export default function PolitiqueConfidentialitePage() {
             Politique de confidentialité
           </h1>
           <p className="text-sm text-muted italic mb-6">
-            Dernière mise à jour : 26 juin 2026
+            Dernière mise à jour : 23 juillet 2026
           </p>
           <p className="text-sm text-muted leading-relaxed mb-10">
             Chez Voxstel, la protection de vos données personnelles est une priorité. Cette
@@ -75,9 +75,17 @@ export default function PolitiqueConfidentialitePage() {
               (PCI-DSS).
             </p>
             <h3 className="text-sm font-semibold text-foreground mb-2">Données techniques</h3>
-            <p className="text-sm text-muted leading-relaxed">
+            <p className="text-sm text-muted leading-relaxed mb-3">
               Adresse IP, type de navigateur, données de connexion (à des fins de sécurité et de
               bon fonctionnement du service).
+            </p>
+            <p className="text-sm text-muted leading-relaxed">
+              Sous réserve de votre consentement, nous utilisons Microsoft Clarity pour enregistrer
+              de manière anonymisée vos interactions à l&apos;écran (mouvements de souris, clics,
+              défilement) afin d&apos;analyser l&apos;usage du site et d&apos;en améliorer
+              l&apos;ergonomie. Les champs sensibles — notamment votre adresse email et votre mot de
+              passe — sont automatiquement masqués et ne sont jamais capturés dans ces
+              enregistrements.
             </p>
           </section>
 
@@ -150,6 +158,15 @@ export default function PolitiqueConfidentialitePage() {
               <li>
                 <strong className="font-semibold text-foreground">Stripe</strong> — traitement des
                 paiements
+              </li>
+              <li>
+                <strong className="font-semibold text-foreground">
+                  Microsoft Ireland Operations Ltd (Microsoft Clarity)
+                </strong>{" "}
+                — analyse d&apos;audience et enregistrement anonymisé des sessions (mouvements de
+                souris, clics, défilement) pour améliorer l&apos;ergonomie du site. Les champs
+                sensibles (email, mot de passe) sont masqués et ne sont jamais enregistrés. Actif
+                uniquement après votre consentement.
               </li>
             </ul>
             <p className="text-sm text-muted leading-relaxed">
@@ -264,8 +281,8 @@ export default function PolitiqueConfidentialitePage() {
             <h2 className="text-base font-bold text-foreground mb-3">8. Cookies</h2>
             <p className="text-sm text-muted leading-relaxed mb-4">
               Voxstel utilise des cookies essentiels ainsi que des cookies de mesure d&apos;audience
-              et publicitaires tiers (Meta, Google Ads, Google Analytics), ces derniers uniquement
-              après votre consentement explicite :
+              et publicitaires tiers (Google Ads, Google Analytics, Microsoft Clarity), ces
+              derniers uniquement après votre consentement explicite :
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
@@ -304,13 +321,14 @@ export default function PolitiqueConfidentialitePage() {
                     </td>
                   </tr>
                   <tr className="border-b border-border">
-                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">_fbp, _fbc</td>
+                    <td className="py-3 pr-4 text-muted align-top font-mono text-xs">_clck, _clsk</td>
                     <td className="py-3 pr-4 text-muted align-top">
-                      Pixel publicitaire Meta — mesure l&apos;efficacité de nos campagnes
-                      publicitaires sur Facebook/Instagram. Déposé par un tiers (Meta Platforms,
-                      Inc., États-Unis).
+                      Microsoft Clarity — analyse d&apos;audience et enregistrement anonymisé des
+                      sessions (mouvements de souris, clics, défilement) pour améliorer
+                      l&apos;ergonomie du site. Les champs sensibles (email, mot de passe) sont
+                      masqués. Déposé par un tiers (Microsoft Ireland Operations Ltd).
                     </td>
-                    <td className="py-3 pr-4 text-muted align-top">90 jours</td>
+                    <td className="py-3 pr-4 text-muted align-top">1 an / session</td>
                     <td className="py-3 text-muted align-top">
                       <strong className="font-semibold text-foreground">Requis</strong> — posé
                       uniquement si vous cliquez &laquo; Accepter &raquo; dans le bandeau
@@ -346,10 +364,10 @@ export default function PolitiqueConfidentialitePage() {
               9. Transferts hors Union Européenne
             </h2>
             <p className="text-sm text-muted leading-relaxed">
-              Certains de nos sous-traitants (Vercel, Anthropic, Stripe) sont basés aux
-              États-Unis. Ces transferts de données sont encadrés par des garanties appropriées
-              (clauses contractuelles types de la Commission Européenne, certifications du Data
-              Privacy Framework UE-USA selon le prestataire).
+              Certains de nos sous-traitants (Vercel, Anthropic, Stripe, Microsoft) sont basés aux
+              États-Unis ou peuvent y transférer des données. Ces transferts sont encadrés par des
+              garanties appropriées (clauses contractuelles types de la Commission Européenne,
+              certifications du Data Privacy Framework UE-USA selon le prestataire).
             </p>
           </section>
 
