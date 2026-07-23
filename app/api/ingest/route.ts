@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("analytics/events error:", error);
+    console.error("ingest error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

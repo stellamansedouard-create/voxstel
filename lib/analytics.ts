@@ -10,7 +10,7 @@ export type EventType =
   // instrumentation branch's fuller taxonomy is a superset of these two.
   | "checkout_started"
   | "checkout_completed"
-  // --- Funnel events (client-side, /api/analytics/events) -----------------
+  // --- Funnel events (client-side, /api/ingest) ---------------------------
   // Reconnected 22/07/2026 — these existed in an earlier version of the
   // generator and were dropped during the Bibliothèque/Crédits refactor. The
   // analytics_events rows from that era are still in the table (see

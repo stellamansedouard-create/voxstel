@@ -1,7 +1,17 @@
 "use client";
 
-// Browser-side funnel tracking — POSTs to /api/analytics/events (see that
-// route for the allow-list) and the two /api/analytics/session-* routes.
+// Browser-side funnel tracking — POSTs to /api/ingest (see that route for the
+// allow-list) and the two /api/ingest/session-* routes.
+//
+// The path is deliberately neutral (NOT /api/analytics/events): ad/tracking
+// blockers match filter lists on URL substrings like "analytics", "events",
+// "track", "collect", "beacon" and drop the request client-side as
+// `(blocked:other)` before it ever leaves the browser. Our audience
+// (AI/creative/tech) runs blockers heavily, so the old path silently
+// under-counted prompt_copied and the rest of the funnel. Keep this path free
+// of those substrings. /api/prompts/mark-copied was never blocked, which is
+// why was_copied kept working while its paired prompt_copied event vanished.
+//
 // Consent-gated the same way lib/utm.client.ts is: nothing fires until the
 // visitor has accepted the cookie banner, so this never becomes a second,
 // non-consented tracking path running alongside the one CookieBanner already
@@ -32,7 +42,7 @@ export function track(
 
   const sessionId = getStoredUTM().session_id ?? undefined;
 
-  fetch("/api/analytics/events", {
+  fetch("/api/ingest", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
