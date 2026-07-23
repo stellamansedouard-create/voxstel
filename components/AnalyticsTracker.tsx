@@ -51,7 +51,7 @@ export function AnalyticsTracker() {
       const sessionId = utm.session_id;
       if (!sessionId) return true;
 
-      fetch("/api/analytics/session-start", {
+      fetch("/api/ingest/session-start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -99,7 +99,7 @@ export function AnalyticsTracker() {
         session_id: sessionId,
         last_step: getLastStep() ?? pathname,
       });
-      navigator.sendBeacon("/api/analytics/session-end", payload);
+      navigator.sendBeacon("/api/ingest/session-end", payload);
     }
 
     function onVisibilityChange() {

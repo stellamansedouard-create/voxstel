@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("analytics/session-end error:", error);
+    console.error("ingest/session-end error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
