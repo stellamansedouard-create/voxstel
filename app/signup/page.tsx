@@ -187,6 +187,7 @@ function SignupForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
+                data-clarity-mask="true"
                 className="input-field"
                 placeholder="vous@exemple.com"
               />
@@ -205,6 +206,7 @@ function SignupForm() {
                   required
                   minLength={6}
                   autoComplete="new-password"
+                  data-clarity-mask="true"
                   className="input-field pr-11"
                   placeholder="••••••••"
                 />

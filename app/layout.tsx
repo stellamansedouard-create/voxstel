@@ -5,6 +5,7 @@ import { UTMTracker } from "@/components/UTMTracker";
 import CookieBanner from "@/components/CookieBanner";
 import { PixelEventHandler } from "@/components/PixelEventHandler";
 import { GoogleAdsTagLoader } from "@/components/GoogleAdsTagLoader";
+import { ClarityLoader } from "@/components/ClarityLoader";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
@@ -88,6 +89,9 @@ export default function RootLayout({
         <Header />
         <Suspense fallback={null}>
           <GoogleAdsTagLoader />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ClarityLoader />
         </Suspense>
         <Suspense fallback={null}>
           <UTMTracker />

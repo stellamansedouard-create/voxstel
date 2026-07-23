@@ -143,6 +143,7 @@ function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
+                data-clarity-mask="true"
                 className="input-field"
                 placeholder="vous@exemple.com"
               />
@@ -159,6 +160,7 @@ function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
+                  data-clarity-mask="true"
                   className="input-field pr-11"
                   placeholder="••••••••"
                 />
