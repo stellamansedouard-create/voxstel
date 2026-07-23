@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { assertCanGenerate, chargeAndRecord } from "@/lib/deliver";
 import { InsufficientCreditsError } from "@/lib/credits";
+import { assertInputAllowed, ContentBlockedError, REFUS_MESSAGE } from "@/lib/moderation";
 import type { AITool, Category, GeneratedPrompt, ImageAspect } from "@/types";
 
 interface TrackingPayload {
@@ -42,6 +43,21 @@ export async function POST(req: NextRequest) {
     // throws InsufficientCreditsError -> mapped to 402 in the catch below.
     // The classic generator now runs on credits, not the legacy monthly quota.
     await assertCanGenerate(user.id);
+
+    // INPUT moderation — on the raw user request, before any Anthropic call. A
+    // forbidden demand is logged + throws ContentBlockedError (-> 422 below),
+    // never reaching generation and never costing a credit. The allowed verdict
+    // is threaded into chargeAndRecord for the moderation_flags trace.
+    const userText = [
+      description,
+      usageContext ?? "",
+      JSON.stringify(adaptiveAnswers ?? {}),
+    ].join("\n");
+    const inputModeration = await assertInputAllowed(userText, {
+      userId: user.id,
+      sessionId: _tracking?.session_id ?? null,
+      category,
+    });
 
     const model = useSonnet ? MODELS.sonnet : MODELS.haiku;
     const toolMeta = getToolById(category, tool);
@@ -132,6 +148,8 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
       tool,
       promptEn: result.en,
       promptFr: result.fr ?? null,
+      inputModeration,
+      sessionId: _tracking?.session_id ?? null,
     });
 
     // Analytics — fire-and-forget
@@ -153,6 +171,14 @@ ${usageContext ? `\nContexte d'usage : ${usageContext}` : ""}${extras ? `\nPréc
     // shows the same paywall.
     if (error instanceof InsufficientCreditsError) {
       return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
+    // Blocked by moderation (input or output). Logging already happened at the
+    // block site; here we only map to the HTTP signal + neutral user message.
+    if (error instanceof ContentBlockedError) {
+      return NextResponse.json(
+        { error: "content_blocked", message: REFUS_MESSAGE },
+        { status: 422 }
+      );
     }
     console.error("generate-prompt error:", error);
     return NextResponse.json(
