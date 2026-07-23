@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getWording } from "@/lib/ambiance";
+import { track } from "@/lib/analytics.client";
 import type { Category, LayeredOutput } from "@/types";
 
 interface LayeredResultProps {
@@ -10,6 +11,15 @@ interface LayeredResultProps {
   output: LayeredOutput | null;
   /** The refined/kept ambiance — the layer-1 result. */
   ambiance: string;
+  /**
+   * id of the prompts_history row for THIS delivery — added 22/07/2026 so the
+   * library/layered journey gets the same was_copied tracking as the classic
+   * generator (components/generator/PromptResult.tsx). Both the ambiance-only
+   * delivery (refine-ambiance flow) and the subject delivery are paid, so both
+   * have a row and both need this. Undefined only if the API response somehow
+   * omitted it — copy still works, it just isn't tracked server-side.
+   */
+  historyId?: string | null;
   onRestart: () => void;
   /** Continue from a refined ambiance into the subject. */
   onContinueToSubject?: () => void;
@@ -19,6 +29,7 @@ export default function LayeredResult({
   category,
   output,
   ambiance,
+  historyId,
   onRestart,
   onContinueToSubject,
 }: LayeredResultProps) {
@@ -41,18 +52,42 @@ export default function LayeredResult({
       </div>
 
       {/* Layer 1 only — the refined ambiance */}
-      {!output && <CopyBlock label={w.ambianceLabel} value={ambiance} />}
+      {!output && (
+        <CopyBlock
+          label={w.ambianceLabel}
+          value={ambiance}
+          category={category}
+          historyId={historyId}
+          field="ambiance"
+        />
+      )}
 
       {/* Music keeps the two fields the tool itself expects */}
       {output?.kind === "music" && (
         <div className="space-y-4">
-          <CopyBlock label="STYLE" value={output.style} hint="À coller dans le champ Style" />
-          <CopyBlock label="PAROLES" value={output.lyrics} hint="À coller dans le champ Paroles" />
+          <CopyBlock
+            label="STYLE"
+            value={output.style}
+            hint="À coller dans le champ Style"
+            category={category}
+            historyId={historyId}
+            field="style"
+          />
+          <CopyBlock
+            label="PAROLES"
+            value={output.lyrics}
+            hint="À coller dans le champ Paroles"
+            category={category}
+            historyId={historyId}
+            field="lyrics"
+          />
         </div>
       )}
 
       {/* Everything else: one merged prompt */}
-      {output?.kind === "merged" && <MergedPrompt en={output.en} fr={output.fr} />}
+      {output?.kind === "merged" && (
+        <MergedPrompt en={output.en} fr={output.fr} category={category} historyId={historyId} />
+      )}
 
       {!output && onContinueToSubject && (
         <button onClick={onContinueToSubject} className="btn-primary w-full mt-6">
@@ -67,7 +102,17 @@ export default function LayeredResult({
   );
 }
 
-function MergedPrompt({ en, fr }: { en: string; fr: string }) {
+function MergedPrompt({
+  en,
+  fr,
+  category,
+  historyId,
+}: {
+  en: string;
+  fr: string;
+  category: Category;
+  historyId?: string | null;
+}) {
   const [tab, setTab] = useState<"en" | "fr">("en");
   const active = tab === "en" ? en : fr;
 
@@ -89,7 +134,7 @@ function MergedPrompt({ en, fr }: { en: string; fr: string }) {
         ))}
       </div>
       <div className="p-5">
-        <PromptBody value={active} />
+        <PromptBody value={active} category={category} historyId={historyId} lang={tab} field="merged" />
       </div>
     </div>
   );
@@ -99,10 +144,16 @@ function CopyBlock({
   label,
   value,
   hint,
+  category,
+  historyId,
+  field,
 }: {
   label: string;
   value: string;
   hint?: string;
+  category: Category;
+  historyId?: string | null;
+  field: string;
 }) {
   return (
     <div className="bg-white rounded-2xl border border-border overflow-hidden">
@@ -111,19 +162,52 @@ function CopyBlock({
         {hint && <span className="text-xs text-muted">{hint}</span>}
       </div>
       <div className="p-5">
-        <PromptBody value={value} />
+        <PromptBody value={value} category={category} historyId={historyId} field={field} />
       </div>
     </div>
   );
 }
 
-function PromptBody({ value }: { value: string }) {
+function PromptBody({
+  value,
+  category,
+  historyId,
+  lang,
+  field,
+}: {
+  value: string;
+  category: Category;
+  historyId?: string | null;
+  lang?: "en" | "fr";
+  field?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   async function copy() {
     await navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+
+    // Reconnects prompts_history.was_copied for the library/layered journey —
+    // added 22/07/2026, same mechanism as the classic generator
+    // (components/generator/PromptResult.tsx). Before this, every copy button
+    // in this component only updated local UI state; nothing was ever written
+    // back, so was_copied stayed false for every library-journey delivery
+    // regardless of what the visitor actually did with the result.
+    // Fire-and-forget: a dropped call must never block or error out the copy
+    // the user just performed.
+    if (historyId) {
+      fetch("/api/prompts/mark-copied", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: historyId }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+    track("prompt_copied", {
+      promptCategory: category,
+      metadata: { source: "library_journey", lang, field },
+    });
   }
 
   return (

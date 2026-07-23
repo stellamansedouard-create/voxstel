@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import type { GeneratedPrompt, AITool } from "@/types";
+import type { GeneratedPrompt, AITool, Category } from "@/types";
 import { CATEGORIES } from "@/lib/metadata";
+import { track } from "@/lib/analytics.client";
 
 interface PromptResultProps {
   prompt: GeneratedPrompt;
   tool: AITool;
+  /** Needed only to label the prompt_copied analytics event — see copyToClipboard. */
+  category: Category;
   refinementsLeft: number;
   onRestart: () => void;
   onRenforce: () => void;
@@ -24,6 +27,7 @@ function getToolName(toolId: AITool): string {
 export default function PromptResult({
   prompt,
   tool,
+  category,
   refinementsLeft,
   onRestart,
   onRenforce,
@@ -37,6 +41,21 @@ export default function PromptResult({
     await navigator.clipboard.writeText(text);
     setCopied(lang);
     setTimeout(() => setCopied(null), 2000);
+
+    // Reconnects prompts_history.was_copied (see app/api/prompts/mark-copied) —
+    // this call site had never written anything past the local UI checkmark
+    // before 22/07/2026, so was_copied was always false regardless of what
+    // the visitor actually did. Fire-and-forget: a dropped call must never
+    // block or error out the copy the user just performed.
+    if (prompt.historyId) {
+      fetch("/api/prompts/mark-copied", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: prompt.historyId }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+    track("prompt_copied", { promptCategory: category, metadata: { source: "classic_generator", lang } });
   }
 
   const activePrompt = activeTab === "en" ? prompt.en : prompt.fr;

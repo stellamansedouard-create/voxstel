@@ -44,7 +44,18 @@ interface GeneratorActions {
   setSubject: (subject: string) => void;
   /** Swaps in a fresh question round (ambiance or subject) and clears answers. */
   setLayerQuestions: (questions: DirectQuestion[], step: GeneratorStep) => void;
-  setLayeredOutput: (output: LayeredOutput) => void;
+  /**
+   * historyId is the prompts_history row id for THIS delivery — added
+   * 22/07/2026 so LayeredResult can reconnect was_copied the same way the
+   * classic generator does. Required (not optional): both callers of this
+   * action (LibraryJourney's ambiance-delivery and subject-delivery branches)
+   * now get historyId back from /api/deliver, so there's no legitimate call
+   * site left that has an output but no row id.
+   */
+  setLayeredOutput: (output: LayeredOutput, historyId: string) => void;
+  /** Used by the ambiance-only delivery (refine-ambiance flow), which sets the
+   *  step/ambiance text itself and only needs the row id recorded alongside. */
+  setLayeredHistoryId: (historyId: string | null) => void;
   setStep: (step: GeneratorStep) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -59,6 +70,9 @@ interface ExtendedState extends GeneratorState {
   refinePrecisionQuestions: DirectQuestion[];
   refinePrecisionAnswers: Record<string, string>;
   hasUsedRefinePrecision: boolean;
+  /** prompts_history row id backing the current layeredOutput / ambiance
+   *  delivery — see setLayeredOutput / setLayeredHistoryId above. */
+  layeredHistoryId: string | null;
 }
 
 const initialState: ExtendedState = {
@@ -85,6 +99,7 @@ const initialState: ExtendedState = {
   ambianceFlow: null,
   subject: "",
   layeredOutput: null,
+  layeredHistoryId: null,
 };
 
 const STEP_ORDER: GeneratorStep[] = [
@@ -113,6 +128,7 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         ambianceFlow: null,
         subject: "",
         layeredOutput: null,
+        layeredHistoryId: null,
         directQuestions: [],
         directAnswers: {},
         previousQA: [],
@@ -274,8 +290,10 @@ export const useGeneratorStore = create<ExtendedState & GeneratorActions>(
         error: null,
       }),
 
-    setLayeredOutput: (output) =>
-      set({ layeredOutput: output, step: "result", error: null }),
+    setLayeredOutput: (output, historyId) =>
+      set({ layeredOutput: output, layeredHistoryId: historyId, step: "result", error: null }),
+
+    setLayeredHistoryId: (historyId) => set({ layeredHistoryId: historyId }),
 
     setStep: (step) => set({ step }),
     setLoading: (isLoading) => set({ isLoading }),

@@ -73,6 +73,8 @@ export interface DeliverGeneratedPromptResult {
   ambiance: string | null;
   /** New credit balance after the charge; null for unlimited users. */
   balance: number | null;
+  /** id of the prompts_history row just written — see ChargeAndRecordResult. */
+  historyId: string;
 }
 
 /**
@@ -135,7 +137,7 @@ export async function deliverGeneratedPrompt(
   }
 
   // 3. Charge exactly once + record, together.
-  const balance = await chargeAndRecord({
+  const { balance, historyId } = await chargeAndRecord({
     userId: input.userId,
     layer: input.layer,
     category: input.category,
@@ -146,7 +148,7 @@ export async function deliverGeneratedPrompt(
     promptFr,
   });
 
-  return { layer: input.layer, output, ambiance, balance };
+  return { layer: input.layer, output, ambiance, balance, historyId };
 }
 
 export interface ChargeAndRecordParams {
@@ -159,6 +161,15 @@ export interface ChargeAndRecordParams {
   layer?: "ambiance" | "subject";
   sourcePageSlug?: string | null;
   questionsAnswers?: QAEntry[];
+}
+
+export interface ChargeAndRecordResult {
+  /** New credit balance after the charge; null for unlimited users. */
+  balance: number | null;
+  /** id of the prompts_history row just inserted — lets the caller thread it
+   *  back to the client so a later "copy" action can mark was_copied=true on
+   *  the SAME row, instead of guessing which row a copy click refers to. */
+  historyId: string;
 }
 
 /**
@@ -177,11 +188,13 @@ export interface ChargeAndRecordParams {
  * questions_answers); the classic generator passes none, so questions_answers
  * stays NULL exactly as its previous raw insert left it.
  *
- * Returns the new balance (number), or null for unlimited users.
+ * Returns the new balance (number, or null for unlimited users) AND the
+ * inserted row's id — added 22/07/2026 so was_copied can be reconnected
+ * end-to-end (see app/api/prompts/mark-copied/route.ts).
  */
 export async function chargeAndRecord(
   p: ChargeAndRecordParams
-): Promise<number | null> {
+): Promise<ChargeAndRecordResult> {
   const balance = await deductCredit(p.userId, "generation", {
     category: p.category,
     tool: p.tool,
@@ -196,7 +209,7 @@ export async function chargeAndRecord(
     (p.sourcePageSlug ?? null) !== null ||
     (p.questionsAnswers?.length ?? 0) > 0;
 
-  const { error } = await createServerSupabase()
+  const { data, error } = await createServerSupabase()
     .from("prompts_history")
     .insert({
       user_id: p.userId,
@@ -213,9 +226,11 @@ export async function chargeAndRecord(
             qa: p.questionsAnswers ?? [],
           }
         : null,
-    });
+    })
+    .select("id")
+    .single();
 
-  if (error) {
+  if (error || !data) {
     // Undo the decrement so the credit ⇔ history invariant holds. Only a
     // metered user was actually decremented (balance is a number).
     if (balance !== null) {
@@ -228,14 +243,14 @@ export async function chargeAndRecord(
     }
     console.error(
       "[deliver] prompts_history INSERT failed — message:",
-      error.message,
+      error?.message,
       "| code:",
-      error.code,
+      error?.code,
       "| details:",
-      error.details
+      error?.details
     );
     throw new Error("history_write_failed");
   }
 
-  return balance;
+  return { balance, historyId: data.id as string };
 }

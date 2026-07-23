@@ -3,6 +3,7 @@
 // The free ambiance prompt, copiable with no account and no auth wall — the
 // friction here is what brings the traffic.
 import { useState } from "react";
+import { track } from "@/lib/analytics.client";
 
 interface CopyablePromptProps {
   label: string;
@@ -42,6 +43,7 @@ export default function CopyablePrompt({
       // Always the English one, whatever is on screen. The French text is a
       // reading aid; English is what Suno/Midjourney/etc. actually parse.
       await navigator.clipboard.writeText(value);
+      track("prompt_copied", { metadata: { label } });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

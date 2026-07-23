@@ -48,7 +48,10 @@ export interface PromptHistoryItem {
   category: string;
   tool: string;
   prompt_en: string;
-  prompt_fr: string;
+  // Nullable: "music" generations and ambiance-only library deliveries write no
+  // French translation (see lib/deliver.ts). A raw .slice() on this used to
+  // crash the whole dashboard for any account owning one such row.
+  prompt_fr: string | null;
   created_at: string;
 }
 
@@ -92,7 +95,10 @@ export default function PromptHistoryList({ prompts }: { prompts: PromptHistoryI
       {prompts.map((prompt) => {
         const isExpanded = expandedId === prompt.id;
         const icon = CATEGORY_ICONS[prompt.category] ?? "✨";
-        const excerpt = prompt.prompt_fr.slice(0, 120);
+        // prompt_fr can be null (music / ambiance-only). Fall back to the
+        // English prompt for the collapsed excerpt so the card still renders.
+        const excerptSource = prompt.prompt_fr ?? prompt.prompt_en ?? "";
+        const excerpt = excerptSource.slice(0, 120);
 
         return (
           <li key={prompt.id}>
@@ -114,7 +120,7 @@ export default function PromptHistoryList({ prompts }: { prompts: PromptHistoryI
                     </div>
                     {!isExpanded && (
                       <p className="text-sm text-muted leading-relaxed line-clamp-2">
-                        {excerpt}{prompt.prompt_fr.length > 120 ? "…" : ""}
+                        {excerpt}{excerptSource.length > 120 ? "…" : ""}
                       </p>
                     )}
                   </div>
@@ -149,17 +155,21 @@ export default function PromptHistoryList({ prompts }: { prompts: PromptHistoryI
                       {prompt.prompt_en}
                     </p>
                   </div>
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-muted">
-                        🇫🇷 Français
-                      </span>
-                      <CopyButton text={prompt.prompt_fr} />
+                  {/* French block only when a translation exists — music and
+                      ambiance-only deliveries have none. */}
+                  {prompt.prompt_fr && (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+                          🇫🇷 Français
+                        </span>
+                        <CopyButton text={prompt.prompt_fr} />
+                      </div>
+                      <p className="text-sm text-foreground bg-card-hover rounded-xl p-3 break-words leading-relaxed whitespace-pre-wrap select-text">
+                        {prompt.prompt_fr}
+                      </p>
                     </div>
-                    <p className="text-sm text-foreground bg-card-hover rounded-xl p-3 break-words leading-relaxed whitespace-pre-wrap select-text">
-                      {prompt.prompt_fr}
-                    </p>
-                  </div>
+                  )}
                 </div>
               )}
             </div>

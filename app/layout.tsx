@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Suspense } from "react";
 import { UTMTracker } from "@/components/UTMTracker";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import CookieBanner from "@/components/CookieBanner";
 import { PixelEventHandler } from "@/components/PixelEventHandler";
 import { GoogleAdsTagLoader } from "@/components/GoogleAdsTagLoader";
@@ -95,6 +96,9 @@ export default function RootLayout({
         </Suspense>
         <Suspense fallback={null}>
           <UTMTracker />
+        </Suspense>
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
         </Suspense>
         <Suspense fallback={null}>
           <PixelEventHandler />
