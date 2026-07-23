@@ -183,7 +183,7 @@ export default async function HomePage() {
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
               {/* Image — gauche */}
-              <div className="flex justify-center lg:justify-start">
+              <div className="order-2 lg:order-1 flex justify-center lg:justify-start">
                 <div className="w-full">
                   <Image
                     src="/images/fomo-visage.webp"
@@ -200,7 +200,7 @@ export default async function HomePage() {
               </div>
 
               {/* Texte — droite */}
-              <div>
+              <div className="order-1 lg:order-2">
                 <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-5 block">
                   Pourquoi pas seul ?
                 </span>
@@ -350,7 +350,7 @@ export default async function HomePage() {
               </div>
 
               {/* ARROW */}
-              <div className="flex items-center justify-center pt-[72px]" aria-hidden>
+              <div className="flex items-center justify-center pt-0 md:pt-[72px]" aria-hidden>
                 {/* Desktop: horizontal arrow */}
                 <div className="hidden md:flex flex-col items-center gap-1.5">
                   <div className="h-px w-8 bg-accent/30" />
@@ -445,7 +445,7 @@ export default async function HomePage() {
                     <span className="text-sm text-muted whitespace-nowrap">{step.label}</span>
                   </div>
                   {i < MINI_STEPS.length - 1 && (
-                    <span className="text-accent/40 mx-1" aria-hidden>→</span>
+                    <span className="hidden md:inline text-accent/40 mx-1" aria-hidden>→</span>
                   )}
                 </div>
               ))}
