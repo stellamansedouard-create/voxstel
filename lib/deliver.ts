@@ -25,6 +25,13 @@ import {
 import { refineAmbianceLayer } from "@/lib/ambiance-layer";
 import { generateSubjectPrompt } from "@/lib/subject-layer";
 import { createServerSupabase } from "@/lib/supabase";
+import {
+  assertInputAllowed,
+  moderateOutput,
+  logModerationBlocked,
+  ContentBlockedError,
+  type ModerationResult,
+} from "@/lib/moderation";
 import type { AITool, AmbianceLayer, Category, LayeredOutput } from "@/types";
 
 /** The Q&A of the rounds that led to this delivery, persisted for measurement. */
@@ -43,6 +50,8 @@ interface DeliverBase {
   sourcePageSlug?: string | null;
   questionsAnswers?: QAEntry[];
   useSonnet?: boolean;
+  /** Session id for moderation logging; null when not tracked. */
+  sessionId?: string | null;
 }
 
 export interface DeliverAmbianceInput extends DeliverBase {
@@ -104,6 +113,19 @@ export async function deliverGeneratedPrompt(
   // 1. Gate first — never burn an engine call for a user who cannot be charged.
   await assertCanGenerate(input.userId);
 
+  // 1b. INPUT moderation — on the raw user text of this round. Blocks (throws
+  //     ContentBlockedError -> 422) before any engine call, so a forbidden
+  //     request never reaches Anthropic nor costs a credit.
+  const inputText =
+    input.layer === "ambiance"
+      ? [input.ambiancePrompt, JSON.stringify(input.answers ?? {})].join("\n")
+      : [input.subject, JSON.stringify(input.subjectAnswers ?? {})].join("\n");
+  const inputModeration = await assertInputAllowed(inputText, {
+    userId: input.userId,
+    sessionId: input.sessionId ?? null,
+    category: input.category,
+  });
+
   // 2. Generate (no charge yet — a failed model call must cost nothing).
   let output: LayeredOutput | null = null;
   let ambiance: string | null = null;
@@ -136,7 +158,9 @@ export async function deliverGeneratedPrompt(
     promptFr = output.kind === "music" ? null : output.fr || null;
   }
 
-  // 3. Charge exactly once + record, together.
+  // 3. OUTPUT moderation + charge + record. chargeAndRecord runs moderateOutput
+  //    on the produced prompt BEFORE debiting, so a blocked output costs no
+  //    credit; the input verdict is threaded in for the moderation_flags trace.
   const { balance, historyId } = await chargeAndRecord({
     userId: input.userId,
     layer: input.layer,
@@ -146,6 +170,8 @@ export async function deliverGeneratedPrompt(
     questionsAnswers: input.questionsAnswers ?? [],
     promptEn,
     promptFr,
+    inputModeration,
+    sessionId: input.sessionId ?? null,
   });
 
   return { layer: input.layer, output, ambiance, balance, historyId };
@@ -161,6 +187,11 @@ export interface ChargeAndRecordParams {
   layer?: "ambiance" | "subject";
   sourcePageSlug?: string | null;
   questionsAnswers?: QAEntry[];
+  /** Input-moderation verdict from the entry point, stored in moderation_flags
+   *  to prove the input gate ran even on allowed generations. */
+  inputModeration?: ModerationResult;
+  /** Session id for moderation logging; null when not tracked. */
+  sessionId?: string | null;
 }
 
 export interface ChargeAndRecordResult {
@@ -195,6 +226,26 @@ export interface ChargeAndRecordResult {
 export async function chargeAndRecord(
   p: ChargeAndRecordParams
 ): Promise<ChargeAndRecordResult> {
+  // OUTPUT moderation — the single chokepoint BOTH generators share, so it
+  // covers the classic route and the library journey at once. Runs on the
+  // produced prompt BEFORE the debit: a blocked output is logged and throws
+  // ContentBlockedError (-> 422) without ever decrementing a credit or writing
+  // a history row. fail-closed (a transient classifier error blocks) — safer to
+  // refuse an already-generated prompt than to risk delivering forbidden text.
+  const outputModeration = await moderateOutput(
+    [p.promptFr, p.promptEn].filter(Boolean).join("\n\n")
+  );
+  if (!outputModeration.allowed) {
+    await logModerationBlocked({
+      userId: p.userId,
+      sessionId: p.sessionId ?? null,
+      category: p.category,
+      stage: "output",
+      result: outputModeration,
+    }).catch((e) => console.error("[moderation] log output failed:", e));
+    throw new ContentBlockedError("output", outputModeration);
+  }
+
   const balance = await deductCredit(p.userId, "generation", {
     category: p.category,
     tool: p.tool,
@@ -226,6 +277,13 @@ export async function chargeAndRecord(
             qa: p.questionsAnswers ?? [],
           }
         : null,
+      // Trace des deux barrières sur les générations autorisées — prouve que le
+      // contrôle a tourné (plus jamais null). input peut être absent si un
+      // appelant ne modère pas l'entrée ; output est toujours présent ici.
+      moderation_flags: {
+        input: p.inputModeration ?? null,
+        output: outputModeration,
+      },
     })
     .select("id")
     .single();

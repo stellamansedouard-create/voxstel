@@ -23,6 +23,9 @@ export type EventType =
   | "prompt_copied"
   | "upgrade_clicked"
   | "pricing_viewed"
+  // Blocage de modération (entrée ou sortie) — cf. lib/moderation.ts. Déjà
+  // whitelisté par le check-constraint analytics_events_event_type_check.
+  | "moderation_blocked"
   // New — not part of the old taxonomy. Fired via sendBeacon on tab
   // close/hide with the last known step, so a drop-off has a concrete
   // "left here" instead of just silence in the funnel counts.

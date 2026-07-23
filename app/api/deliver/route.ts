@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { deliverGeneratedPrompt, type QAEntry } from "@/lib/deliver";
 import { InsufficientCreditsError } from "@/lib/credits";
+import { ContentBlockedError, REFUS_MESSAGE } from "@/lib/moderation";
 import { trackEvent } from "@/lib/analytics";
 import type { AITool, AmbianceLayer, Category } from "@/types";
 
@@ -63,6 +64,7 @@ export async function POST(req: NextRequest) {
         answers: body.answers ?? {},
         sourcePageSlug: sourcePageSlug ?? null,
         questionsAnswers,
+        sessionId: _tracking?.session_id ?? null,
       });
     } else {
       if (!body.ambiance?.prompt?.trim() || !body.subject?.trim()) {
@@ -80,6 +82,7 @@ export async function POST(req: NextRequest) {
         subjectAnswers: body.subjectAnswers ?? {},
         sourcePageSlug: sourcePageSlug ?? null,
         questionsAnswers,
+        sessionId: _tracking?.session_id ?? null,
       });
     }
 
@@ -100,6 +103,14 @@ export async function POST(req: NextRequest) {
     // the signal the client turns into the paywall.
     if (error instanceof InsufficientCreditsError) {
       return NextResponse.json({ error: "insufficient_credits" }, { status: 402 });
+    }
+    // Blocked by moderation (input or output) — logged at the block site; map to
+    // the neutral 422 the client shows in place of a result.
+    if (error instanceof ContentBlockedError) {
+      return NextResponse.json(
+        { error: "content_blocked", message: REFUS_MESSAGE },
+        { status: 422 }
+      );
     }
     console.error("deliver error:", error);
     return NextResponse.json(
